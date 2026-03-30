@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panthera-HT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* 顶部导航栏 */
+        .navbar {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(2.5px);
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Panthera-HT 品牌名 */
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        /* 文档、Github、素材库 */
+        .navbar-links a {
+            text-decoration: none;
+            color: #393939;
+            font-size: 17px;
+            transition: color 0.3s;
+        }
+
+        .navbar-links a:hover {
+            color: #333;
+        }
+
+        .navbar-links a.navbar-link-strong {
+            font-weight: 600;
+            font-size: 17px;
+        }
+
+        /* 购买按钮 */
+        .btn-buy {
+            background: #ff6b35 !important;
+            color: #ffffff !important;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 600;
+            transition: background 0.3s;
+            border: 1.8px solid rgba(226, 226, 226, 0.8);
+            margin-right: -16px;
+        }
+
+        .btn-buy:hover {
+            background: #ff5722 !important;
+            color: #ffffff !important;
+        }
+
+        /* 首页大图 */
+        .hero {
+            width: 100%;
+            margin-top: 0px;
+        }
+
+        .hero img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* 产品概览 */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 36px;
+        }
+
+        .overview-separator {
+            position: relative;
+            left: 50%;
+            height: 100px;
+            margin: 18px 0 30px;
+            width: calc(100% + 700px);
+            max-width: 2000px;
+            transform: translateX(-50%);
+        }
+
+        .overview-separator::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.16) 18%, rgba(15, 23, 42, 0.3) 50%, rgba(15, 23, 42, 0.16) 82%, rgba(15, 23, 42, 0));
+        }
+
+        .overview-separator::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 112px;
+            height: 12px;
+            border-radius: 999px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.86) 0%, rgba(247, 247, 247, 0) 100%);
+        }
+
+        .parameters,
+        .background {
+            background: transparent;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .parameters h2,
+        .background h2 {
+            font-size: 34px;
+            color: #222;
+            line-height: 1.1;
+        }
+
+        .parameters h2 {
+            text-align: center;
+            font-size: 46px;
+            margin-bottom: 42px;
+        }
+
+        .background-shell {
+            position: relative;
+            left: 50%;
+            margin-top: 24px;
+            width: min(1380px, calc(100vw - 32px));
+            transform: translateX(-50%);
+        }
+
+        .background {
+            padding: 40px 28px 8px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(244, 244, 244, 0.58), rgba(247, 247, 247, 0.88));
+            width: 100%;
+        }
+
+        .background h2 {
+            text-align: center;
+            font-size: 46px;
+            margin-bottom: 46px;
+            letter-spacing: 0.01em;
+        }
+
+        .background-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+            align-items: stretch;
+            gap: 36px;
+        }
+
+        .background-media {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100%;
+        }
+
+        .background-media img {
+            display: block;
+            width: auto;
+            height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .params-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .param-item {
+            position: relative;
+            min-height: 175px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 26px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(244, 244, 244, 0.58), rgba(247, 247, 247, 0.86));
+            transition: transform 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .param-item::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 58%);
+            pointer-events: none;
+        }
+
+        .param-item:not(:nth-child(3n)) {
+            border-right: 1px solid rgba(15, 23, 42, 0.18);
+        }
+
+        .param-item:nth-child(-n+6) {
+            border-bottom: 1px solid rgba(15, 23, 42, 0.18);
+        }
+
+        .param-item:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, rgba(248, 248, 248, 0.92), rgba(250, 250, 250, 1));
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+        }
+
+        .param-label {
+            font-size: 14px;
+            color: #8a8a8a;
+            margin-bottom: 0;
+            letter-spacing: 0;
+        }
+
+        .param-value {
+            font-size: 40px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.05;
+            text-align: center;
+        }
+
+        .background-story {
+            display: grid;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .background-block {
+            padding: 20px 0 0;
+            border-top: 1px solid rgba(15, 23, 42, 0.14);
+        }
+
+        .background-block::before {
+            content: none;
+        }
+
+        .background-block:last-child {
+            padding-bottom: 0;
+        }
+
+        .background p {
+            max-width: none;
+            font-size: 17px;
+            line-height: 1.85;
+            color: #4a4a4a;
+            margin-bottom: 0;
+        }
+
+        .background a {
+            color: #222;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.18);
+        }
+
+        .background a:hover {
+            border-bottom-color: rgba(15, 23, 42, 0.45);
+        }
+
+        /* 模型可视化 */
+        .viewer-title-outside {
+            margin-top: 110px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-size: 46px;
+            color: #222;
+        }
+
+        .viewer-section {
+            position: relative;
+            margin-top: 0;
+            padding: 36px 32px;
+            border-radius: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.58);
+            background: rgba(255, 255, 255, 0.52);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow:
+                0 16px 40px rgba(15, 23, 42, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.72);
+            width: min(1400px, calc(100vw - 40px));
+            margin-left: 50%;
+            transform: translateX(-50%);
+            overflow: hidden;
+        }
+
+        .viewer-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.38), transparent 24%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.08) 36%, transparent 68%);
+            pointer-events: none;
+        }
+
+        .viewer-header {
+            margin-bottom: 22px;
+        }
+
+        .viewer-header h2 {
+            font-size: 34px;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+        .viewer-note {
+            font-size: 14px;
+            color: #8c8c8c;
+            margin-bottom: 14px;
+        }
+
+        .viewer-model {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #f4f4f4;
+            font-size: 13px;
+            color: #444;
+        }
+
+        .viewer-shell {
+            position: relative;
+            display: grid;
+            grid-template-columns: 340px minmax(0, 1fr);
+            gap: 20px;
+            height: 600px;
+            z-index: 1;
+        }
+
+        .viewer-sidebar {
+            border-radius: 24px;
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: 100%;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #fcfcfd 0%, #f3f4f6 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.86),
+                inset 0 -1px 0 rgba(15, 23, 42, 0.03),
+                0 6px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        .viewer-panel-title {
+            font-size: 18px;
+            color: #222;
+        }
+
+        .viewer-panel-copy {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #8a8a8a;
+        }
+
+        .joint-controls {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: repeat(3, minmax(0, auto));
+            grid-auto-flow: column;
+            gap: 12px;
+        }
+
+        .joint-card {
+            padding: 14px;
+            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid #ececec;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .joint-card:hover,
+        .joint-card.active {
+            border-color: #d8d8d8;
+            background: #fcfcfc;
+        }
+
+        .joint-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .joint-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .joint-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            min-width: 58px;
+            text-align: right;
+        }
+
+        .joint-slider {
+            width: 100%;
+            accent-color: #2e2e2e;
+            cursor: ew-resize;
+        }
+
+        .joint-limits {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .viewer-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .viewer-button {
+            border: 1px solid #e5e5e5;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+
+        .viewer-button:hover {
+            border-color: #cfcfcf;
+        }
+
+        .viewer-button.primary {
+            background: #222;
+            color: #fff;
+            border-color: #222;
+        }
+
+        .viewer-button.secondary {
+            background: #fff;
+            color: #444;
+        }
+
+        .viewer-stage {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            height: 100%;
+            background: linear-gradient(180deg, #fbfbfc 0%, #f1f3f5 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.86),
+                inset 0 -1px 0 rgba(15, 23, 42, 0.04),
+                0 8px 20px rgba(15, 23, 42, 0.05);
+        }
+
+        .viewer-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .viewer-status {
+            position: absolute;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(34, 34, 34, 0.86);
+            color: #fff;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            transition: opacity 0.25s;
+        }
+
+        .viewer-status.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 产品亮点 */
+        .features {
+            margin-top: 120px;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 46px;
+            margin-bottom: 40px;
+            color: #222;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: stretch;
+            gap: 50px;
+            margin-bottom: 35px;
+            margin-left: -10%;
+            margin-right: -10%;
+            width: 120%;
+            background: white;
+            padding: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature-item:nth-child(even) .feature-content {
+            padding: 36px 0 36px 40px;
+        }
+
+        .feature-image {
+            flex: 1.02;
+            display: flex;
+            min-height: 100%;
+            padding: 0;
+        }
+
+        .feature-item:nth-child(even) .feature-image {
+            padding: 0;
+        }
+
+        .feature-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: 0 14px 14px 0;
+        }
+
+        .feature-item:nth-child(even) .feature-image img {
+            border-radius: 14px 0 0 14px;
+        }
+
+        .feature-content {
+            flex: 0.89;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 36px 40px 36px 0;
+        }
+
+        .feature-content h3 {
+            font-size: 40px;
+            margin-bottom: 24px color: #222;
+        }
+
+        .feature-content p {
+            font-size: 22px;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        /* 展示视频 */
+        .video-section {
+            --video-border-light: rgba(17, 24, 39, 0.14);
+            --video-border-mid: rgba(17, 24, 39, 0.18);
+            --video-border-inverse: rgba(255, 255, 255, 0.26);
+            position: relative;
+            margin-top: 60px;
+            width: min(1800px, calc(100vw - 40px));
+            margin-left: 50%;
+            transform: translateX(-50%);
+            padding: 48px 32px 72px;
+            border-radius: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.58);
+            background: rgba(255, 255, 255, 0.52);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow:
+                0 8px 24px rgba(15, 23, 42, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.72);
+            overflow: hidden;
+        }
+
+        .video-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.38), transparent 24%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.08) 36%, transparent 68%);
+            pointer-events: none;
+        }
+
+        .video-section-inner {
+            position: relative;
+            width: 100%;
+            max-width: none;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .video-head {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .video-title {
+            color: #222;
+            font-family: 'Outfit', sans-serif;
+            font-size: 46px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .video-description {
+            color: #666;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            margin: 0;
+        }
+
+        .video-title-break {
+            display: none;
+        }
+
+        .video-nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            justify-content: center;
+            width: 144px;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: min(1200px, calc(100vw - 64px));
+            gap: 24px;
+            margin-top: 22px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            min-height: 64px;
+        }
+
+        .video-carousel {
+            width: min(1200px, calc(100vw - 64px));
+            position: relative;
+            aspect-ratio: 16 / 9;
+            height: auto;
+            margin-top: 32px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+
+        .video-slide {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.18s ease, opacity 0.18s ease;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        .video-slide.is-active {
+            z-index: 3;
+            opacity: 1;
+        }
+
+        .video-slide.is-neighbor {
+            z-index: 2;
+            opacity: 0;
+        }
+
+        .video-slide.is-hidden {
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .video-slide-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #000;
+            border-radius: 16px;
+        }
+
+        .video-slide:not(.is-active) .video-slide-inner {
+            pointer-events: none;
+        }
+
+        .video-cover-shell,
+        .video-cover-image,
+        .video-player-frame {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .video-cover-image {
+            object-fit: cover;
+        }
+
+        .video-cover-shell {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            padding: 0;
+            background: transparent;
+            cursor: pointer;
+            transition: opacity 0.16s ease, visibility 0.16s ease;
+            z-index: 2;
+        }
+
+        .video-cover-shell.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+
+        .video-cover-play {
+            position: absolute;
+            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 999px;
+            width: 122px;
+            height: 122px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: rgba(34, 34, 34, 0.72);
+            border: 1px solid var(--video-border-inverse);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+            backdrop-filter: blur(8px);
+        }
+
+        .video-cover-play svg {
+            width: 70px;
+            height: 70px;
+            display: block;
+            fill: #fff;
+            transform: translateX(1px);
+        }
+
+        .video-player-frame {
+            border: 0;
+            background: #000;
+            z-index: 1;
+            opacity: 1;
+        }
+
+        .video-player-frame.is-ready {
+            opacity: 1;
+        }
+
+        .video-media-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .video-cta-wrap {
+            display: flex;
+            justify-content: flex-end;
+            position: static;
+            margin-left: auto;
+        }
+
+        .video-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: min(100%, 320px);
+            padding: 14px 18px;
+            border-radius: 999px;
+            border: 1px solid var(--video-border-inverse);
+            background: #111;
+            backdrop-filter: blur(6px);
+            overflow: hidden;
+            text-decoration: none;
+            position: relative;
+            transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .video-cta::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.01) 65%);
+            opacity: 1;
+            transition: opacity 0.25s ease;
+        }
+
+        .video-cta:hover {
+            border-color: rgba(255, 255, 255, 0.34);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.16);
+        }
+
+        .video-cta:hover::before {
+            opacity: 0.88;
+        }
+
+        .video-cta-icon,
+        .video-cta-text,
+        .video-cta-arrow {
+            position: relative;
+            z-index: 1;
+        }
+
+        .video-cta-icon {
+            width: 30px;
+            height: 21px;
+            margin-right: auto;
+            color: #fff;
+            flex: 0 0 auto;
+        }
+
+        .video-cta-text {
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+        }
+
+        .video-cta-arrow {
+            width: 14px;
+            height: 14px;
+            border-top: 2px solid #f3f4f6;
+            border-right: 2px solid #f3f4f6;
+            transform: translateY(2px) rotate(-45deg);
+        }
+
+        .video-cta:hover .video-cta-arrow {
+            transform: translateY(2px) rotate(-45deg);
+        }
+
+        .video-nav-btn {
+            width: 60px;
+            height: 60px;
+            flex: 0 0 auto;
+            border-radius: 50%;
+            border: 1px solid var(--video-border-mid);
+            background: #fff;
+            color: #222;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+            transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .video-nav-btn:hover {
+            background: #222;
+            border-color: #222;
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(17, 24, 39, 0.18);
+            transform: translateY(-1px);
+        }
+
+        .video-arrow {
+            width: 13px;
+            height: 13px;
+            border-top: 2px solid currentColor;
+            border-right: 2px solid currentColor;
+        }
+
+        .video-arrow.left {
+            transform: translateX(2px) rotate(-135deg);
+        }
+
+        .video-arrow.right {
+            transform: translateX(-2px) rotate(45deg);
+        }
+
+        /* 文档下拉菜单 */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* 伪元素桥接"文档"按钮与子菜单之间的安全区域 */
+        .dropdown::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: -20px;
+            right: -20px;
+            height: 15px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            min-width: 200px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            z-index: 1001;
+            padding: 8px 0;
+        }
+
+        .dropdown:hover .dropdown-content,
+        .dropdown:hover .dropdown-content:hover {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #333 !important;
+            padding: 12px 24px;
+            text-decoration: none;
+            display: block;
+            transition: background 0.2s, color 0.2s;
+            font-size: 16px;
+        }
+
+        .dropdown-content a:visited,
+        .dropdown-content a:active,
+        .dropdown-content a:focus {
+            color: #333 !important;
+        }
+
+        .dropdown-content a:hover {
+            background: #ebebeb;
+            color: #333 !important;
+        }
+
+        .language-dropdown {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .language-dropdown::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: -16px;
+            right: -16px;
+            height: 15px;
+        }
+
+        .language-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            cursor: default;
+        }
+
+        .language-trigger img {
+            width: auto;
+            height: auto;
+            max-width: 23px;
+            max-height: 23px;
+            display: block;
+        }
+
+        .language-content {
+            display: none !important;
+            min-width: 150px;
+        }
+
+        .language-option {
+            width: 100%;
+            padding: 12px 24px;
+            border: 0;
+            background: transparent;
+            color: #333;
+            text-align: left;
+            font-size: 16px;
+            font-family: inherit;
+            cursor: default;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .language-option:hover,
+        .language-option:focus,
+        .language-option:active {
+            background: #ebebeb;
+            color: #333;
+            outline: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                width: 95%;
+                padding: 10px 15px;
+            }
+
+            .navbar-brand {
+                font-size: 18px;
+            }
+
+            .navbar-links {
+                gap: 15px;
+            }
+
+            .navbar-links a {
+                font-size: 14px
+            }
+
+            .viewer-section {
+                padding: 28px 20px;
+                border-radius: 28px;
+                width: auto;
+                margin-left: 0;
+                transform: none;
+            }
+
+            .viewer-title-outside {
+                font-size: 28px;
+            }
+
+            .viewer-shell {
+                grid-template-columns: 1fr;
+                height: auto;
+                min-height: auto;
+            }
+
+            .viewer-stage {
+                min-height: 420px;
+            }
+
+            .joint-controls {
+                grid-template-columns: 1fr;
+                grid-template-rows: none;
+                grid-auto-flow: row;
+            }
+
+            .video-section {
+                width: 100vw;
+                margin-top: 28px;
+                margin-left: 50%;
+                transform: translateX(-50%);
+                padding: 40px 16px 48px;
+                border-radius: 0;
+            }
+
+            .video-section-inner {
+                max-width: none;
+            }
+
+            .video-head {
+                align-items: center;
+            }
+
+            .video-title {
+                font-size: 32px;
+            }
+
+            .video-title-break {
+                display: none;
+            }
+
+            .video-nav {
+                position: static;
+                gap: 12px;
+                width: 100%;
+            }
+
+            .video-nav-btn {
+                width: 48px;
+                height: 48px;
+            }
+
+            .video-carousel {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16 / 9;
+                margin-top: 28px;
+            }
+
+            .video-slide-inner {
+                width: 100%;
+            }
+
+            .video-cover-play {
+                width: 72px;
+                height: 72px;
+                font-size: 13px;
+            }
+
+            .video-controls {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                margin-top: 8px;
+                min-height: 0;
+            }
+
+            .video-cta-wrap {
+                position: static;
+                transform: none;
+            }
+
+            .video-cta {
+                width: 100%;
+                gap: 8px;
+                padding: 14px 18px;
+            }
+
+            .video-cta-text {
+                font-size: 18px;
+            }
+
+            .overview-grid {
+                gap: 32px;
+            }
+
+            .parameters,
+            .background {
+                padding: 0;
+                border-radius: 0;
+            }
+
+            .parameters h2,
+            .background h2 {
+                font-size: 28px;
+            }
+
+            .parameters h2 {
+                font-size: 34px;
+                margin-bottom: 24px;
+            }
+
+            .background {
+                padding: 16px 12px 2px;
+                border-radius: 14px;
+                width: auto;
+            }
+
+            .background-shell {
+                position: static;
+                left: auto;
+                margin-top: 20px;
+                width: auto;
+                transform: none;
+            }
+
+            .background h2 {
+                margin-bottom: 24px;
+                font-size: 30px;
+            }
+
+            .background-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .background-media {
+                min-height: 0;
+            }
+
+            .background-media img {
+                width: 100%;
+                height: auto;
+                max-height: none;
+            }
+
+            .params-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .param-item {
+                min-height: 130px;
+                padding: 19px 13px;
+                gap: 6px;
+            }
+
+            .param-item:not(:nth-child(3n)) {
+                border-right: none;
+            }
+
+            .param-item:nth-child(-n+6) {
+                border-bottom: none;
+            }
+
+            .param-item:not(:nth-child(2n)) {
+                border-right: 1px solid rgba(15, 23, 42, 0.18);
+            }
+
+            .param-item:nth-child(-n+8) {
+                border-bottom: 1px solid rgba(15, 23, 42, 0.18);
+            }
+
+            .param-label {
+                font-size: 13px;
+            }
+
+            .param-value {
+                font-size: 30px;
+            }
+
+            .background-story {
+                gap: 22px;
+                max-width: none;
+            }
+
+            .feature-item {
+                flex-direction: column !important;
+                gap: 0;
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .feature-image {
+                width: 100%;
+                min-height: 0;
+                padding: 0;
+            }
+
+            .feature-image img {
+                aspect-ratio: 16 / 10;
+                border-radius: 0 0 14px 14px;
+            }
+
+            .feature-content {
+                padding: 24px 22px 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <a href="#top" class="navbar-brand" id="nav-brand-top">Panthera-HT</a>
+        <div class="navbar-links">
+            <div class="dropdown">
+                <a href="#docs" class="navbar-link-strong">文档</a>
+                <div class="dropdown-content">
+                    <a href="documents/Panthera-HT参数手册.pdf" target="_blank">参数手册</a>
+                    <a href="documents/Panthera-HT快速使用指南.pdf" target="_blank">快速使用指南</a>
+                </div>
+            </div>
+            <a href="https://github.com/HighTorque-Robotics/Panthera-HT_Main" target="_blank"
+                class="navbar-link-strong">Github</a>
+            <a href="https://www.hightorque.cn/" target="_blank" class="navbar-link-strong">联系我们</a>
+            <div class="language-dropdown" aria-label="Language Selector">
+                <button type="button" class="language-trigger" aria-haspopup="true" aria-expanded="false">
+                    <img src="images/icon2.png" alt="Language">
+                </button>
+                <div class="dropdown-content language-content">
+                    <button type="button" class="language-option">简体中文</button>
+                    <button type="button" class="language-option">English</button>
+                </div>
+            </div>
+            <a href="https://item.taobao.com/item.htm?abbucket=19&id=1014650746579&mi_id=0000JynIiQKtmE1RXN8CYmnPQ_6sEVLAWCwCpq8md6ZgcCM&ns=1&skuId=6187069663848&spm=a21n57.1.hoverItem.2&utparam=%7B%22aplus_abtest%22%3A%229b8e430d1050bc17cfe825ea69089579%22%7D&xxc=taobaoSearch"
+                target="_blank" class="btn-buy">购买</a>
+        </div>
+    </nav>
+
+    <!-- 首页大图 -->
+    <section class="hero">
+        <img src="images/首页图.jpg" alt="Panthera-HT 机械臂">
+    </section>
+
+    <!-- 参数展示 -->
+    <div class="container">
+        <div class="overview-grid">
+            <section class="parameters">
+                <h2>技术参数</h2>
+                <div class="params-grid">
+                    <div class="param-item">
+                        <div class="param-label">自由度</div>
+                        <div class="param-value" data-target="6" data-suffix="dof">0dof</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">重量</div>
+                        <div class="param-value" data-target="4.35" data-suffix="kg">0kg</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">最大负载</div>
+                        <div class="param-value" data-target="3.5" data-suffix="kg">0kg</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">臂展</div>
+                        <div class="param-value" data-target="860" data-suffix="mm">0mm</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">折叠尺寸</div>
+                        <div class="param-value" data-target="460" data-suffix="mm">0mm</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">末端最大移动速度</div>
+                        <div class="param-value" data-target="0.8" data-suffix="m/s">0m/s</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">重复定位精度</div>
+                        <div class="param-value" data-target="0.1" data-suffix="mm">0mm</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">通信方式</div>
+                        <div class="param-value">CAN-FD</div>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-label">峰值关节扭矩</div>
+                        <div class="param-value" data-target="36" data-suffix="Nm">0Nm</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="background-shell">
+            <div class="overview-separator" aria-hidden="true"></div>
+
+            <section class="background">
+                <h2>项目背景</h2>
+                <div class="background-layout">
+                    <div class="background-media">
+                        <img src="images/background.png" alt="Panthera-HT 项目背景">
+                    </div>
+                    <div class="background-story">
+                        <div class="background-block">
+                            <p>Panthera-HT 项目的初心是让学生党能以更低的价格玩到更高性能的关节电机机械臂。<br>
+                                项目前身 Panthera 机械臂是一套基于 DM 执行器的六轴夹爪机械臂。初始概念由 wEch1ng(<a href="https://github.com/wEch1ng"
+                                    target="_blank">https://github.com/wEch1ng</a>) 提出，wEch1ng 与伙伴 KelvinLauMiau
+                                共同分担设计、实施、调试和硬件验证的责任，最终完成了 Panthera 机械臂的制作并开源。</p>
+                        </div>
+                        <div class="background-block">
+                            <p>后来项目原作者与高擎一拍即合，在高擎的支持下将项目完善落地并命名 Panthera-HT，做成了一个更加完善的创客产品。但我们始终坚持开源理念，不对项目作出任何限制。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 产品亮点 -->
+        <section class="features">
+            <h2>产品亮点</h2>
+
+            <div class="feature-item">
+                <div class="feature-image">
+                    <img src="images/特点图片/1.jpg" alt="精准操控">
+                </div>
+                <div class="feature-content">
+                    <h3>精准操控，高效协同</h3>
+                    <p>依托运动控制算法与高精度传感能力，实现0.1mm重复定位精度，面对对位、抓取和连续轨迹执行时更稳更准。</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-image">
+                    <img src="images/特点图片/2.jpg" alt="臂展出众">
+                </div>
+                <div class="feature-content">
+                    <h3>臂展出众，游刃有余</h3>
+                    <p>轻量化6轴设计结合860mm超长臂展，带来更大的空间覆盖能力，让机械臂在复杂场景中依然能够灵活伸展、自由运动。</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-image">
+                    <img src="images/特点图片/3.jpg" alt="美观耐用">
+                </div>
+                <div class="feature-content">
+                    <h3>简洁利落，稳定可靠</h3>
+                    <p>整体设计兼顾外观统一与结构稳定，铝合金机身集美观、强度与耐用性于一体，长期使用依然稳固可靠。</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-image">
+                    <img src="images/特点图片/4.jpg" alt="智能通讯">
+                </div>
+                <div class="feature-content">
+                    <h3>开源兼容，开发高效</h3>
+                    <p>适配ROS2与Lerobot，支持C++、Python开发，并提供URDF模型与仿真支持，便于教学研究与二次开发快速落地。</p>
+                </div>
+            </div>
+        </section>
+
+        <h2 class="viewer-title-outside">模型可视化</h2>
+        <section class="viewer-section" id="viewer">
+            <div class="viewer-shell">
+                <aside class="viewer-sidebar">
+                    <div>
+                        <p class="viewer-panel-copy">拖动 Joint1 到 Joint6 以调整模型姿态。</p>
+                    </div>
+                    <div class="joint-controls" id="joint-controls"></div>
+                    <div class="viewer-actions">
+                        <button class="viewer-button primary" id="viewer-reset">回到零位</button>
+                        <button class="viewer-button secondary" id="viewer-home">重置视角</button>
+                    </div>
+                </aside>
+
+                <div class="viewer-stage">
+                    <canvas id="viewer-canvas" class="viewer-canvas"></canvas>
+                    <div class="viewer-status" id="viewer-status">正在加载 URDF 与 STL 模型...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 展示视频 -->
+        <section class="video-section">
+            <div class="video-section-inner">
+                <div class="video-head">
+                    <h2 class="video-title">产品视频</h2>
+                    <p class="video-description">展示产品的运行效果和二次开发案例</p>
+                </div>
+                <div class="video-carousel" id="video-carousel">
+                    <article class="video-slide" data-index="0"
+                        data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
+                        <div class="video-slide-inner">
+                            <button type="button" class="video-cover-shell" aria-label="播放视频1">
+                                <img class="video-cover-image" src="images/视频封面/1.png" alt="视频1封面" loading="lazy"
+                                    referrerpolicy="no-referrer">
+                                <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
+                                        focusable="false">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg></span>
+                            </button>
+                            <video class="video-player-frame video-media-hidden" data-src="video/1.mp4"
+                                title="Panthera-HT Video 1" controls playsinline preload="metadata"></video>
+                        </div>
+                    </article>
+                    <article class="video-slide" data-index="1"
+                        data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
+                        <div class="video-slide-inner">
+                            <button type="button" class="video-cover-shell" aria-label="播放视频2">
+                                <img class="video-cover-image" src="images/视频封面/2.png" alt="视频2封面" loading="lazy"
+                                    referrerpolicy="no-referrer">
+                                <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
+                                        focusable="false">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg></span>
+                            </button>
+                            <video class="video-player-frame video-media-hidden" data-src="video/2.mp4"
+                                title="Panthera-HT Video 2" controls playsinline preload="metadata"></video>
+                        </div>
+                    </article>
+                    <article class="video-slide" data-index="2"
+                        data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
+                        <div class="video-slide-inner">
+                            <button type="button" class="video-cover-shell" aria-label="播放视频3">
+                                <img class="video-cover-image" src="images/视频封面/3.png" alt="视频3封面" loading="lazy"
+                                    referrerpolicy="no-referrer">
+                                <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
+                                        focusable="false">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg></span>
+                            </button>
+                            <video class="video-player-frame video-media-hidden" data-src="video/3.mp4"
+                                title="Panthera-HT Video 3" controls playsinline preload="metadata"></video>
+                        </div>
+                    </article>
+                </div>
+                <div class="video-controls">
+                    <div class="video-nav">
+                        <button type="button" class="video-nav-btn" id="video-nav-left" aria-label="切换到上一个视频">
+                            <span class="video-arrow left"></span>
+                        </button>
+                        <button type="button" class="video-nav-btn" id="video-nav-right" aria-label="切换到下一个视频">
+                            <span class="video-arrow right"></span>
+                        </button>
+                    </div>
+                    <div class="video-cta-wrap">
+                        <a class="video-cta" id="video-cta-link" href="video/1.mp4" target="_blank"
+                            rel="noopener noreferrer" aria-label="在新窗口打开当前视频">
+                            <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
+                                <path
+                                    d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
+                                    fill="currentColor" />
+                            </svg>
+                            <span class="video-cta-text">在Bilibili中观看</span>
+                            <span class="video-cta-arrow" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script type="module" src="viewer.js"></script>
+    <script>
+        const navBrandTop = document.getElementById("nav-brand-top");
+        if (navBrandTop) {
+            navBrandTop.addEventListener("click", (event) => {
+                event.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        }
+
+        const videoCards = Array.from(document.querySelectorAll(".video-slide"));
+        const videoFrames = Array.from(document.querySelectorAll(".video-player-frame"));
+        const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
+        const videoCtaLink = document.getElementById("video-cta-link");
+        const videoNavLeft = document.getElementById("video-nav-left");
+        const videoNavRight = document.getElementById("video-nav-right");
+        let activeVideoIndex = 0;
+        let playingVideoIndex = -1;
+
+        videoCards.forEach((card) => {
+            const frame = card.querySelector(".video-player-frame");
+            const coverImage = card.querySelector(".video-cover-image");
+            const src = frame?.dataset?.src;
+            if (!frame || !coverImage || !src) return;
+            frame.src = src;
+            frame.poster = coverImage.currentSrc || coverImage.src;
+            frame.controls = false;
+        });
+
+        const normalizeVideoIndex = (index) => {
+            const count = videoCards.length;
+            return ((index % count) + count) % count;
+        };
+
+        const getVideoDelta = (index) => {
+            let delta = index - activeVideoIndex;
+            const half = videoCards.length / 2;
+            if (delta > half) delta -= videoCards.length;
+            if (delta < -half) delta += videoCards.length;
+            return delta;
+        };
+
+        const updateVideoCta = () => {
+            if (!videoCtaLink || !videoCards.length) return;
+            const activeCard = videoCards[activeVideoIndex];
+            const pageUrl = activeCard?.dataset?.pageUrl;
+            if (!pageUrl) return;
+            videoCtaLink.href = pageUrl;
+        };
+
+        const resetVideoCardMedia = (card, options = {}) => {
+            const { rewind = true } = options;
+            const frame = card.querySelector(".video-player-frame");
+            const coverShell = card.querySelector(".video-cover-shell");
+            if (!frame || !coverShell) return;
+
+            frame.classList.add("video-media-hidden");
+            frame.classList.remove("is-ready");
+            delete frame.dataset.loadToken;
+            frame.controls = false;
+
+            coverShell.classList.remove("hidden");
+
+            frame.pause();
+            if (rewind) {
+                frame.currentTime = 0;
+            }
+        };
+
+        const renderVideoCarousel = () => {
+            videoCards.forEach((card, index) => {
+                const delta = getVideoDelta(index);
+                const isCenter = delta === 0;
+                const isNeighbor = Math.abs(delta) === 1;
+                card.classList.toggle("is-active", isCenter);
+                card.classList.toggle("is-neighbor", isNeighbor);
+                card.classList.toggle("is-hidden", !isCenter && !isNeighbor);
+
+                if (isCenter) {
+                    card.style.transform = "translate(-50%, -50%)";
+                    const frame = card.querySelector(".video-player-frame");
+                    const coverShell = card.querySelector(".video-cover-shell");
+                    if (frame && coverShell) {
+                        const shouldPlay = index === playingVideoIndex;
+                        if (shouldPlay) {
+                            frame.classList.remove("video-media-hidden");
+                            coverShell.classList.toggle("hidden", frame.classList.contains("is-ready"));
+                        }
+                    }
+                    return;
+                }
+
+                const translatePercent = isNeighbor ? delta * 56 : (delta < 0 ? -132 : 132);
+                card.style.transform = `translate(calc(-50% + ${translatePercent}%), -50%)`;
+            });
+
+            updateVideoCta();
+        };
+
+        const pauseAllVideos = () => {
+            playingVideoIndex = -1;
+            videoCards.forEach((card) => {
+                resetVideoCardMedia(card);
+            });
+        };
+
+        const playCenterVideo = () => {
+            const centerCard = videoCards[activeVideoIndex];
+            if (!centerCard) return;
+            const frame = centerCard.querySelector(".video-player-frame");
+            const coverShell = centerCard.querySelector(".video-cover-shell");
+            const coverImage = centerCard.querySelector(".video-cover-image");
+            if (!frame || !coverShell || !coverImage) return;
+
+            const loadToken = Date.now().toString() + Math.random().toString(36).slice(2);
+            frame.dataset.loadToken = loadToken;
+            frame.classList.remove("video-media-hidden", "is-ready");
+            coverShell.classList.remove("hidden");
+            frame.controls = false;
+            frame.poster = coverImage.currentSrc || coverImage.src;
+
+            frame.addEventListener("playing", () => {
+                if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
+                frame.controls = true;
+                requestAnimationFrame(() => {
+                    if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
+                    frame.classList.add("is-ready");
+                    coverShell.classList.add("hidden");
+                });
+            }, { once: true });
+
+            playingVideoIndex = activeVideoIndex;
+            renderVideoCarousel();
+
+            requestAnimationFrame(async () => {
+                if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
+                try {
+                    frame.currentTime = 0;
+                    await frame.play();
+                } catch (_error) {
+                    frame.classList.remove("is-ready");
+                    coverShell.classList.remove("hidden");
+                }
+            });
+        };
+
+        const setActiveVideoIndex = (nextIndex) => {
+            const previousPlayingIndex = playingVideoIndex;
+            playingVideoIndex = -1;
+            activeVideoIndex = normalizeVideoIndex(nextIndex);
+            renderVideoCarousel();
+
+            // 延迟重置之前播放的视频，避免闪黑
+            if (previousPlayingIndex !== -1) {
+                setTimeout(() => {
+                    const previousCard = videoCards[previousPlayingIndex];
+                    if (previousCard && previousPlayingIndex !== activeVideoIndex) {
+                        resetVideoCardMedia(previousCard);
+                    }
+                }, 300);
+            }
+        };
+
+        if (videoNavLeft) {
+            videoNavLeft.addEventListener("click", () => {
+                setActiveVideoIndex(activeVideoIndex - 1);
+            });
+        }
+
+        if (videoNavRight) {
+            videoNavRight.addEventListener("click", () => {
+                setActiveVideoIndex(activeVideoIndex + 1);
+            });
+        }
+
+        videoCards.forEach((card, index) => {
+            card.addEventListener("click", () => {
+                if (index === activeVideoIndex) return;
+                setActiveVideoIndex(index);
+            });
+        });
+
+        videoCoverShells.forEach((coverShell, index) => {
+            coverShell.addEventListener("click", (event) => {
+                event.stopPropagation();
+                if (index !== activeVideoIndex) return;
+                playCenterVideo();
+            });
+        });
+
+        if (videoCards.length) {
+            renderVideoCarousel();
+        }
+
+        // 技术参数动态计数效果
+        function animateCounter(element, target, duration = 1500) {
+            const suffix = element.dataset.suffix || '';
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+
+                // 根据目标值类型决定显示格式
+                let displayValue;
+                if (target % 1 === 0) {
+                    // 目标值是整数，只显示整数
+                    displayValue = Math.floor(current);
+                } else if (target < 1) {
+                    // 小于1的小数，显示1位小数
+                    displayValue = current.toFixed(1);
+                } else {
+                    // 其他小数，显示2位小数
+                    displayValue = current.toFixed(2);
+                }
+
+                element.textContent = displayValue + suffix;
+            }, 16);
+        }
+
+        // 使用 Intersection Observer 检测元素进入视口
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px'
+        };
+
+        const paramObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    const target = parseFloat(entry.target.dataset.target);
+                    if (!isNaN(target)) {
+                        entry.target.dataset.animated = 'true';
+                        animateCounter(entry.target, target);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // 观察所有带有 data-target 属性的参数值
+        document.querySelectorAll('.param-value[data-target]').forEach(element => {
+            paramObserver.observe(element);
+        });
+
+    </script>
+</body>
+
+</html>
