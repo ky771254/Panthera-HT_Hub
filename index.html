@@ -466,23 +466,37 @@
         }
 
         .viewer-actions {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 12px;
             margin-top: auto;
         }
 
         .viewer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
             border: 1px solid #e5e5e5;
             border-radius: 999px;
             padding: 10px 16px;
             font-size: 13px;
             font-weight: 600;
+            white-space: nowrap;
             cursor: pointer;
             transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
 
         .viewer-button:hover {
             border-color: #cfcfcf;
+        }
+
+        .viewer-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+            border-color: #e5e5e5;
+            background: #f3f4f6;
+            color: #8b8b8b;
         }
 
         .viewer-button.primary {
@@ -494,6 +508,21 @@
         .viewer-button.secondary {
             background: #fff;
             color: #444;
+        }
+
+        .viewer-button.viewer-toggle {
+            min-width: 92px;
+            color: #fff;
+        }
+
+        .viewer-button.viewer-toggle.toggle-start {
+            background: #2d9b49;
+            border-color: #2d9b49;
+        }
+
+        .viewer-button.viewer-toggle.toggle-stop {
+            background: #ca3a36;
+            border-color: #ca3a36;
         }
 
         .viewer-stage {
@@ -512,6 +541,27 @@
             width: 100%;
             height: 100%;
             display: block;
+            transition: filter 0.25s ease, transform 0.25s ease;
+        }
+
+        .viewer-stage.is-blocked .viewer-canvas {
+            filter: blur(5px);
+            transform: scale(1.04);
+        }
+
+        .viewer-stage-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(245, 247, 249, 0.42);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 1;
+        }
+
+        .viewer-stage.is-blocked .viewer-stage-overlay {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .viewer-status {
@@ -526,6 +576,7 @@
             font-size: 13px;
             letter-spacing: 0.02em;
             transition: opacity 0.25s;
+            z-index: 2;
         }
 
         .viewer-status.hidden {
@@ -1330,8 +1381,9 @@
             <a href="https://github.com/HighTorque-Robotics/Panthera-HT_Main" target="_blank"
                 class="navbar-link-strong">Github</a>
             <a href="https://www.hightorque.cn/" target="_blank" class="navbar-link-strong">联系我们</a>
-            <button type="button" class="language-trigger" onclick="location.href='index_en.html'" title="Switch to English" aria-label="Switch to English">
-                    <img src="images/icon2.png" alt="Language">
+            <button type="button" class="language-trigger" onclick="location.href='index_en.html'"
+                title="Switch to English" aria-label="Switch to English">
+                <img src="images/icon2.png" alt="Language">
             </button>
             <a href="https://item.taobao.com/item.htm?abbucket=19&id=1014650746579&mi_id=0000JynIiQKtmE1RXN8CYmnPQ_6sEVLAWCwCpq8md6ZgcCM&ns=1&skuId=6187069663848&spm=a21n57.1.hoverItem.2&utparam=%7B%22aplus_abtest%22%3A%229b8e430d1050bc17cfe825ea69089579%22%7D&xxc=taobaoSearch"
                 target="_blank" class="btn-buy">购买</a>
@@ -1468,13 +1520,16 @@
                     </div>
                     <div class="joint-controls" id="joint-controls"></div>
                     <div class="viewer-actions">
-                        <button class="viewer-button primary" id="viewer-reset">回到零位</button>
+                        <button class="viewer-button viewer-toggle toggle-start" id="viewer-toggle"
+                            aria-pressed="false">START</button>
                         <button class="viewer-button secondary" id="viewer-home">重置视角</button>
+                        <button class="viewer-button primary" id="viewer-reset">回到零位</button>
                     </div>
                 </aside>
 
-                <div class="viewer-stage">
+                <div class="viewer-stage is-blocked" id="viewer-stage">
                     <canvas id="viewer-canvas" class="viewer-canvas"></canvas>
+                    <div class="viewer-stage-overlay" aria-hidden="true"></div>
                     <div class="viewer-status" id="viewer-status">正在加载 URDF 与 STL 模型...</div>
                 </div>
             </div>
@@ -1488,7 +1543,8 @@
                     <p class="video-description">展示产品的运行效果和二次开发案例</p>
                 </div>
                 <div class="video-carousel" id="video-carousel">
-                    <article class="video-slide" data-index="0" data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
+                    <article class="video-slide" data-index="0"
+                        data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="播放视频1">
                                 <img class="video-cover-image" src="images/视频封面/1.png" alt="视频1封面" loading="lazy"
@@ -1502,7 +1558,8 @@
                                 title="Panthera-HT Video 1" controls playsinline preload="metadata"></video>
                         </div>
                     </article>
-                    <article class="video-slide" data-index="1" data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
+                    <article class="video-slide" data-index="1"
+                        data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="播放视频2">
                                 <img class="video-cover-image" src="images/视频封面/2.png" alt="视频2封面" loading="lazy"
@@ -1516,7 +1573,8 @@
                                 title="Panthera-HT Video 2" controls playsinline preload="metadata"></video>
                         </div>
                     </article>
-                    <article class="video-slide" data-index="2" data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
+                    <article class="video-slide" data-index="2"
+                        data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="播放视频3">
                                 <img class="video-cover-image" src="images/视频封面/3.png" alt="视频3封面" loading="lazy"

@@ -466,23 +466,37 @@
         }
 
         .viewer-actions {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 12px;
             margin-top: auto;
         }
 
         .viewer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
             border: 1px solid #e5e5e5;
             border-radius: 999px;
             padding: 10px 16px;
             font-size: 13px;
             font-weight: 600;
+            white-space: nowrap;
             cursor: pointer;
             transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
 
         .viewer-button:hover {
             border-color: #cfcfcf;
+        }
+
+        .viewer-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+            border-color: #e5e5e5;
+            background: #f3f4f6;
+            color: #8b8b8b;
         }
 
         .viewer-button.primary {
@@ -494,6 +508,21 @@
         .viewer-button.secondary {
             background: #fff;
             color: #444;
+        }
+
+        .viewer-button.viewer-toggle {
+            min-width: 92px;
+            color: #fff;
+        }
+
+        .viewer-button.viewer-toggle.toggle-start {
+            background: #2d9b49;
+            border-color: #2d9b49;
+        }
+
+        .viewer-button.viewer-toggle.toggle-stop {
+            background: #ca3a36;
+            border-color: #ca3a36;
         }
 
         .viewer-stage {
@@ -512,6 +541,27 @@
             width: 100%;
             height: 100%;
             display: block;
+            transition: filter 0.25s ease, transform 0.25s ease;
+        }
+
+        .viewer-stage.is-blocked .viewer-canvas {
+            filter: blur(8px);
+            transform: scale(1.03);
+        }
+
+        .viewer-stage-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(245, 247, 249, 0.42);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 1;
+        }
+
+        .viewer-stage.is-blocked .viewer-stage-overlay {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .viewer-status {
@@ -526,6 +576,7 @@
             font-size: 13px;
             letter-spacing: 0.02em;
             transition: opacity 0.25s;
+            z-index: 2;
         }
 
         .viewer-status.hidden {
@@ -1465,13 +1516,15 @@
                     </div>
                     <div class="joint-controls" id="joint-controls"></div>
                     <div class="viewer-actions">
-                        <button class="viewer-button primary" id="viewer-reset">回到零位</button>
+                        <button class="viewer-button viewer-toggle toggle-start" id="viewer-toggle" aria-pressed="false">START</button>
                         <button class="viewer-button secondary" id="viewer-home">重置视角</button>
+                        <button class="viewer-button primary" id="viewer-reset">回到零位</button>
                     </div>
                 </aside>
 
-                <div class="viewer-stage">
+                <div class="viewer-stage is-blocked" id="viewer-stage">
                     <canvas id="viewer-canvas" class="viewer-canvas"></canvas>
+                    <div class="viewer-stage-overlay" aria-hidden="true"></div>
                     <div class="viewer-status" id="viewer-status">正在加载 URDF 与 STL 模型...</div>
                 </div>
             </div>

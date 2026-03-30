@@ -29,9 +29,11 @@ const jointControls = document.getElementById("joint-controls");
 const statusEl = document.getElementById("viewer-status");
 const resetButton = document.getElementById("viewer-reset");
 const homeButton = document.getElementById("viewer-home");
+const toggleButton = document.getElementById("viewer-toggle");
+const stage = document.getElementById("viewer-stage");
 const container = canvas?.parentElement;
 
-if (canvas && jointControls && statusEl && resetButton && homeButton && container) {
+if (canvas && jointControls && statusEl && resetButton && homeButton && toggleButton && stage && container) {
     initViewer().catch((error) => {
         console.error(error);
         setStatus("Viewer 初始化失败，请检查浏览器控制台。", false);
@@ -40,8 +42,10 @@ if (canvas && jointControls && statusEl && resetButton && homeButton && containe
 
 async function initViewer() {
     setupScene();
+    setViewerActive(false);
     setStatus("正在初始化模型 ...", true);
     createJointControls(ROBOT_DESCRIPTION.joints);
+    setViewerActive(false);
     setStatus("正在加载 STL 模型 ...", true);
 
     try {
@@ -60,6 +64,7 @@ async function initViewer() {
 
     resetButton.addEventListener("click", resetPose);
     homeButton.addEventListener("click", resetCamera);
+    toggleButton.addEventListener("click", () => setViewerActive(stage.classList.contains("is-blocked")));
     window.addEventListener("resize", handleResize);
     handleResize();
     animate();
@@ -82,6 +87,7 @@ function setupScene() {
     camera.position.set(1.4, 0.95, 1.2);
 
     const controls = new OrbitControls(camera, canvas);
+    controls.enabled = false;
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.target.set(0, 0, 0.28);
@@ -424,6 +430,23 @@ function resetCamera() {
     state.camera.position.copy(state.baseCameraPosition);
     state.controls.target.copy(state.baseCameraTarget);
     state.controls.update();
+}
+
+function setViewerActive(isActive) {
+    stage.classList.toggle("is-blocked", !isActive);
+    canvas.style.pointerEvents = isActive ? "auto" : "none";
+    state.controls.enabled = isActive;
+    resetButton.disabled = !isActive;
+    homeButton.disabled = !isActive;
+
+    state.sliderMap.forEach(({ slider }) => {
+        slider.disabled = !isActive;
+    });
+
+    toggleButton.textContent = isActive ? "STOP" : "START";
+    toggleButton.classList.toggle("toggle-start", !isActive);
+    toggleButton.classList.toggle("toggle-stop", isActive);
+    toggleButton.setAttribute("aria-pressed", String(isActive));
 }
 
 function handleResize() {
