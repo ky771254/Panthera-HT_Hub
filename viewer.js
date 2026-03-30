@@ -2,6 +2,9 @@ import * as THREE from "./vendor/three/three.module.js";
 import { OrbitControls } from "./vendor/three/examples/jsm/controls/OrbitControls.js";
 
 const WORLD_UP = new THREE.Vector3(0, 0, 1);
+const DEFAULT_JOINT_SPEED_DEG = 180;
+const MIN_JOINT_SPEED_DEG = 30;
+const MAX_JOINT_SPEED_DEG = 360;
 const DEFAULT_JOINTS = [
     { name: "joint1", axis: [0, 0, 1], limit: { lower: -2.4, upper: 2.4 } },
     { name: "joint2", axis: [0, 1, 0], limit: { lower: 0.0, upper: 3.2 } },
@@ -22,6 +25,8 @@ const state = {
     robotRoot: null,
     baseCameraPosition: new THREE.Vector3(),
     baseCameraTarget: new THREE.Vector3(),
+    lastFrameTime: 0,
+    jointSpeed: THREE.MathUtils.degToRad(DEFAULT_JOINT_SPEED_DEG),
 };
 
 const canvas = document.getElementById("viewer-canvas");
@@ -31,6 +36,8 @@ const resetButton = document.getElementById("viewer-reset");
 const homeButton = document.getElementById("viewer-home");
 const toggleButton = document.getElementById("viewer-toggle");
 const stage = document.getElementById("viewer-stage");
+const speedSlider = document.getElementById("joint-speed");
+const speedValueEl = document.getElementById("joint-speed-value");
 const container = canvas?.parentElement;
 
 if (canvas && jointControls && statusEl && resetButton && homeButton && toggleButton && stage && container) {
@@ -65,6 +72,12 @@ async function initViewer() {
     resetButton.addEventListener("click", resetPose);
     homeButton.addEventListener("click", resetCamera);
     toggleButton.addEventListener("click", () => setViewerActive(stage.classList.contains("is-blocked")));
+    if (speedSlider) {
+        speedSlider.addEventListener("input", () => {
+            setJointSpeedDegrees(Number(speedSlider.value));
+        });
+        setJointSpeedDegrees(Number(speedSlider.value) || DEFAULT_JOINT_SPEED_DEG);
+    }
     window.addEventListener("resize", handleResize);
     handleResize();
     animate();
@@ -263,8 +276,7 @@ function createJointControls(joints) {
 
         slider.addEventListener("input", () => {
             const radians = degreesToRadians(Number(slider.value));
-            applyJointValue(joint.name, radians);
-            value.textContent = formatDegrees(radians);
+            setJointTarget(joint.name, radians);
         });
 
         slider.addEventListener("pointerdown", () => card.classList.add("active"));
@@ -277,6 +289,7 @@ function createJointControls(joints) {
         state.sliderMap.set(joint.name, { slider, value, card });
         state.jointStates.set(joint.name, {
             value: 0,
+            target: 0,
             lower: joint.limit.lower,
             upper: joint.limit.upper,
             axis: new THREE.Vector3(...joint.axis).normalize(),
@@ -301,6 +314,19 @@ function orderJointControlsForColumns(joints) {
     // Keep any non-standard joints visible after the primary six.
     byName.forEach((joint) => ordered.push(joint));
     return ordered;
+}
+
+function setJointSpeedDegrees(rawValue) {
+    const clamped = THREE.MathUtils.clamp(rawValue, MIN_JOINT_SPEED_DEG, MAX_JOINT_SPEED_DEG);
+    state.jointSpeed = THREE.MathUtils.degToRad(clamped);
+
+    if (speedValueEl) {
+        speedValueEl.textContent = `${Math.round(clamped)}°/s`;
+    }
+
+    if (speedSlider && Number(speedSlider.value) !== Number(clamped.toFixed(0))) {
+        speedSlider.value = String(Math.round(clamped));
+    }
 }
 
 async function buildRobot(description) {
@@ -364,7 +390,7 @@ async function buildRobot(description) {
                 if (jointState) {
                     jointState.axis = new THREE.Vector3(...joint.axis).normalize();
                     jointState.pivot = jointPivot;
-                    applyJointValue(joint.name, jointState.value);
+                    applyJointValue(joint.name, jointState.value, { setTarget: true });
                 }
             }
         });
@@ -377,7 +403,25 @@ async function buildRobot(description) {
     return robotRoot;
 }
 
-function applyJointValue(jointName, rawValue) {
+function setJointTarget(jointName, rawValue, options = {}) {
+    const jointState = state.jointStates.get(jointName);
+    if (!jointState) {
+        return;
+    }
+
+    const clamped = THREE.MathUtils.clamp(rawValue, jointState.lower, jointState.upper);
+    jointState.target = clamped;
+
+    if (options.immediate) {
+        applyJointValue(jointName, clamped, { syncUi: false, setTarget: true });
+    }
+
+    if (options.syncUi !== false) {
+        updateJointUi(jointName, clamped);
+    }
+}
+
+function applyJointValue(jointName, rawValue, options = {}) {
     const jointState = state.jointStates.get(jointName);
     if (!jointState) {
         return;
@@ -385,25 +429,23 @@ function applyJointValue(jointName, rawValue) {
 
     const clamped = THREE.MathUtils.clamp(rawValue, jointState.lower, jointState.upper);
     jointState.value = clamped;
+    if (options.setTarget) {
+        jointState.target = clamped;
+    }
 
     if (jointState.pivot) {
         jointState.pivot.quaternion.setFromAxisAngle(jointState.axis, clamped);
     }
 
-    const controls = state.sliderMap.get(jointName);
-    if (controls) {
-        const degreeValue = radiansToDegrees(clamped);
-        if (Number(controls.slider.value) !== Number(degreeValue.toFixed(1))) {
-            controls.slider.value = degreeValue.toFixed(1);
-        }
-        controls.value.textContent = formatDegrees(clamped);
+    if (options.syncUi !== false) {
+        updateJointUi(jointName, clamped);
     }
 }
 
 function resetPose() {
     state.jointStates.forEach((jointState, jointName) => {
         const nextValue = THREE.MathUtils.clamp(0, jointState.lower, jointState.upper);
-        applyJointValue(jointName, nextValue);
+        setJointTarget(jointName, nextValue);
     });
 }
 
@@ -442,6 +484,9 @@ function setViewerActive(isActive) {
     state.sliderMap.forEach(({ slider }) => {
         slider.disabled = !isActive;
     });
+    if (speedSlider) {
+        speedSlider.disabled = !isActive;
+    }
 
     toggleButton.textContent = isActive ? "STOP" : "START";
     toggleButton.classList.toggle("toggle-start", !isActive);
@@ -460,8 +505,9 @@ function handleResize() {
     state.renderer.setSize(rect.width, rect.height, false);
 }
 
-function animate() {
+function animate(time) {
     requestAnimationFrame(animate);
+    updateJointMotion(time);
     state.controls.update();
     state.renderer.render(state.scene, state.camera);
 }
@@ -500,6 +546,52 @@ function degreesToRadians(value) {
 function formatDegrees(radians) {
     const degrees = radiansToDegrees(radians);
     return `${degrees >= 0 ? "+" : ""}${degrees.toFixed(1)}°`;
+}
+
+function updateJointUi(jointName, radians) {
+    const controls = state.sliderMap.get(jointName);
+    if (!controls) {
+        return;
+    }
+    const degreeValue = radiansToDegrees(radians);
+    if (Number(controls.slider.value) !== Number(degreeValue.toFixed(1))) {
+        controls.slider.value = degreeValue.toFixed(1);
+    }
+    controls.value.textContent = formatDegrees(radians);
+}
+
+function updateJointMotion(time) {
+    if (!Number.isFinite(time)) {
+        return;
+    }
+
+    if (!state.lastFrameTime) {
+        state.lastFrameTime = time;
+        return;
+    }
+
+    const deltaSeconds = Math.min((time - state.lastFrameTime) / 1000, 0.05);
+    state.lastFrameTime = time;
+
+    const speed = Number.isFinite(state.jointSpeed) ? state.jointSpeed : THREE.MathUtils.degToRad(DEFAULT_JOINT_SPEED_DEG);
+    const maxStep = speed * deltaSeconds;
+    if (maxStep <= 0) {
+        return;
+    }
+
+    state.jointStates.forEach((jointState, jointName) => {
+        const target = Number.isFinite(jointState.target) ? jointState.target : jointState.value;
+        const delta = target - jointState.value;
+        if (Math.abs(delta) <= maxStep) {
+            if (delta !== 0) {
+                applyJointValue(jointName, target, { syncUi: false, setTarget: false });
+            }
+            return;
+        }
+
+        const nextValue = jointState.value + Math.sign(delta) * maxStep;
+        applyJointValue(jointName, nextValue, { syncUi: false, setTarget: false });
+    });
 }
 
 async function loadStlGeometry(url) {

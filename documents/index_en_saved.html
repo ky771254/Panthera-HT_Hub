@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -545,8 +545,8 @@
         }
 
         .viewer-stage.is-blocked .viewer-canvas {
-            filter: blur(8px);
-            transform: scale(1.03);
+            filter: blur(5px);
+            transform: scale(1.04);
         }
 
         .viewer-stage-overlay {
@@ -667,7 +667,7 @@
             --video-border-mid: rgba(17, 24, 39, 0.18);
             --video-border-inverse: rgba(255, 255, 255, 0.26);
             position: relative;
-            margin-top: 60px;
+            margin-top: 120px;
             width: min(1800px, calc(100vw - 40px));
             margin-left: 50%;
             transform: translateX(-50%);
@@ -1076,9 +1076,18 @@
             width: 28px;
             height: 28px;
             padding: 0;
+            margin: 0;
             border: 0;
+            line-height: 1;
             background: transparent;
-            cursor: default;
+            cursor: pointer;
+            opacity: 1;
+            transition: opacity 0.3s;
+            flex-shrink: 0;
+        }
+
+        .language-trigger:hover {
+            opacity: 0.6;
         }
 
         .language-trigger img {
@@ -1363,74 +1372,68 @@
         <a href="#top" class="navbar-brand" id="nav-brand-top">Panthera-HT</a>
         <div class="navbar-links">
             <div class="dropdown">
-                <a href="#docs" class="navbar-link-strong">文档</a>
+                <a href="#docs" class="navbar-link-strong">DOCS</a>
                 <div class="dropdown-content">
-                    <a href="documents/Panthera-HT参数手册.pdf" target="_blank">参数手册</a>
-                    <a href="documents/Panthera-HT快速使用指南.pdf" target="_blank">快速使用指南</a>
+                    <a href="documents/Panthera-HT Parameter Manual.pdf" target="_blank">Parameter Manual</a>
+                    <a href="documents/Panthera-HT Quick Start Guide.pdf" target="_blank">Quick Start Guide</a>
                 </div>
             </div>
             <a href="https://github.com/HighTorque-Robotics/Panthera-HT_Main" target="_blank"
                 class="navbar-link-strong">Github</a>
-            <a href="https://www.hightorque.cn/" target="_blank" class="navbar-link-strong">联系我们</a>
-            <div class="language-dropdown" aria-label="Language Selector">
-                <button type="button" class="language-trigger" aria-haspopup="true" aria-expanded="false">
+            <a href="https://www.hightorquerobotics.com/" target="_blank" class="navbar-link-strong">CONTACT</a>
+            <button type="button" class="language-trigger" onclick="location.href='index.html'" title="切换到中文" aria-label="切换到中文">
                     <img src="images/icon2.png" alt="Language">
-                </button>
-                <div class="dropdown-content language-content">
-                    <button type="button" class="language-option">简体中文</button>
-                    <button type="button" class="language-option">English</button>
-                </div>
-            </div>
-            <a href="https://item.taobao.com/item.htm?abbucket=19&id=1014650746579&mi_id=0000JynIiQKtmE1RXN8CYmnPQ_6sEVLAWCwCpq8md6ZgcCM&ns=1&skuId=6187069663848&spm=a21n57.1.hoverItem.2&utparam=%7B%22aplus_abtest%22%3A%229b8e430d1050bc17cfe825ea69089579%22%7D&xxc=taobaoSearch"
-                target="_blank" class="btn-buy">购买</a>
+            </button>
+            <a href="https://store.hightorque.cn/products/panthera-ht-6-dof-robotic-arm"
+                target="_blank" class="btn-buy">BUY</a>
         </div>
     </nav>
 
     <!-- 首页大图 -->
     <section class="hero">
-        <img src="images/首页图.jpg" alt="Panthera-HT 机械臂">
+        <img src="images/英文首页.png" alt="Panthera-HT Robotic Arm">
     </section>
 
     <!-- 参数展示 -->
     <div class="container">
         <div class="overview-grid">
             <section class="parameters">
-                <h2>技术参数</h2>
+                <h2>Specifications</h2>
                 <div class="params-grid">
                     <div class="param-item">
-                        <div class="param-label">自由度</div>
+                        <div class="param-label">DOF</div>
                         <div class="param-value" data-target="6" data-suffix="dof">0dof</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">重量</div>
+                        <div class="param-label">Weight</div>
                         <div class="param-value" data-target="4.35" data-suffix="kg">0kg</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">最大负载</div>
+                        <div class="param-label">Max Payload</div>
                         <div class="param-value" data-target="3.5" data-suffix="kg">0kg</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">臂展</div>
+                        <div class="param-label">Reach</div>
                         <div class="param-value" data-target="860" data-suffix="mm">0mm</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">折叠尺寸</div>
+                        <div class="param-label">Folded Length</div>
                         <div class="param-value" data-target="460" data-suffix="mm">0mm</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">末端最大移动速度</div>
+                        <div class="param-label">Max TCP Speed</div>
                         <div class="param-value" data-target="0.8" data-suffix="m/s">0m/s</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">重复定位精度</div>
+                        <div class="param-label">Repeatability</div>
                         <div class="param-value" data-target="0.1" data-suffix="mm">0mm</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">通信方式</div>
+                        <div class="param-label">Communication</div>
                         <div class="param-value">CAN-FD</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">峰值关节扭矩</div>
+                        <div class="param-label">Peak Joint Torque</div>
                         <div class="param-value" data-target="36" data-suffix="Nm">0Nm</div>
                     </div>
                 </div>
@@ -1442,20 +1445,19 @@
             <div class="overview-separator" aria-hidden="true"></div>
 
             <section class="background">
-                <h2>项目背景</h2>
+                <h2>Project Background</h2>
                 <div class="background-layout">
                     <div class="background-media">
-                        <img src="images/background.png" alt="Panthera-HT 项目背景">
+                        <img src="images/background.png" alt="Panthera-HT Project Background">
                     </div>
                     <div class="background-story">
                         <div class="background-block">
-                            <p>Panthera-HT 项目的初心是让学生党能以更低的价格玩到更高性能的关节电机机械臂。<br>
-                                项目前身 Panthera 机械臂是一套基于 DM 执行器的六轴夹爪机械臂。初始概念由 wEch1ng(<a href="https://github.com/wEch1ng"
-                                    target="_blank">https://github.com/wEch1ng</a>) 提出，wEch1ng 与伙伴 KelvinLauMiau
-                                共同分担设计、实施、调试和硬件验证的责任，最终完成了 Panthera 机械臂的制作并开源。</p>
+                            <p>The Panthera-HT project was born from a desire to make high-performance joint-motor robotic arms accessible to students at a lower price.<br>
+                                Its predecessor, the Panthera robotic arm, was a 6-axis gripper arm based on DM actuators. The initial concept was proposed by wEch1ng (<a href="https://github.com/wEch1ng"
+                                    target="_blank">https://github.com/wEch1ng</a>), who collaborated with KelvinLauMiau to share responsibilities in design, implementation, debugging, and hardware validation, ultimately completing and open-sourcing the Panthera arm.</p>
                         </div>
                         <div class="background-block">
-                            <p>后来项目原作者与高擎一拍即合，在高擎的支持下将项目完善落地并命名 Panthera-HT，做成了一个更加完善的创客产品。但我们始终坚持开源理念，不对项目作出任何限制。</p>
+                            <p>The original authors later joined forces with HighTorque Robotics, and with HighTorque's support, the project was refined and commercialized as Panthera-HT — a more complete maker product. We remain committed to open-source principles with no restrictions on the project.</p>
                         </div>
                     </div>
                 </div>
@@ -1464,68 +1466,68 @@
 
         <!-- 产品亮点 -->
         <section class="features">
-            <h2>产品亮点</h2>
+            <h2>Features</h2>
 
             <div class="feature-item">
                 <div class="feature-image">
-                    <img src="images/特点图片/1.jpg" alt="精准操控">
+                    <img src="images/特点图片/1.jpg" alt="Precise Control">
                 </div>
                 <div class="feature-content">
-                    <h3>精准操控，高效协同</h3>
-                    <p>依托运动控制算法与高精度传感能力，实现0.1mm重复定位精度，面对对位、抓取和连续轨迹执行时更稳更准。</p>
+                    <h3>Precise Control, Efficient Operation</h3>
+                    <p>Leveraging motion control algorithms and high-precision sensing, the arm achieves 0.1mm repeatability — delivering greater stability and accuracy for alignment, grasping, and continuous trajectory tasks.</p>
                 </div>
             </div>
 
             <div class="feature-item">
                 <div class="feature-image">
-                    <img src="images/特点图片/2.jpg" alt="臂展出众">
+                    <img src="images/特点图片/2.jpg" alt="Outstanding Reach">
                 </div>
                 <div class="feature-content">
-                    <h3>臂展出众，游刃有余</h3>
-                    <p>轻量化6轴设计结合860mm超长臂展，带来更大的空间覆盖能力，让机械臂在复杂场景中依然能够灵活伸展、自由运动。</p>
+                    <h3>Outstanding Reach, Maximum Flexibility</h3>
+                    <p>A lightweight 6-axis design combined with an 860mm extended reach delivers greater spatial coverage, allowing the arm to move freely and fluidly even in complex environments.</p>
                 </div>
             </div>
 
             <div class="feature-item">
                 <div class="feature-image">
-                    <img src="images/特点图片/3.jpg" alt="美观耐用">
+                    <img src="images/特点图片/3.jpg" alt="Durable Build">
                 </div>
                 <div class="feature-content">
-                    <h3>简洁利落，稳定可靠</h3>
-                    <p>整体设计兼顾外观统一与结构稳定，铝合金机身集美观、强度与耐用性于一体，长期使用依然稳固可靠。</p>
+                    <h3>Clean Design, Built to Last</h3>
+                    <p>The overall design balances aesthetic consistency with structural integrity. The aluminum alloy body combines good looks, strength, and durability for long-term reliable use.</p>
                 </div>
             </div>
 
             <div class="feature-item">
                 <div class="feature-image">
-                    <img src="images/特点图片/4.jpg" alt="智能通讯">
+                    <img src="images/特点图片/4.jpg" alt="Open Source">
                 </div>
                 <div class="feature-content">
-                    <h3>开源兼容，开发高效</h3>
-                    <p>适配ROS2与Lerobot，支持C++、Python开发，并提供URDF模型与仿真支持，便于教学研究与二次开发快速落地。</p>
+                    <h3>Open Source, Developer Friendly</h3>
+                    <p>Compatible with ROS2 and LeRobot, supporting C++ and Python development. URDF models and simulation support are included, making it easy to get started with research, education, and custom development.</p>
                 </div>
             </div>
         </section>
 
-        <h2 class="viewer-title-outside">模型可视化</h2>
+        <h2 class="viewer-title-outside">Model Viewer</h2>
         <section class="viewer-section" id="viewer">
             <div class="viewer-shell">
                 <aside class="viewer-sidebar">
                     <div>
-                        <p class="viewer-panel-copy">拖动 Joint1 到 Joint6 以调整模型姿态。</p>
+                        <p class="viewer-panel-copy">Drag Joint1 to Joint6 to adjust the model pose.</p>
                     </div>
                     <div class="joint-controls" id="joint-controls"></div>
                     <div class="viewer-actions">
                         <button class="viewer-button viewer-toggle toggle-start" id="viewer-toggle" aria-pressed="false">START</button>
-                        <button class="viewer-button secondary" id="viewer-home">重置视角</button>
-                        <button class="viewer-button primary" id="viewer-reset">回到零位</button>
+                        <button class="viewer-button secondary" id="viewer-home">Reset View</button>
+                        <button class="viewer-button primary" id="viewer-reset">Zero Pos</button>
                     </div>
                 </aside>
 
                 <div class="viewer-stage is-blocked" id="viewer-stage">
                     <canvas id="viewer-canvas" class="viewer-canvas"></canvas>
                     <div class="viewer-stage-overlay" aria-hidden="true"></div>
-                    <div class="viewer-status" id="viewer-status">正在加载 URDF 与 STL 模型...</div>
+                    <div class="viewer-status" id="viewer-status">Loading URDF and STL models...</div>
                 </div>
             </div>
         </section>
@@ -1534,15 +1536,14 @@
         <section class="video-section">
             <div class="video-section-inner">
                 <div class="video-head">
-                    <h2 class="video-title">产品视频</h2>
-                    <p class="video-description">展示产品的运行效果和二次开发案例</p>
+                    <h2 class="video-title">Product Videos</h2>
+                    <p class="video-description">Showcasing the arm in action and custom development use cases</p>
                 </div>
                 <div class="video-carousel" id="video-carousel">
-                    <article class="video-slide" data-index="0"
-                        data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
+                    <article class="video-slide" data-index="0" data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
                         <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="播放视频1">
-                                <img class="video-cover-image" src="images/视频封面/1.png" alt="视频1封面" loading="lazy"
+                            <button type="button" class="video-cover-shell" aria-label="Play Video 1">
+                                <img class="video-cover-image" src="images/视频封面/1.png" alt="Video 1 Cover" loading="lazy"
                                     referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
@@ -1553,11 +1554,10 @@
                                 title="Panthera-HT Video 1" controls playsinline preload="metadata"></video>
                         </div>
                     </article>
-                    <article class="video-slide" data-index="1"
-                        data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
+                    <article class="video-slide" data-index="1" data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
                         <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="播放视频2">
-                                <img class="video-cover-image" src="images/视频封面/2.png" alt="视频2封面" loading="lazy"
+                            <button type="button" class="video-cover-shell" aria-label="Play Video 2">
+                                <img class="video-cover-image" src="images/视频封面/2.png" alt="Video 2 Cover" loading="lazy"
                                     referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
@@ -1568,11 +1568,10 @@
                                 title="Panthera-HT Video 2" controls playsinline preload="metadata"></video>
                         </div>
                     </article>
-                    <article class="video-slide" data-index="2"
-                        data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
+                    <article class="video-slide" data-index="2" data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
                         <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="播放视频3">
-                                <img class="video-cover-image" src="images/视频封面/3.png" alt="视频3封面" loading="lazy"
+                            <button type="button" class="video-cover-shell" aria-label="Play Video 3">
+                                <img class="video-cover-image" src="images/视频封面/3.png" alt="Video 3 Cover" loading="lazy"
                                     referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
@@ -1586,22 +1585,22 @@
                 </div>
                 <div class="video-controls">
                     <div class="video-nav">
-                        <button type="button" class="video-nav-btn" id="video-nav-left" aria-label="切换到上一个视频">
+                        <button type="button" class="video-nav-btn" id="video-nav-left" aria-label="Previous video">
                             <span class="video-arrow left"></span>
                         </button>
-                        <button type="button" class="video-nav-btn" id="video-nav-right" aria-label="切换到下一个视频">
+                        <button type="button" class="video-nav-btn" id="video-nav-right" aria-label="Next video">
                             <span class="video-arrow right"></span>
                         </button>
                     </div>
                     <div class="video-cta-wrap">
                         <a class="video-cta" id="video-cta-link" href="video/1.mp4" target="_blank"
-                            rel="noopener noreferrer" aria-label="在新窗口打开当前视频">
+                            rel="noopener noreferrer" aria-label="Open current video in new window">
                             <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
                                 <path
                                     d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
                                     fill="currentColor" />
                             </svg>
-                            <span class="video-cta-text">在Bilibili中观看</span>
+                            <span class="video-cta-text">Watch on Bilibili</span>
                             <span class="video-cta-arrow" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -1610,6 +1609,27 @@
         </section>
     </div>
     <script type="module" src="viewer.js"></script>
+    <script>
+        // Translate viewer status messages from Chinese to English
+        const viewerStatus = document.getElementById("viewer-status");
+        if (viewerStatus) {
+            const statusTranslations = {
+                "正在初始化模型 ...": "Initializing model ...",
+                "正在加载 STL 模型 ...": "Loading STL models ...",
+                "模型已加载，可以拖动关节和视角。": "Model loaded. Drag joints and viewport to interact.",
+                "Viewer 初始化失败，请检查浏览器控制台。": "Viewer initialization failed. Check the browser console.",
+                "模型加载失败：请通过 HTTP 服务访问页面，不能直接用 file:// 打开。": "Model load failed: Please serve via HTTP, not file://.",
+            };
+            new MutationObserver(() => {
+                const text = viewerStatus.textContent;
+                if (statusTranslations[text]) {
+                    viewerStatus.textContent = statusTranslations[text];
+                } else if (text.startsWith("模型加载失败：")) {
+                    viewerStatus.textContent = text.replace("模型加载失败：", "Model load failed: ").replace("请检查浏览器控制台。", "Check the browser console.");
+                }
+            }).observe(viewerStatus, { childList: true, characterData: true, subtree: true });
+        }
+    </script>
     <script>
         const navBrandTop = document.getElementById("nav-brand-top");
         if (navBrandTop) {

@@ -407,6 +407,48 @@
             color: #8a8a8a;
         }
 
+        .viewer-speed {
+            padding: 14px;
+            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid #ececec;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .viewer-speed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .viewer-speed-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .viewer-speed-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .viewer-speed-slider {
+            width: 100%;
+            accent-color: #2e2e2e;
+            cursor: ew-resize;
+        }
+
+        .viewer-speed-limits {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+
         .joint-controls {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1516,7 +1558,19 @@
             <div class="viewer-shell">
                 <aside class="viewer-sidebar">
                     <div>
-                        <p class="viewer-panel-copy">拖动 Joint1 到 Joint6 以调整模型姿态。</p>
+                        <p class="viewer-panel-copy">拖动 Joint1 到 Joint6，以线性方式调整模型姿态。</p>
+                    </div>
+                    <div class="viewer-speed">
+                        <div class="viewer-speed-header">
+                            <span class="viewer-speed-label">模拟关节速度</span>
+                            <span class="viewer-speed-value" id="joint-speed-value">180°/s</span>
+                        </div>
+                        <input class="viewer-speed-slider" id="joint-speed" type="range" min="30" max="360" step="10" value="180"
+                            aria-label="绾挎€ч€熷害">
+                        <div class="viewer-speed-limits">
+                            <span>30</span>
+                            <span>360</span>
+                        </div>
                     </div>
                     <div class="joint-controls" id="joint-controls"></div>
                     <div class="viewer-actions">
