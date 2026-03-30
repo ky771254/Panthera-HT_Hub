@@ -105,7 +105,7 @@ function setupScene() {
     grid.position.z = 0;
     scene.add(grid);
 
-    state.renderer = renderer;
+    state.renderer = renderer;  
     state.scene = scene;
     state.camera = camera;
     state.controls = controls;
@@ -114,13 +114,13 @@ function setupScene() {
 function createRobotDescription() {
     const links = new Map();
     [
-        ["base_link", "description/meshes/base_link.STL"],
-        ["link1", "description/meshes/link1.STL"],
-        ["link2", "description/meshes/link2.STL"],
-        ["link3", "description/meshes/link3.STL"],
-        ["link4", "description/meshes/link4.STL"],
-        ["link5", "description/meshes/link5.STL"],
-        ["link6", "description/meshes/link6.STL"],
+        ["base_link", "meshes/base_link.STL"],
+        ["link1", "meshes/link1.STL"],
+        ["link2", "meshes/link2.STL"],
+        ["link3", "meshes/link3.STL"],
+        ["link4", "meshes/link4.STL"],
+        ["link5", "meshes/link5.STL"],
+        ["link6", "meshes/link6.STL"],
         ["tool_link", ""],
     ].forEach(([name, mesh]) => {
         links.set(name, {
