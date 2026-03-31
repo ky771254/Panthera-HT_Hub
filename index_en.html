@@ -377,7 +377,7 @@
             display: grid;
             grid-template-columns: 340px minmax(0, 1fr);
             gap: 20px;
-            height: 600px;
+            height: 700px;
             z-index: 1;
         }
 
@@ -1423,11 +1423,12 @@
             <a href="https://github.com/HighTorque-Robotics/Panthera-HT_Main" target="_blank"
                 class="navbar-link-strong">Github</a>
             <a href="https://www.hightorquerobotics.com/" target="_blank" class="navbar-link-strong">CONTACT</a>
-            <button type="button" class="language-trigger" onclick="location.href='index.html'" title="切换到中文" aria-label="切换到中文">
-                    <img src="images/icon2.png" alt="Language">
+            <button type="button" class="language-trigger" onclick="location.href='index.html'" title="切换到中文"
+                aria-label="切换到中文">
+                <img src="images/icon2.png" alt="Language">
             </button>
-            <a href="https://store.hightorque.cn/products/panthera-ht-6-dof-robotic-arm"
-                target="_blank" class="btn-buy">BUY</a>
+            <a href="https://store.hightorque.cn/products/panthera-ht-6-dof-robotic-arm" target="_blank"
+                class="btn-buy">BUY</a>
         </div>
     </nav>
 
@@ -1490,16 +1491,24 @@
                 <h2>Project Background</h2>
                 <div class="background-layout">
                     <div class="background-media">
-                        <img src="images/background.png" alt="Panthera-HT Project Background">
+                        <img src="images/background.jpg" alt="Panthera-HT Project Background">
                     </div>
                     <div class="background-story">
                         <div class="background-block">
-                            <p>The Panthera-HT project was born from a desire to make high-performance joint-motor robotic arms accessible to students at a lower price.<br>
-                                Its predecessor, the Panthera robotic arm, was a 6-axis gripper arm based on DM actuators. The initial concept was proposed by wEch1ng (<a href="https://github.com/wEch1ng"
-                                    target="_blank">https://github.com/wEch1ng</a>), who collaborated with KelvinLauMiau to share responsibilities in design, implementation, debugging, and hardware validation, ultimately completing and open-sourcing the Panthera arm.</p>
+                            <p>The Panthera-HT project was born from a desire to make high-performance joint-motor
+                                robotic arms accessible to students at a lower price.<br>
+                                Its predecessor, the Panthera robotic arm, was a 6-axis gripper arm based on DM
+                                actuators. The initial concept was proposed by wEch1ng (<a
+                                    href="https://github.com/wEch1ng" target="_blank">https://github.com/wEch1ng</a>),
+                                who collaborated with KelvinLauMiau to share responsibilities in design, implementation,
+                                debugging, and hardware validation, ultimately completing and open-sourcing the Panthera
+                                arm.</p>
                         </div>
                         <div class="background-block">
-                            <p>The original authors later joined forces with HighTorque Robotics, and with HighTorque's support, the project was refined and commercialized as Panthera-HT — a more complete maker product. We remain committed to open-source principles with no restrictions on the project.</p>
+                            <p>The original authors later joined forces with HighTorque Robotics, and with HighTorque's
+                                support, the project was refined and commercialized as Panthera-HT — a more complete
+                                maker product. We remain committed to open-source principles with no restrictions on the
+                                project.</p>
                         </div>
                     </div>
                 </div>
@@ -1516,7 +1525,9 @@
                 </div>
                 <div class="feature-content">
                     <h3>Precise Control, Efficient Operation</h3>
-                    <p>Leveraging motion control algorithms and high-precision sensing, the arm achieves 0.1mm repeatability — delivering greater stability and accuracy for alignment, grasping, and continuous trajectory tasks.</p>
+                    <p>Leveraging motion control algorithms and high-precision sensing, the arm achieves 0.1mm
+                        repeatability — delivering greater stability and accuracy for alignment, grasping, and
+                        continuous trajectory tasks.</p>
                 </div>
             </div>
 
@@ -1526,7 +1537,8 @@
                 </div>
                 <div class="feature-content">
                     <h3>Outstanding Reach, Maximum Flexibility</h3>
-                    <p>A lightweight 6-axis design combined with an 860mm extended reach delivers greater spatial coverage, allowing the arm to move freely and fluidly even in complex environments.</p>
+                    <p>A lightweight 6-axis design combined with an 860mm extended reach delivers greater spatial
+                        coverage, allowing the arm to move freely and fluidly even in complex environments.</p>
                 </div>
             </div>
 
@@ -1536,7 +1548,8 @@
                 </div>
                 <div class="feature-content">
                     <h3>Clean Design, Built to Last</h3>
-                    <p>The overall design balances aesthetic consistency with structural integrity. The aluminum alloy body combines good looks, strength, and durability for long-term reliable use.</p>
+                    <p>The overall design balances aesthetic consistency with structural integrity. The aluminum alloy
+                        body combines good looks, strength, and durability for long-term reliable use.</p>
                 </div>
             </div>
 
@@ -1546,7 +1559,9 @@
                 </div>
                 <div class="feature-content">
                     <h3>Open Source, Developer Friendly</h3>
-                    <p>Compatible with ROS2 and LeRobot, supporting C++ and Python development. URDF models and simulation support are included, making it easy to get started with research, education, and custom development.</p>
+                    <p>Compatible with ROS2 and LeRobot, supporting C++ and Python development. URDF models and
+                        simulation support are included, making it easy to get started with research, education, and
+                        custom development.</p>
                 </div>
             </div>
         </section>
@@ -1556,15 +1571,16 @@
             <div class="viewer-shell">
                 <aside class="viewer-sidebar">
                     <div>
-                        <p class="viewer-panel-copy">Drag Joint1 to Joint6 to adjust the model pose with linear motion.</p>
+                        <p class="viewer-panel-copy">Drag Joint1 to Joint6 to adjust the model pose with linear motion.
+                        </p>
                     </div>
                     <div class="viewer-speed">
                         <div class="viewer-speed-header">
-                            <span class="viewer-speed-label">Linear Speed</span>
+                            <span class="viewer-speed-label">Joint speed</span>
                             <span class="viewer-speed-value" id="joint-speed-value">180°/s</span>
                         </div>
-                        <input class="viewer-speed-slider" id="joint-speed" type="range" min="30" max="360" step="10" value="180"
-                            aria-label="Linear speed">
+                        <input class="viewer-speed-slider" id="joint-speed" type="range" min="30" max="360" step="10"
+                            value="180" aria-label="Joint speed">
                         <div class="viewer-speed-limits">
                             <span>30</span>
                             <span>360</span>
@@ -1572,7 +1588,8 @@
                     </div>
                     <div class="joint-controls" id="joint-controls"></div>
                     <div class="viewer-actions">
-                        <button class="viewer-button viewer-toggle toggle-start" id="viewer-toggle" aria-pressed="false">START</button>
+                        <button class="viewer-button viewer-toggle toggle-start" id="viewer-toggle"
+                            aria-pressed="false">START</button>
                         <button class="viewer-button secondary" id="viewer-home">Reset View</button>
                         <button class="viewer-button primary" id="viewer-reset">Zero Pos</button>
                     </div>
@@ -1594,11 +1611,12 @@
                     <p class="video-description">Showcasing the arm in action and custom development use cases</p>
                 </div>
                 <div class="video-carousel" id="video-carousel">
-                    <article class="video-slide" data-index="0" data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
+                    <article class="video-slide" data-index="0"
+                        data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="Play Video 1">
-                                <img class="video-cover-image" src="images/视频封面/1.png" alt="Video 1 Cover" loading="lazy"
-                                    referrerpolicy="no-referrer">
+                                <img class="video-cover-image" src="images/视频封面/1.png" alt="Video 1 Cover"
+                                    loading="lazy" referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
                                         <path d="M8 5v14l11-7z" />
@@ -1608,11 +1626,12 @@
                                 title="Panthera-HT Video 1" controls playsinline preload="metadata"></video>
                         </div>
                     </article>
-                    <article class="video-slide" data-index="1" data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
+                    <article class="video-slide" data-index="1"
+                        data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="Play Video 2">
-                                <img class="video-cover-image" src="images/视频封面/2.png" alt="Video 2 Cover" loading="lazy"
-                                    referrerpolicy="no-referrer">
+                                <img class="video-cover-image" src="images/视频封面/2.png" alt="Video 2 Cover"
+                                    loading="lazy" referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
                                         <path d="M8 5v14l11-7z" />
@@ -1622,11 +1641,12 @@
                                 title="Panthera-HT Video 2" controls playsinline preload="metadata"></video>
                         </div>
                     </article>
-                    <article class="video-slide" data-index="2" data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
+                    <article class="video-slide" data-index="2"
+                        data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="Play Video 3">
-                                <img class="video-cover-image" src="images/视频封面/3.png" alt="Video 3 Cover" loading="lazy"
-                                    referrerpolicy="no-referrer">
+                                <img class="video-cover-image" src="images/视频封面/3.png" alt="Video 3 Cover"
+                                    loading="lazy" referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
                                         <path d="M8 5v14l11-7z" />
