@@ -2,7 +2,7 @@ import * as THREE from "./vendor/three/three.module.js";
 import { OrbitControls } from "./vendor/three/examples/jsm/controls/OrbitControls.js";
 
 const WORLD_UP = new THREE.Vector3(0, 0, 1);
-const DEFAULT_JOINT_SPEED_DEG = 180;
+const DEFAULT_JOINT_SPEED_DEG = 120;
 const MIN_JOINT_SPEED_DEG = 30;
 const MAX_JOINT_SPEED_DEG = 360;
 const DEFAULT_JOINTS = [
@@ -27,6 +27,9 @@ const state = {
     baseCameraTarget: new THREE.Vector3(),
     lastFrameTime: 0,
     jointSpeed: THREE.MathUtils.degToRad(DEFAULT_JOINT_SPEED_DEG),
+    raycaster: new THREE.Raycaster(),
+    pointer: new THREE.Vector2(),
+    dragState: null,
 };
 
 const canvas = document.getElementById("viewer-canvas");
@@ -128,6 +131,12 @@ function setupScene() {
     state.scene = scene;
     state.camera = camera;
     state.controls = controls;
+
+    canvas.addEventListener("pointerdown", handlePointerDown);
+    canvas.addEventListener("pointermove", handlePointerMove);
+    canvas.addEventListener("pointerup", handlePointerUp);
+    canvas.addEventListener("pointercancel", handlePointerUp);
+    canvas.addEventListener("pointerleave", handlePointerLeave);
 }
 
 function createRobotDescription() {
@@ -340,10 +349,11 @@ async function buildRobot(description) {
 
     const meshTasks = [];
 
-    const createLinkGroup = (linkName) => {
+    const createLinkGroup = (linkName, ownerJointName = null) => {
         const link = description.links.get(linkName);
         const linkGroup = new THREE.Group();
         linkGroup.name = linkName;
+        linkGroup.userData.dragJointName = ownerJointName;
 
         if (link?.visuals?.length) {
             link.visuals.forEach((visual) => {
@@ -365,6 +375,7 @@ async function buildRobot(description) {
                         );
                         mesh.castShadow = false;
                         mesh.receiveShadow = true;
+                        mesh.userData.dragJointName = ownerJointName;
                         visualGroup.add(mesh);
                     });
                     meshTasks.push(task);
@@ -382,7 +393,7 @@ async function buildRobot(description) {
             const jointPivot = new THREE.Group();
             jointPivot.name = `${joint.name}-pivot`;
             jointFrame.add(jointPivot);
-            jointPivot.add(createLinkGroup(joint.child));
+            jointPivot.add(createLinkGroup(joint.child, joint.name));
             linkGroup.add(jointFrame);
 
             if (joint.type !== "fixed") {
@@ -505,6 +516,190 @@ function handleResize() {
     state.renderer.setSize(rect.width, rect.height, false);
 }
 
+function handlePointerDown(event) {
+    if (!state.controls.enabled || !state.robotRoot) {
+        return;
+    }
+
+    const hit = getPointerJointHit(event);
+    if (!hit) {
+        canvas.style.cursor = "grab";
+        return;
+    }
+
+    const dragState = createJointDragState(hit, event);
+    if (!dragState) {
+        return;
+    }
+
+    state.dragState = dragState;
+    state.controls.enabled = false;
+    canvas.style.cursor = "grabbing";
+    canvas.setPointerCapture(event.pointerId);
+    event.preventDefault();
+}
+
+function handlePointerMove(event) {
+    if (state.dragState?.pointerId === event.pointerId) {
+        updateJointDrag(event);
+        return;
+    }
+
+    if (!state.controls.enabled || !state.robotRoot) {
+        return;
+    }
+
+    canvas.style.cursor = getPointerJointHit(event) ? "grab" : "default";
+}
+
+function handlePointerUp(event) {
+    if (!state.dragState || state.dragState.pointerId !== event.pointerId) {
+        return;
+    }
+
+    stopJointDrag(event.pointerId);
+}
+
+function handlePointerLeave() {
+    if (!state.dragState) {
+        canvas.style.cursor = state.controls.enabled ? "default" : "not-allowed";
+    }
+}
+
+function stopJointDrag(pointerId) {
+    if (!state.dragState || state.dragState.pointerId !== pointerId) {
+        return;
+    }
+
+    const controls = state.sliderMap.get(state.dragState.jointName);
+    controls?.card.classList.remove("active");
+    state.dragState = null;
+    state.controls.enabled = !stage.classList.contains("is-blocked");
+    canvas.style.cursor = state.controls.enabled ? "grab" : "not-allowed";
+    if (canvas.hasPointerCapture(pointerId)) {
+        canvas.releasePointerCapture(pointerId);
+    }
+}
+
+function getPointerJointHit(event) {
+    const intersections = getPointerIntersections(event);
+    for (const hit of intersections) {
+        const jointName = findDragJointName(hit.object);
+        if (jointName && state.jointStates.has(jointName)) {
+            return { jointName, point: hit.point.clone(), object: hit.object };
+        }
+    }
+
+    return null;
+}
+
+function getPointerIntersections(event) {
+    updatePointerFromEvent(event);
+    state.raycaster.setFromCamera(state.pointer, state.camera);
+    return state.raycaster.intersectObject(state.robotRoot, true);
+}
+
+function updatePointerFromEvent(event) {
+    const rect = canvas.getBoundingClientRect();
+    state.pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    state.pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+}
+
+function findDragJointName(object) {
+    let current = object;
+    while (current) {
+        if (current.userData?.dragJointName) {
+            return current.userData.dragJointName;
+        }
+        current = current.parent;
+    }
+    return null;
+}
+
+function createJointDragState(hit, event) {
+    const jointState = state.jointStates.get(hit.jointName);
+    if (!jointState?.pivot) {
+        return null;
+    }
+
+    const originWorld = jointState.pivot.getWorldPosition(new THREE.Vector3());
+    const axisWorld = jointState.axis.clone().applyQuaternion(
+        jointState.pivot.getWorldQuaternion(new THREE.Quaternion()),
+    ).normalize();
+
+    const radialWorld = hit.point.clone().sub(originWorld);
+    const axisComponent = axisWorld.clone().multiplyScalar(radialWorld.dot(axisWorld));
+    radialWorld.sub(axisComponent);
+
+    if (radialWorld.lengthSq() < 1e-8) {
+        radialWorld.copy(getCameraSideVector().cross(axisWorld)).setLength(0.12);
+    }
+
+    const tangentWorld = axisWorld.clone().cross(radialWorld).normalize();
+    if (tangentWorld.lengthSq() < 1e-8) {
+        return null;
+    }
+
+    const radialLength = Math.max(radialWorld.length(), 0.05);
+    const startPoint = projectWorldToCanvas(hit.point);
+    const radiusPoint = projectWorldToCanvas(originWorld.clone().add(radialWorld));
+    const tangentPoint = projectWorldToCanvas(hit.point.clone().add(tangentWorld.multiplyScalar(radialLength)));
+    const radiusPx = Math.max(startPoint.distanceTo(radiusPoint), 36);
+    const tangentPx = tangentPoint.sub(startPoint);
+
+    if (tangentPx.lengthSq() < 1) {
+        tangentPx.set(1, 0);
+    } else {
+        tangentPx.normalize();
+    }
+
+    const controls = state.sliderMap.get(hit.jointName);
+    controls?.card.classList.add("active");
+
+    return {
+        pointerId: event.pointerId,
+        jointName: hit.jointName,
+        startValue: jointState.value,
+        startPointer: new THREE.Vector2(event.clientX, event.clientY),
+        tangentPx,
+        radiusPx,
+    };
+}
+
+function updateJointDrag(event) {
+    const dragState = state.dragState;
+    if (!dragState) {
+        return;
+    }
+
+    const pointerDelta = new THREE.Vector2(
+        event.clientX - dragState.startPointer.x,
+        event.clientY - dragState.startPointer.y,
+    );
+    const angleDelta = pointerDelta.dot(dragState.tangentPx) / dragState.radiusPx;
+    setJointTarget(dragState.jointName, dragState.startValue + angleDelta, { immediate: true });
+    event.preventDefault();
+}
+
+function projectWorldToCanvas(worldPosition) {
+    const projected = worldPosition.clone().project(state.camera);
+    const rect = canvas.getBoundingClientRect();
+    return new THREE.Vector2(
+        ((projected.x + 1) * 0.5) * rect.width,
+        ((1 - projected.y) * 0.5) * rect.height,
+    );
+}
+
+function getCameraSideVector() {
+    const direction = new THREE.Vector3();
+    state.camera.getWorldDirection(direction);
+    const side = direction.cross(state.camera.up).normalize();
+    if (side.lengthSq() < 1e-8) {
+        side.set(1, 0, 0);
+    }
+    return side;
+}
+
 function animate(time) {
     requestAnimationFrame(animate);
     updateJointMotion(time);
@@ -558,6 +753,11 @@ function updateJointUi(jointName, radians) {
         controls.slider.value = degreeValue.toFixed(1);
     }
     controls.value.textContent = formatDegrees(radians);
+    if (state.dragState?.jointName === jointName) {
+        controls.card.classList.add("active");
+    } else {
+        controls.card.classList.remove("active");
+    }
 }
 
 function updateJointMotion(time) {
