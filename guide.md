@@ -207,7 +207,6 @@ robot:
   max_torque: [21, 36, 36, 21, 10, 10]  # 最大力矩（Nm）
   velocity_limits: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]  # 速度限制（rad/s）
   acceleration_limits: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0]  # 加速度限制（rad/s²）
-
 ```
 
 什么时候需要改：
