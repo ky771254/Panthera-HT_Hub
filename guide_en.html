@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panthera-HT SDK Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --panel: rgba(255, 255, 255, 0.92);
+            --panel-strong: #ffffff;
+            --ink: #1d2733;
+            --muted: #6f7b88;
+            --line: rgba(110, 130, 155, 0.16);
+            --accent: #7db9f8;
+            --accent-soft: rgba(125, 185, 248, 0.18);
+            --shadow: 0 18px 36px rgba(82, 110, 144, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            font-family: "Inter", "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), transparent 24%),
+                linear-gradient(180deg, #fafcff 0%, #f2f5f9 100%);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .docs-shell {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 360px minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 24px;
+            align-self: start;
+            max-height: calc(100vh - 48px);
+            overflow: auto;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            padding: 22px 18px 20px;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none;
+        }
+
+        .toc {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .toc-node {
+            min-width: 0;
+        }
+
+        .toc-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .toc-link {
+            display: block;
+            flex: 1;
+            min-width: 0;
+            padding: 8px 12px;
+            border-radius: 14px;
+            color: #526170;
+            text-decoration: none;
+            line-height: 1.45;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .toc-link:hover {
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--ink);
+        }
+
+        .toc-link:focus-visible {
+            outline: 2px solid rgba(125, 185, 248, 0.75);
+            outline-offset: 2px;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .toc-link.is-active {
+            background: var(--accent-soft);
+            color: #2e6fab;
+            font-weight: 700;
+        }
+
+        .toc-level-1 {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .toc-level-2 {
+            font-size: 13px;
+            padding-left: 18px;
+        }
+
+        .toc-level-3 {
+            font-size: 13px;
+            padding-left: 28px;
+            color: #6e7a86;
+        }
+
+        .toc-level-4 {
+            font-size: 13px;
+            padding-left: 38px;
+            color: #7c8894;
+        }
+
+        .toc-toggle {
+            width: 18px;
+            height: 18px;
+            margin-top: 9px;
+            flex: 0 0 auto;
+            border: 0;
+            padding: 0;
+            background: transparent;
+            color: #5f8fbe;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .toc-toggle:hover {
+            color: #2e6fab;
+        }
+
+        .toc-toggle-icon {
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid currentColor;
+            border-bottom: 2px solid currentColor;
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+        .toc-node.is-open > .toc-row .toc-toggle-icon {
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+        .toc-node:not(.is-open) > .toc-row .toc-toggle-icon {
+            transform: rotate(-45deg) translate(-1px, 1px);
+        }
+
+        .toc-children {
+            margin: 6px 0 0 14px;
+            padding-left: 10px;
+            border-left: 1px solid rgba(125, 185, 248, 0.18);
+            display: block;
+            min-width: 0;
+        }
+
+        .toc-node:not(.is-open) > .toc-children {
+            display: none;
+        }
+
+        .content-wrap {
+            min-width: 0;
+        }
+
+        .content-card {
+            border: 1px solid var(--line);
+            border-radius: 32px;
+            background: var(--panel-strong);
+            box-shadow: var(--shadow);
+            padding: 42px 48px 56px;
+        }
+
+        .doc-body {
+            min-width: 0;
+        }
+
+        .doc-body > :first-child {
+            margin-top: 0;
+        }
+
+        .doc-body h1,
+        .doc-body h2,
+        .doc-body h3,
+        .doc-body h4 {
+            scroll-margin-top: 24px;
+            color: #1d2733;
+            line-height: 1.25;
+        }
+
+        .doc-body h1 {
+            margin: 1.8em 0 0.7em;
+            font-size: clamp(30px, 3vw, 42px);
+            font-family: "Outfit", "Inter", sans-serif;
+        }
+
+        .doc-body h2 {
+            margin: 1.9em 0 0.8em;
+            font-size: clamp(24px, 2.4vw, 32px);
+        }
+
+        .doc-body h3 {
+            margin: 1.7em 0 0.75em;
+            font-size: clamp(20px, 2vw, 24px);
+        }
+
+        .doc-body h4 {
+            margin: 1.4em 0 0.65em;
+            font-size: 18px;
+        }
+
+        .doc-body p,
+        .doc-body li,
+        .doc-body blockquote {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .doc-body p,
+        .doc-body ul,
+        .doc-body ol,
+        .doc-body blockquote,
+        .doc-body pre,
+        .doc-body table,
+        .doc-body hr {
+            margin: 0 0 1.2em;
+        }
+
+        .doc-body ul,
+        .doc-body ol {
+            padding-left: 1.5em;
+        }
+
+        .doc-body li + li {
+            margin-top: 0.35em;
+        }
+
+        .doc-body code {
+            font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+            font-size: 0.94em;
+            background: #eef4fb;
+            border-radius: 6px;
+            padding: 0.18em 0.36em;
+        }
+
+        .doc-body pre {
+            overflow: auto;
+            padding: 18px 20px;
+            border-radius: 20px;
+            background: #f4f7fb;
+            color: #294056;
+            border: 1px solid rgba(125, 185, 248, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        }
+
+        .doc-body pre code {
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            color: inherit;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .doc-body blockquote {
+            margin-left: 0;
+            padding: 14px 18px;
+            border-left: 4px solid var(--accent);
+            background: #f4f8fd;
+            color: #4f6377;
+            border-radius: 0 16px 16px 0;
+        }
+
+        .doc-body hr {
+            border: 0;
+            border-top: 1px solid rgba(30, 31, 26, 0.1);
+        }
+
+        .doc-body table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 18px;
+            border: 1px solid rgba(30, 31, 26, 0.1);
+            display: block;
+            overflow-x: auto;
+        }
+
+        .doc-body thead {
+            background: #edf4fb;
+        }
+
+        .doc-body th,
+        .doc-body td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(30, 31, 26, 0.08);
+            vertical-align: top;
+            min-width: 160px;
+        }
+
+        .doc-body tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .doc-body strong {
+            color: #1c2630;
+        }
+
+        .mobile-sidebar-toggle {
+            display: none;
+            width: 100%;
+            margin-bottom: 14px;
+            padding: 12px 14px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--ink);
+            font-size: 15px;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        @media (max-width: 1080px) {
+            .docs-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                max-height: none;
+                display: none;
+            }
+
+            .sidebar.is-open {
+                display: block;
+            }
+
+            .mobile-sidebar-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .docs-shell {
+                padding: 18px;
+            }
+
+            .content-card {
+                padding: 28px 22px 40px;
+                border-radius: 24px;
+            }
+
+            .doc-body p,
+            .doc-body li,
+            .doc-body blockquote {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="docs-shell">
+        <button class="mobile-sidebar-toggle" type="button" aria-expanded="false" aria-controls="guide-sidebar">View Contents</button>
+        <aside class="sidebar" id="guide-sidebar">
+            <nav class="toc" aria-label="Table of contents">
+                <div class="toc-node" data-depth="0" data-level="1"><div class="toc-row"><a class="toc-link toc-level-1" href="#section-001">SDK Directory Guide</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-001-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-001-children">
+                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-002">Overall Layout</a></div></div>
+                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-003">panthera_python/ - Main Python Workspace</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-003-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-003-children">
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-004">scripts/ - Example Library</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-004-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-004-children">
+                            <div class="toc-node" data-depth="3" data-level="4"><div class="toc-row"><a class="toc-link toc-level-4" href="#section-005">Gripper Control</a></div></div>
+                        </div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-006">robot_param/ - Robot Configuration</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-007">Panthera-HT_description/ - 3D Model and URDF Assets</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-008">motor_whl/ - Prebuilt Motor Driver Wheels</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-009">images/ - Documentation Assets</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-010">src/ - Python Binding Source</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-011">Other Files</a></div></div>
+                    </div></div>
+                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-012">panthera_cpp/ - Lower-Level C++ Stack</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-012-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-012-children">
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-013">motor_cpp/ - Motor Driver Layer</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-014">robot_cpp/ - Robot Control Layer</a></div></div>
+                    </div></div>
+                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-015">Root-Level Files</a></div></div>
+                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-016">Quick Navigation: Where Should I Start?</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-016-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-016-children">
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-017">Scenario 1: Python quick start</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-018">Scenario 2: Understand the SDK internals</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-019">Scenario 3: Change robot parameters</a></div></div>
+                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-020">Scenario 4: Develop in C++</a></div></div>
+                    </div></div>
+                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-021">Dependency Map</a></div></div>
+                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-022">FAQ</a></div></div>
+                </div></div>
+            </nav>
+        </aside>
+
+        <section class="content-wrap">
+            <article class="content-card">
+                <div class="doc-body">
+                    <h1 id="section-001" tabindex="-1">SDK Directory Guide</h1>
+                    <blockquote>
+                        <p>This guide explains what each folder in the Panthera-HT SDK is for and where you should start.</p>
+                    </blockquote>
+                    <hr />
+                    <h2 id="section-002" tabindex="-1">Overall Layout</h2>
+                    <pre><code class="language-plaintext">Panthera-HT_SDK/
+├── panthera_cpp/           ← Low-level C++ implementation (advanced users)
+├── panthera_python/        ← Python control stack (the main entry for most users)
+├── LICENSE                 ← Open-source license
+└── README.md               ← Quick start overview
+</code></pre>
+                    <p>In short:</p>
+                    <ul>
+                        <li><p><code>panthera_cpp</code> contains the low-level C++ driver and robot logic.</p></li>
+                        <li><p><code>panthera_python</code> contains the Python-facing control interface and examples.</p></li>
+                        <li><p>Most users can stay inside <code>panthera_python</code>.</p></li>
+                    </ul>
+                    <hr />
+                    <h2 id="section-003" tabindex="-1">panthera_python/ - Main Python Workspace</h2>
+                    <p>This is the directory you will use most of the time. All Python examples live here.</p>
+                    <pre><code class="language-plaintext">panthera_python/
+├── scripts/                    ← Examples and learning entry point
+├── robot_param/                ← Robot configuration files
+├── Panthera-HT_description/    ← 3D model and URDF assets
+├── motor_whl/                  ← Prebuilt motor driver wheels
+├── images/                     ← Documentation images
+├── src/                        ← Python binding source
+├── requirements.txt            ← Python dependency list
+├── README.md                   ← Python SDK usage guide
+└── CMakeLists.txt              ← Build config for source builds
+</code></pre>
+                    <h3 id="section-004" tabindex="-1">scripts/ - Example Library</h3>
+                    <p>This folder contains the ready-to-run control examples, from basic inspection scripts to advanced trajectory and teleoperation demos.</p>
+                    <pre><code class="language-plaintext">scripts/
+├── Panthera_lib/                              ← High-level control library
+│   ├── Panthera.py                            ← Main robot control class
+│   ├── recorder.py                            ← Trajectory record / replay helper
+│   └── __init__.py                            ← Module init
+│
+├── 0_robot_get_state.py                       ← Read robot state first
+├── 0_robot_set_zero.py                        ← Set the zero position
+│
+├── 1_Joint_PosVel_control.py                  ← Joint position + velocity control
+├── 1_Joint_Vel_control.py                     ← Pure joint velocity control
+├── 1_Joint_PD_control.py                      ← Low-level PD control
+├── 1_moveJ_control.py                         ← Synchronized joint-space motion
+├── 1_forward_kinematics_test.py               ← Forward kinematics test
+├── 1_inverse_kinematics_test.py               ← Inverse kinematics test
+│
+├── 2_inv_PosVel_control.py                    ← Cartesian position control via IK
+├── 2_gravity_compensation_control.py          ← Gravity compensation
+├── 2_gravity_friction_compensation_control.py ← Gravity + friction compensation
+├── 2_Jointimpendence_control_with_gra_pd.py   ← Joint impedance with gravity + PD
+├── 2_Jointimpendence_control_with_gra_fri_pd.py ← Joint impedance with gravity + friction + PD
+│
+├── 3_interpolation_control_zeroVel.py         ← Polynomial interpolation, zero end velocity
+├── 3_interpolation_control_nozeroVel.py       ← Polynomial interpolation, non-zero end velocity
+├── 3_sin_trajectory_control.py                ← Sine trajectory tracking
+├── 3_gravity_compensation_with_fk.py          ← Gravity compensation + FK display
+│
+├── 4_impedance_trajectory_control_with_gra_pd.py ← Trajectory-level impedance control
+│
+├── 5_record_trajectory.py                     ← Teach by dragging and record
+├── 5_replay_trajectory.py                     ← Replay a recorded trajectory
+├── 5_teleop_control.py                        ← Master-slave teleoperation
+│
+├── 6_moveL_pos_control.py                     ← Linear Cartesian motion, position mode
+├── 6_moveL_rotate_control.py                  ← Linear Cartesian motion, rotation mode
+│
+├── 7_keyboard_cartesian_pos_control.py        ← Keyboard Cartesian position control
+├── 7_keyboard_cartesian_vel_control.py        ← Keyboard Cartesian velocity control
+│
+└── motor_example/                             ← Low-level single-motor examples
+    ├── 01_motor_get_status.py
+    ├── 02_position_control.py
+    ├── 03_velocity_control.py
+    ├── 04_torque_control.py
+    ├── 05_voltage_control.py
+    ├── 06_current_control.py
+    ├── 07_pos_vel_maxtorque_control.py
+    ├── 08_pos_vel_torque_kp_kd_control.py
+    ├── 09_set_zero.py
+    ├── motor_control.py
+    └── motor_README.md
+</code></pre>
+                    <p>Recommended learning path:</p>
+                    <ol>
+                        <li><p>Start with <code>0_robot_get_state.py</code> to confirm the hardware connection is healthy.</p></li>
+                        <li><p>Learn the basic motion APIs with the <code>1_</code> examples.</p></li>
+                        <li><p>Move on to compensation and interpolation with the <code>2_</code> and <code>3_</code> examples.</p></li>
+                        <li><p>Use the <code>5_</code>, <code>6_</code>, and <code>7_</code> examples as application references.</p></li>
+                        <li><p>Do not directly run the <code>motor_example/</code> scripts unless you are debugging a specific motor.</p></li>
+                    </ol>
+                    <p><code>Panthera_lib/</code> is the high-level wrapper used by almost every example. In day-to-day usage, <code>Panthera.py</code> is the core file you will build on.</p>
+                    <h4 id="section-005" tabindex="-1">Gripper Control</h4>
+                    <p>The gripper is the seventh motor in the chain. It is managed through <code>Panthera_lib</code> with an API style that matches the joint control interface.</p>
+                    <pre><code class="language-yaml">gripper_limits:
+  lower: 0.0   # fully closed (rad)
+  upper: 2.0   # fully open (rad)
+</code></pre>
+                    <p>Common APIs:</p>
+                    <table>
+                        <thead>
+                            <tr><th>Method</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>gripper_open(pos=1.6, vel=0.5, max_tqu=0.5)</code></td><td>Open the gripper</td></tr>
+                            <tr><td><code>gripper_close(pos=0.0, vel=0.5, max_tqu=0.5)</code></td><td>Close the gripper</td></tr>
+                            <tr><td><code>gripper_control(pos, vel, max_tqu)</code></td><td>Precise position / velocity / max torque control</td></tr>
+                            <tr><td><code>gripper_control_MIT(pos, vel, tqe, kp, kd)</code></td><td>MIT-style five-parameter control</td></tr>
+                            <tr><td><code>get_current_pos_gripper()</code></td><td>Read current gripper position</td></tr>
+                            <tr><td><code>get_current_vel_gripper()</code></td><td>Read current gripper velocity</td></tr>
+                            <tr><td><code>get_current_torque_gripper()</code></td><td>Read current gripper torque</td></tr>
+                        </tbody>
+                    </table>
+                    <p>Typical usage:</p>
+                    <pre><code class="language-python">from Panthera_lib import Panthera
+
+robot = Panthera("../robot_param/Leader.yaml")
+
+robot.gripper_open()
+robot.gripper_close()
+robot.gripper_control(1.0, 0.5, 0.5)
+</code></pre>
+                    <p>Commands outside <code>[0.0, 2.0]</code> are rejected for safety.</p>
+                    <hr />
+                    <h3 id="section-006" tabindex="-1">robot_param/ - Robot Configuration</h3>
+                    <p>This directory stores robot-level configuration, such as joint limits, torque limits, and motor IDs.</p>
+                    <pre><code class="language-plaintext">robot_param/
+├── Leader.yaml                 ← Main arm config
+├── Follower.yaml               ← Follower arm config
+└── motor_param/                ← Low-level motor config
+    ├── 6dof_Panthera_params_leader.yaml
+    ├── 6dof_Panthera_params_follower.yaml
+    ├── motor_1.yaml
+    ├── motor_6.yaml
+    └── robot_config.yaml
+</code></pre>
+                    <p>Example:</p>
+                    <pre><code class="language-yaml">robot:
+  name: "Panthera-HT"
+  joint_limits:
+    lower: [-2.4, 0.0, 0.0, -1.6, -1.7, -2.5]
+    upper: [2.4, 3.2, 4.0, 1.6, 1.7, 2.5]
+  max_torque: [21, 36, 36, 21, 10, 10]
+  velocity_limits: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+  acceleration_limits: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0]
+</code></pre>
+                    <p>When should you edit these files:</p>
+                    <ul>
+                        <li><p>For a single-arm setup, make sure the correct <code>end_effector_link</code> is used for the arm model you are running.</p></li>
+                        <li><p>For a dual-arm setup, the master arm should use <code>Leader.yaml</code> and the follower arm should use <code>Follower.yaml</code>.</p></li>
+                        <li><p>Most users do not need to edit these files unless they are adjusting limits or hardware-specific parameters.</p></li>
+                    </ul>
+                    <hr />
+                    <h3 id="section-007" tabindex="-1">Panthera-HT_description/ - 3D Model and URDF Assets</h3>
+                    <p>This directory stores the URDF robot model and the mesh assets used by kinematics, dynamics, and visualization tooling.</p>
+                    <pre><code class="language-plaintext">Panthera-HT_description/
+├── urdf/
+│   ├── Panthera-HT_description_leader.urdf
+│   └── Panthera-HT_description_follower.urdf
+├── meshes/
+│   ├── base_link.stl
+│   ├── link1.stl
+│   └── ...
+├── config/
+└── launch/
+</code></pre>
+                    <p>You usually do not need to edit this folder unless you are working with visualization, model geometry, or robot description data.</p>
+                    <hr />
+                    <h3 id="section-008" tabindex="-1">motor_whl/ - Prebuilt Motor Driver Wheels</h3>
+                    <p>This folder contains prebuilt Python wheels for the motor communication layer.</p>
+                    <pre><code class="language-plaintext">motor_whl/
+├── hightorque_robot-1.2.0-cp39-cp39-linux_x86_64.whl
+├── hightorque_robot-1.2.0-cp310-cp310-linux_x86_64.whl
+├── hightorque_robot-1.2.0-cp311-cp311-linux_x86_64.whl
+├── hightorque_robot-1.2.0-cp312-cp312-linux_x86_64.whl
+├── hightorque_robot-1.0.0-cp39-cp39-linux_aarch64.whl
+├── hightorque_robot-1.0.0-cp310-cp310-linux_aarch64.whl
+├── hightorque_robot-1.0.0-cp311-cp311-linux_aarch64.whl
+└── hightorque_robot-1.0.0-cp312-cp312-linux_aarch64.whl
+</code></pre>
+                    <p>Install the wheel that matches your Python version and CPU architecture.</p>
+                    <hr />
+                    <h3 id="section-009" tabindex="-1">images/ - Documentation Assets</h3>
+                    <p>This folder stores the images used in the docs and README files.</p>
+                    <hr />
+                    <h3 id="section-010" tabindex="-1">src/ - Python Binding Source</h3>
+                    <p>This is the pybind11 bridge layer between the C++ implementation and the Python package.</p>
+                    <hr />
+                    <h3 id="section-011" tabindex="-1">Other Files</h3>
+                    <table>
+                        <thead>
+                            <tr><th>File</th><th>Purpose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>requirements.txt</code></td><td>Python dependencies</td></tr>
+                            <tr><td><code>README.md</code></td><td>Python SDK guide</td></tr>
+                            <tr><td><code>CMakeLists.txt</code></td><td>Build config for source builds</td></tr>
+                            <tr><td><code>setup.py</code></td><td>Python package install script</td></tr>
+                            <tr><td><code>pyproject.toml</code></td><td>Python project config</td></tr>
+                        </tbody>
+                    </table>
+                    <hr />
+                    <h2 id="section-012" tabindex="-1">panthera_cpp/ - Lower-Level C++ Stack</h2>
+                    <p>This is the low-level C++ implementation that handles device communication and the core robot model logic.</p>
+                    <pre><code class="language-plaintext">panthera_cpp/
+├── motor_cpp/                  ← Motor communication layer
+├── robot_cpp/                  ← Robot control layer
+└── README.md                   ← C++ SDK guide
+</code></pre>
+                    <p>Python users usually do not need to modify this part directly.</p>
+                    <h3 id="section-013" tabindex="-1">motor_cpp/ - Motor Driver Layer</h3>
+                    <p>This layer communicates with motors over CAN and exposes the low-level control modes.</p>
+                    <p>Core responsibilities:</p>
+                    <ul>
+                        <li><p>CAN communication</p></li>
+                        <li><p>Motor state feedback</p></li>
+                        <li><p>Position / velocity / torque / MIT control modes</p></li>
+                        <li><p>Multiple motor model support</p></li>
+                    </ul>
+                    <hr />
+                    <h3 id="section-014" tabindex="-1">robot_cpp/ - Robot Control Layer</h3>
+                    <p>This layer builds on the motor driver layer and provides kinematics, dynamics, gravity compensation, Jacobians, and trajectory logic.</p>
+                    <hr />
+                    <h2 id="section-015" tabindex="-1">Root-Level Files</h2>
+                    <pre><code class="language-plaintext">Panthera-HT_SDK/
+├── LICENSE                     ← MIT license
+└── README.md                   ← Project overview and quick start
+</code></pre>
+                    <hr />
+                    <h2 id="section-016" tabindex="-1">Quick Navigation: Where Should I Start?</h2>
+                    <h3 id="section-017" tabindex="-1">Scenario 1: I am a Python user and want to get started quickly</h3>
+                    <p>Focus on:</p>
+                    <ul>
+                        <li><p><code>panthera_python/scripts/</code></p></li>
+                        <li><p><code>panthera_python/README.md</code></p></li>
+                        <li><p><code>panthera_python/robot_param/</code></p></li>
+                    </ul>
+                    <hr />
+                    <h3 id="section-018" tabindex="-1">Scenario 2: I want to understand how the SDK works internally</h3>
+                    <p>Recommended reading order:</p>
+                    <ol>
+                        <li><p><code>panthera_python/scripts/Panthera_lib/Panthera.py</code></p></li>
+                        <li><p><code>panthera_cpp/motor_cpp</code></p></li>
+                        <li><p><code>panthera_cpp/robot_cpp</code></p></li>
+                    </ol>
+                    <hr />
+                    <h3 id="section-019" tabindex="-1">Scenario 3: I want to change robot parameters</h3>
+                    <p>Start with:</p>
+                    <ul>
+                        <li><p><code>robot_param/Leader.yaml</code></p></li>
+                        <li><p><code>robot_param/Follower.yaml</code></p></li>
+                        <li><p><code>robot_param/motor_param/</code></p></li>
+                    </ul>
+                    <hr />
+                    <h3 id="section-020" tabindex="-1">Scenario 4: I want to develop in C++</h3>
+                    <p>Focus on:</p>
+                    <ul>
+                        <li><p><code>panthera_cpp/motor_cpp</code></p></li>
+                        <li><p><code>panthera_cpp/robot_cpp</code></p></li>
+                        <li><p><code>panthera_cpp/README.md</code></p></li>
+                    </ul>
+                    <hr />
+                    <h2 id="section-021" tabindex="-1">Dependency Map</h2>
+                    <pre><code class="language-plaintext">Your Python script
+    ↓ import
+Panthera_lib
+    ↓ import
+hightorque_robot
+    ↓ pybind11 binding
+panthera_cpp/motor_cpp
+    ↓ CAN communication
+Robot hardware
+</code></pre>
+                    <hr />
+                    <h2 id="section-022" tabindex="-1">FAQ</h2>
+                    <p>Q1: Do I need to compile the C++ code if I only want to use Python?<br />
+                    A: Usually no. Install the matching wheel from <code>motor_whl/</code>.</p>
+                    <p>Q2: What is the difference between <code>Panthera_lib</code> and <code>hightorque_robot</code>?<br />
+                    A: <code>hightorque_robot</code> is the low-level Python binding, while <code>Panthera_lib</code> is the high-level SDK wrapper used by the examples.</p>
+                    <p>Q3: When should I use <code>Leader.yaml</code> vs <code>Follower.yaml</code>?<br />
+                    A: Use the file that matches the arm role and end-effector definition in your setup.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        const sidebar = document.getElementById("guide-sidebar");
+        const toggle = document.querySelector(".mobile-sidebar-toggle");
+        const tocLinks = Array.from(document.querySelectorAll(".toc-link"));
+        const treeToggles = Array.from(document.querySelectorAll(".toc-toggle"));
+        const sections = Array.from(document.querySelectorAll(".doc-body h1[id], .doc-body h2[id], .doc-body h3[id], .doc-body h4[id]"));
+        let activeSectionId = "";
+
+        if (toggle && sidebar) {
+            toggle.addEventListener("click", () => {
+                const opened = sidebar.classList.toggle("is-open");
+                toggle.setAttribute("aria-expanded", String(opened));
+                toggle.textContent = opened ? "Hide Contents" : "View Contents";
+            });
+
+            tocLinks.forEach((link) => {
+                link.addEventListener("click", () => {
+                    if (window.innerWidth <= 1080) {
+                        sidebar.classList.remove("is-open");
+                        toggle.setAttribute("aria-expanded", "false");
+                        toggle.textContent = "View Contents";
+                    }
+                });
+            });
+        }
+
+        treeToggles.forEach((button) => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const node = button.closest(".toc-node");
+                if (!node) {
+                    return;
+                }
+
+                const opened = node.classList.toggle("is-open");
+                button.setAttribute("aria-expanded", String(opened));
+                button.setAttribute("aria-label", opened ? "Collapse subsection" : "Expand subsection");
+            });
+        });
+
+        function expandAncestorNodes(link) {
+            let parent = link.closest(".toc-children");
+            while (parent) {
+                const owner = parent.parentElement;
+                if (owner && owner.classList.contains("toc-node")) {
+                    owner.classList.add("is-open");
+                    const button = owner.querySelector(":scope > .toc-row .toc-toggle");
+                    if (button) {
+                        button.setAttribute("aria-expanded", "true");
+                        button.setAttribute("aria-label", "Collapse subsection");
+                    }
+                }
+                parent = owner ? owner.closest(".toc-children") : null;
+            }
+        }
+
+        function setActiveLink(id) {
+            if (!id || id === activeSectionId) {
+                return;
+            }
+
+            activeSectionId = id;
+
+            tocLinks.forEach((link) => {
+                const active = link.getAttribute("href") === `#${id}`;
+                link.classList.toggle("is-active", active);
+                if (active) {
+                    expandAncestorNodes(link);
+                }
+            });
+        }
+
+        function updateActiveSectionFromScroll() {
+            if (!sections.length) {
+                return;
+            }
+
+            const offset = 120;
+            const scrollMarker = window.scrollY + offset;
+            let current = sections[0];
+
+            for (const section of sections) {
+                if (section.offsetTop <= scrollMarker) {
+                    current = section;
+                } else {
+                    break;
+                }
+            }
+
+            setActiveLink(current.id);
+        }
+
+        window.addEventListener("scroll", updateActiveSectionFromScroll, { passive: true });
+        window.addEventListener("load", updateActiveSectionFromScroll);
+
+        if (location.hash) {
+            const current = document.getElementById(location.hash.slice(1));
+            if (current) {
+                setActiveLink(current.id);
+            }
+        }
+    </script>
+</body>
+</html>
