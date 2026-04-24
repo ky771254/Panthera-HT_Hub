@@ -69,10 +69,29 @@
         }
 
         .toc {
+            position: relative;
             display: flex;
             flex-direction: column;
             gap: 8px;
             min-width: 0;
+        }
+
+        .toc-active-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-radius: 14px;
+            background: var(--accent-soft);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
+            transition:
+                transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+                width 260ms cubic-bezier(0.22, 1, 0.36, 1),
+                height 260ms cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 180ms ease;
         }
 
         .toc-node {
@@ -99,6 +118,8 @@
             white-space: normal;
             overflow-wrap: anywhere;
             word-break: break-word;
+            z-index: 1;
+            transition: color 180ms ease;
         }
 
         .toc-link:hover {
@@ -113,7 +134,7 @@
         }
 
         .toc-link.is-active {
-            background: var(--accent-soft);
+            background: transparent;
             color: #2e6fab;
             font-weight: 700;
         }
@@ -136,6 +157,7 @@
         }
 
         .toc-toggle {
+            position: relative;
             width: 18px;
             height: 18px;
             margin-top: 9px;
@@ -148,6 +170,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            z-index: 1;
         }
 
         .toc-toggle:hover {
@@ -391,6 +414,7 @@
         <button class="mobile-sidebar-toggle" type="button" aria-expanded="false" aria-controls="guide-sidebar">查看章节目录</button>
         <aside class="sidebar" id="guide-sidebar">
             <nav class="toc" aria-label="文档目录">
+                <div class="toc-active-indicator" aria-hidden="true"></div>
                 <div class="toc-node" data-depth="0" data-level="1"><div class="toc-row"><a class="toc-link toc-level-1" href="#section-001">SDK 目录结构说明</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-001-children" aria-label="展开子章节"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-001-children">
                     <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-003">整体结构概览</a></div></div>
                     <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-004">panthera_python/ — Python 控制目录（重点）</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-004-children" aria-label="展开子章节"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-004-children">
@@ -1553,6 +1577,8 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
             label: heading.textContent ? heading.textContent.trim() : "",
         }));
         const sidebar = document.getElementById("guide-sidebar");
+        const toc = document.querySelector(".toc");
+        const activeIndicator = document.querySelector(".toc-active-indicator");
         const toggle = document.querySelector(".mobile-sidebar-toggle");
         const tocLinks = Array.from(document.querySelectorAll(".toc-link"));
         const treeToggles = Array.from(document.querySelectorAll(".toc-toggle"));
@@ -1612,6 +1638,45 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
             }
         }
 
+        function syncSidebarScroll(link) {
+            if (!sidebar || !link || window.innerWidth <= 1080) {
+                return;
+            }
+
+            const sidebarRect = sidebar.getBoundingClientRect();
+            const linkRect = link.getBoundingClientRect();
+            const margin = 24;
+            const hiddenAbove = linkRect.top < sidebarRect.top + margin;
+            const hiddenBelow = linkRect.bottom > sidebarRect.bottom - margin;
+
+            if (hiddenAbove || hiddenBelow) {
+                const targetTop =
+                    link.offsetTop - sidebar.clientHeight / 2 + link.clientHeight / 2;
+                const maxScrollTop = sidebar.scrollHeight - sidebar.clientHeight;
+                const nextScrollTop = Math.max(0, Math.min(targetTop, maxScrollTop));
+                sidebar.scrollTo({ top: nextScrollTop, behavior: "smooth" });
+            }
+        }
+
+        function syncActiveIndicator(link) {
+            if (!toc || !activeIndicator || !link || window.innerWidth <= 1080) {
+                if (activeIndicator) {
+                    activeIndicator.style.opacity = "0";
+                }
+                return;
+            }
+
+            const tocRect = toc.getBoundingClientRect();
+            const linkRect = link.getBoundingClientRect();
+            const top = linkRect.top - tocRect.top + toc.scrollTop;
+            const left = linkRect.left - tocRect.left + toc.scrollLeft;
+
+            activeIndicator.style.width = `${linkRect.width}px`;
+            activeIndicator.style.height = `${linkRect.height}px`;
+            activeIndicator.style.transform = `translate(${left}px, ${top}px)`;
+            activeIndicator.style.opacity = "1";
+        }
+
         function setActiveLink(id) {
             if (!id || id === activeSectionId) {
                 return;
@@ -1623,6 +1688,8 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
                 link.classList.toggle("is-active", active);
                 if (active) {
                     expandAncestorNodes(link);
+                    syncSidebarScroll(link);
+                    syncActiveIndicator(link);
                 }
             });
         }
@@ -1648,6 +1715,13 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
         }
 
         window.addEventListener("scroll", updateActiveSectionFromScroll, { passive: true });
+        window.addEventListener("load", updateActiveSectionFromScroll);
+        window.addEventListener("resize", () => {
+            const activeLink = tocLinks.find((link) => link.classList.contains("is-active"));
+            if (activeLink) {
+                syncActiveIndicator(activeLink);
+            }
+        });
 
         if (location.hash) {
             const current = document.getElementById(location.hash.slice(1));
@@ -1655,6 +1729,7 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
                 setActiveLink(current.id);
             }
         }
+
     </script>
 </body>
 </html>
