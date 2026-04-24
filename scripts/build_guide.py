@@ -13,10 +13,10 @@ from markdown_it import MarkdownIt
 ROOT = Path(__file__).resolve().parent.parent
 GUIDE_CONFIGS = {
     "zh": {
-        "source": ROOT / "指南.md",
+        "source": ROOT / "guide.md",
         "target": ROOT / "guide.html",
         "lang": "zh-CN",
-        "title": "Panthera-HT 开发指南",
+        "title": "Panthera-HT SDK 目录结构说明",
         "font_link": (
             "https://fonts.googleapis.com/css2?"
             "family=Outfit:wght@400;500;600;700&"
