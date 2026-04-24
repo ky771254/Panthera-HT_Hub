@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panthera-HT 开发指南</title>
+    <script>
+        (() => {
+            try {
+                const savedTheme = localStorage.getItem("panthera-guide-theme");
+                document.documentElement.dataset.theme = savedTheme || "light";
+            } catch (error) {
+                document.documentElement.dataset.theme = "light";
+            }
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -31,6 +41,7 @@
             background:
                 radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), transparent 24%),
                 linear-gradient(180deg, #fafcff 0%, #f2f5f9 100%);
+            transition: background 220ms ease, color 220ms ease;
         }
 
         a {
@@ -199,10 +210,16 @@
             border-left: 1px solid rgba(125, 185, 248, 0.18);
             display: block;
             min-width: 0;
+            overflow: hidden;
+            height: 0;
+            opacity: 0;
+            transition:
+                height 240ms cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 180ms ease;
         }
 
-        .toc-node:not(.is-open) > .toc-children {
-            display: none;
+        .toc-node.is-open > .toc-children {
+            opacity: 1;
         }
 
         .content-wrap {
@@ -371,6 +388,178 @@
             text-align: left;
         }
 
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            z-index: 30;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 11px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ink);
+            box-shadow: 0 12px 28px rgba(82, 110, 144, 0.12);
+            backdrop-filter: blur(14px);
+            cursor: pointer;
+            transition: background 180ms ease, border-color 180ms ease, transform 180ms ease, color 180ms ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle:focus-visible {
+            outline: 2px solid rgba(125, 185, 248, 0.75);
+            outline-offset: 2px;
+        }
+
+        .theme-toggle-knob {
+            width: 32px;
+            height: 18px;
+            border-radius: 999px;
+            background: rgba(125, 185, 248, 0.22);
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+        .theme-toggle-knob::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #7db9f8;
+            transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), background 180ms ease;
+        }
+
+        .theme-toggle-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        html[data-theme="dark"] body {
+            color: #e8ebef;
+            background: #1C1C1C;
+        }
+
+        html[data-theme="dark"] .sidebar,
+        html[data-theme="dark"] .content-card,
+        html[data-theme="dark"] .mobile-sidebar-toggle {
+            background: #212121;
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 22px 44px rgba(0, 0, 0, 0.34);
+        }
+
+        html[data-theme="dark"] .theme-toggle {
+            background: #1b1f24;
+            color: #eef1f5;
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+        }
+
+        html[data-theme="dark"] .theme-toggle-knob {
+            background: rgba(125, 185, 248, 0.22);
+        }
+
+        html[data-theme="dark"] .theme-toggle-knob::after {
+            transform: translateX(14px);
+            background: #7db9f8;
+        }
+
+        html[data-theme="dark"] .toc-link {
+            color: #c9d0d8;
+        }
+
+        html[data-theme="dark"] .toc-link:hover,
+        html[data-theme="dark"] .toc-link:focus-visible {
+            background: rgba(255, 255, 255, 0.06);
+            color: #f3f5f7;
+            outline-color: rgba(125, 185, 248, 0.75);
+        }
+
+        html[data-theme="dark"] .toc-link.is-active {
+            color: #9fd0ff;
+        }
+
+        html[data-theme="dark"] .toc-level-3,
+        html[data-theme="dark"] .toc-level-4,
+        html[data-theme="dark"] .toc-level-5,
+        html[data-theme="dark"] .toc-level-6 {
+            color: #9ca6b1;
+        }
+
+        html[data-theme="dark"] .toc-toggle {
+            color: #7db9f8;
+        }
+
+        html[data-theme="dark"] .toc-toggle:hover {
+            color: #9fd0ff;
+        }
+
+        html[data-theme="dark"] .toc-active-indicator {
+            background: rgba(125, 185, 248, 0.18);
+        }
+
+        html[data-theme="dark"] .doc-body h1,
+        html[data-theme="dark"] .doc-body h2,
+        html[data-theme="dark"] .doc-body h3,
+        html[data-theme="dark"] .doc-body h4,
+        html[data-theme="dark"] .doc-body h5,
+        html[data-theme="dark"] .doc-body h6,
+        html[data-theme="dark"] .doc-body strong {
+            color: #f3f5f7;
+        }
+
+        html[data-theme="dark"] .doc-body p,
+        html[data-theme="dark"] .doc-body li,
+        html[data-theme="dark"] .doc-body blockquote,
+        html[data-theme="dark"] .doc-body td,
+        html[data-theme="dark"] .doc-body th {
+            color: #d9dee5;
+        }
+
+        html[data-theme="dark"] .doc-body code {
+            background: #232830;
+            color: #eef1f5;
+        }
+
+        html[data-theme="dark"] .doc-body pre {
+            /* background: #232830; */
+            background: #232830;
+            color: #e8ebef;
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        html[data-theme="dark"] .doc-body blockquote {
+            background: #20252c;
+            color: #d9dee5;
+            border-left-color: rgba(255, 255, 255, 0.2);
+        }
+
+        html[data-theme="dark"] .doc-body hr {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        html[data-theme="dark"] .doc-body table {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        html[data-theme="dark"] .doc-body thead {
+            background: #232830;
+        }
+
+        html[data-theme="dark"] .doc-body th,
+        html[data-theme="dark"] .doc-body td {
+            border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+
         @media (max-width: 1080px) {
             .docs-shell {
                 grid-template-columns: 1fr;
@@ -396,6 +585,12 @@
                 padding: 18px;
             }
 
+            .theme-toggle {
+                top: 14px;
+                right: 18px;
+                padding: 8px 10px;
+            }
+
             .content-card {
                 padding: 28px 22px 40px;
                 border-radius: 24px;
@@ -410,6 +605,10 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-knob" aria-hidden="true"></span>
+        <span class="theme-toggle-label">深色背景</span>
+    </button>
     <main class="docs-shell">
         <button class="mobile-sidebar-toggle" type="button" aria-expanded="false" aria-controls="guide-sidebar">查看章节目录</button>
         <aside class="sidebar" id="guide-sidebar">
@@ -1576,12 +1775,107 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
             id: heading.id,
             label: heading.textContent ? heading.textContent.trim() : "",
         }));
+        const root = document.documentElement;
         const sidebar = document.getElementById("guide-sidebar");
         const toc = document.querySelector(".toc");
         const activeIndicator = document.querySelector(".toc-active-indicator");
+        const themeToggle = document.querySelector(".theme-toggle");
+        const themeToggleLabel = document.querySelector(".theme-toggle-label");
         const toggle = document.querySelector(".mobile-sidebar-toggle");
         const tocLinks = Array.from(document.querySelectorAll(".toc-link"));
         const treeToggles = Array.from(document.querySelectorAll(".toc-toggle"));
+        const treeNodes = Array.from(document.querySelectorAll(".toc-node"))
+            .filter((node) => node.querySelector(":scope > .toc-children"));
+
+        function applyTheme(theme) {
+            root.dataset.theme = theme;
+            if (themeToggle) {
+                themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+            }
+            if (themeToggleLabel) {
+                themeToggleLabel.textContent = theme === "dark" ? "浅色" : "深色";
+            }
+        }
+
+        if (themeToggle) {
+            applyTheme(root.dataset.theme || "light");
+            themeToggle.addEventListener("click", () => {
+                const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+                applyTheme(nextTheme);
+                try {
+                    localStorage.setItem("panthera-guide-theme", nextTheme);
+                } catch (error) {
+                    // Ignore storage failures and still switch theme for this session.
+                }
+            });
+        }
+
+        function setNodeOpen(node, opened, immediate = false) {
+            if (!node) {
+                return;
+            }
+
+            const children = node.querySelector(":scope > .toc-children");
+            const button = node.querySelector(":scope > .toc-row .toc-toggle");
+            if (!children) {
+                return;
+            }
+
+            if (button) {
+                button.setAttribute("aria-expanded", String(opened));
+                button.setAttribute("aria-label", opened ? "收起子章节" : "展开子章节");
+            }
+
+            if (opened) {
+                node.classList.add("is-open");
+                if (immediate) {
+                    children.style.height = "auto";
+                    return;
+                }
+
+                children.style.height = "0px";
+                void children.offsetHeight;
+                children.style.height = `${children.scrollHeight}px`;
+
+                const handleOpenEnd = (event) => {
+                    if (event.propertyName !== "height") {
+                        return;
+                    }
+                    children.style.height = "auto";
+                    children.removeEventListener("transitionend", handleOpenEnd);
+                };
+
+                children.addEventListener("transitionend", handleOpenEnd);
+                return;
+            }
+
+            const currentHeight = children.scrollHeight;
+            if (immediate) {
+                node.classList.remove("is-open");
+                children.style.height = "0px";
+                return;
+            }
+
+            children.style.height = `${currentHeight}px`;
+            void children.offsetHeight;
+            node.classList.remove("is-open");
+            children.style.height = "0px";
+        }
+
+        function syncTreeHeights() {
+            treeNodes.forEach((node) => {
+                const children = node.querySelector(":scope > .toc-children");
+                if (!children) {
+                    return;
+                }
+
+                if (node.classList.contains("is-open")) {
+                    children.style.height = "auto";
+                } else {
+                    children.style.height = "0px";
+                }
+            });
+        }
 
         if (toggle && sidebar) {
             toggle.addEventListener("click", () => {
@@ -1610,11 +1904,13 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
                     return;
                 }
 
-                const opened = node.classList.toggle("is-open");
-                button.setAttribute("aria-expanded", String(opened));
-                button.setAttribute("aria-label", opened ? "收起子章节" : "展开子章节");
+                const opened = !node.classList.contains("is-open");
+                setNodeOpen(node, opened);
+                syncVisibleActiveIndicator();
             });
         });
+
+        syncTreeHeights();
 
         const sectionIds = headingMeta.map((item) => item.id);
         const sections = sectionIds
@@ -1627,12 +1923,7 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
             while (parent) {
                 const owner = parent.parentElement;
                 if (owner && owner.classList.contains("toc-node")) {
-                    owner.classList.add("is-open");
-                    const button = owner.querySelector(":scope > .toc-row .toc-toggle");
-                    if (button) {
-                        button.setAttribute("aria-expanded", "true");
-                        button.setAttribute("aria-label", "收起子章节");
-                    }
+                    setNodeOpen(owner, true, true);
                 }
                 parent = owner ? owner.closest(".toc-children") : null;
             }
@@ -1677,6 +1968,33 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
             activeIndicator.style.opacity = "1";
         }
 
+        function getVisibleActiveLink() {
+            const activeLink = tocLinks.find((link) => link.classList.contains("is-active"));
+            if (!activeLink) {
+                return null;
+            }
+
+            let visibleLink = activeLink;
+            let parent = activeLink.closest(".toc-children");
+
+            while (parent) {
+                const owner = parent.parentElement;
+                if (owner && owner.classList.contains("toc-node") && !owner.classList.contains("is-open")) {
+                    const ownerLink = owner.querySelector(":scope > .toc-row .toc-link");
+                    if (ownerLink) {
+                        visibleLink = ownerLink;
+                    }
+                }
+                parent = owner ? owner.closest(".toc-children") : null;
+            }
+
+            return visibleLink;
+        }
+
+        function syncVisibleActiveIndicator() {
+            syncActiveIndicator(getVisibleActiveLink());
+        }
+
         function setActiveLink(id) {
             if (!id || id === activeSectionId) {
                 return;
@@ -1689,7 +2007,7 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
                 if (active) {
                     expandAncestorNodes(link);
                     syncSidebarScroll(link);
-                    syncActiveIndicator(link);
+                    syncVisibleActiveIndicator();
                 }
             });
         }
@@ -1717,7 +2035,8 @@ A：建议复制一份再改，或者在 <code>scripts/</code> 目录下新建
         window.addEventListener("scroll", updateActiveSectionFromScroll, { passive: true });
         window.addEventListener("load", updateActiveSectionFromScroll);
         window.addEventListener("resize", () => {
-            const activeLink = tocLinks.find((link) => link.classList.contains("is-active"));
+            syncTreeHeights();
+            const activeLink = getVisibleActiveLink();
             if (activeLink) {
                 syncActiveIndicator(activeLink);
             }
