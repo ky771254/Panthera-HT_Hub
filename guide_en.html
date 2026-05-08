@@ -4,20 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panthera-HT SDK Guide</title>
-    <script>
-        (() => {
-            try {
-                const savedTheme = localStorage.getItem("panthera-guide-theme");
-                document.documentElement.dataset.theme = savedTheme || "light";
-            } catch (error) {
-                document.documentElement.dataset.theme = "light";
-            }
-        })();
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
     <style>
+
         :root {
             --bg: #f5f7fb;
             --panel: rgba(255, 255, 255, 0.92);
@@ -37,7 +29,7 @@
         body {
             margin: 0;
             color: var(--ink);
-            font-family: "Inter", "Segoe UI", sans-serif;
+            font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
             background:
                 radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), transparent 24%),
                 linear-gradient(180deg, #fafcff 0%, #f2f5f9 100%);
@@ -157,18 +149,13 @@
 
         .toc-level-2 {
             font-size: 13px;
-            padding-left: 18px;
         }
 
-        .toc-level-3 {
+        .toc-level-3,
+        .toc-level-4,
+        .toc-level-5,
+        .toc-level-6 {
             font-size: 13px;
-            padding-left: 28px;
-            color: #6e7a86;
-        }
-
-        .toc-level-4 {
-            font-size: 13px;
-            padding-left: 38px;
             color: #7c8894;
         }
 
@@ -250,7 +237,9 @@
         .doc-body h1,
         .doc-body h2,
         .doc-body h3,
-        .doc-body h4 {
+        .doc-body h4,
+        .doc-body h5,
+        .doc-body h6 {
             scroll-margin-top: 24px;
             color: #1d2733;
             line-height: 1.25;
@@ -259,7 +248,7 @@
         .doc-body h1 {
             margin: 1.8em 0 0.7em;
             font-size: clamp(30px, 3vw, 42px);
-            font-family: "Outfit", "Inter", sans-serif;
+            font-family: "Outfit", "Noto Sans SC", sans-serif;
         }
 
         .doc-body h2 {
@@ -272,7 +261,9 @@
             font-size: clamp(20px, 2vw, 24px);
         }
 
-        .doc-body h4 {
+        .doc-body h4,
+        .doc-body h5,
+        .doc-body h6 {
             margin: 1.4em 0 0.65em;
             font-size: 18px;
         }
@@ -489,7 +480,9 @@
         }
 
         html[data-theme="dark"] .toc-level-3,
-        html[data-theme="dark"] .toc-level-4 {
+        html[data-theme="dark"] .toc-level-4,
+        html[data-theme="dark"] .toc-level-5,
+        html[data-theme="dark"] .toc-level-6 {
             color: #9ca6b1;
         }
 
@@ -509,6 +502,8 @@
         html[data-theme="dark"] .doc-body h2,
         html[data-theme="dark"] .doc-body h3,
         html[data-theme="dark"] .doc-body h4,
+        html[data-theme="dark"] .doc-body h5,
+        html[data-theme="dark"] .doc-body h6,
         html[data-theme="dark"] .doc-body strong {
             color: #f3f5f7;
         }
@@ -527,6 +522,7 @@
         }
 
         html[data-theme="dark"] .doc-body pre {
+            /* background: #232830; */
             background: #232830;
             color: #e8ebef;
             border-color: rgba(255, 255, 255, 0.08);
@@ -602,69 +598,56 @@
 </head>
 <body>
     <button class="theme-toggle" type="button" aria-pressed="false">
-        <span class="theme-toggle-knob" aria-hidden="true"></span>
-        <span class="theme-toggle-label">Dark Mode</span>
     </button>
     <main class="docs-shell">
         <button class="mobile-sidebar-toggle" type="button" aria-expanded="false" aria-controls="guide-sidebar">View Contents</button>
         <aside class="sidebar" id="guide-sidebar">
             <nav class="toc" aria-label="Table of contents">
                 <div class="toc-active-indicator" aria-hidden="true"></div>
-                <div class="toc-node" data-depth="0" data-level="1"><div class="toc-row"><a class="toc-link toc-level-1" href="#section-001">SDK Directory Guide</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-001-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-001-children">
-                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-002">Overall Layout</a></div></div>
-                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-003">panthera_python/ - Main Python Workspace</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-003-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-003-children">
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-004">📂 scripts/ - Example Library</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-004-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-004-children">
-                            <div class="toc-node" data-depth="3" data-level="4"><div class="toc-row"><a class="toc-link toc-level-4" href="#section-005">🤏 Gripper Control</a></div></div>
-                        </div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-006">📂 robot_param/ - Robot Configuration</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-007">Panthera-HT_description/ - 3D Model and URDF Assets</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-008">📂 motor_whl/ - Prebuilt Motor Driver Wheels</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-009">📂 images/ - Documentation Assets</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-010">📂 src/ - Python Binding Source</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-011">📄 Other Files</a></div></div>
-                    </div></div>
-                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-012">panthera_cpp/ - Lower-Level C++ Stack</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-012-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-012-children">
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-013">📂 motor_cpp/ - Motor Driver Layer</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-014">📂 robot_cpp/ - Robot Control Layer</a></div></div>
-                    </div></div>
-                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-015">Root-Level Files</a></div></div>
-                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-016">Quick Navigation: Where Should I Start?</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-016-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-016-children">
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-017">Scenario 1: I am a Python user and want to get started quickly</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-018">Scenario 2: I want to understand how the SDK works internally</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-019">Scenario 3: I want to change robot parameters</a></div></div>
-                        <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-020">Scenario 4: I want to develop in C++</a></div></div>
-                    </div></div>
-                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-021">Dependency Map</a></div></div>
-                    <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-022">FAQ</a></div></div>
-                </div></div>
+                <div class="toc-node" data-depth="0" data-level="1"><div class="toc-row"><a class="toc-link toc-level-1" href="#section-001">SDK Directory Guide</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-001-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-001-children">                <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-002">Overall Layout</a></div></div>
+                <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-003">panthera_python/ - Main Python Workspace</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-003-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-003-children">                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-004">scripts/ - Example Library</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-004-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-004-children">                <div class="toc-node" data-depth="3" data-level="4"><div class="toc-row"><a class="toc-link toc-level-4" href="#section-005">Gripper Control</a></div></div></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-006">robot_param/ - Robot Configuration</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-007">Panthera-HT_description/ - 3D Model and URDF Assets</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-008">motor_whl/ - Prebuilt Motor Driver Wheels</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-009">images/ - Documentation Assets</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-010">src/ - Python Binding Source</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-011">Other Files</a></div></div></div></div>
+                <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-012">panthera_cpp/ - Lower-Level C++ Stack</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-012-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-012-children">                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-013">motor_cpp/ - Motor Driver Layer</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-014">robot_cpp/ - Robot Control Layer</a></div></div></div></div>
+                <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-015">Root-Level Files</a></div></div>
+                <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-016">Quick Navigation: Where Should I Start?</a><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="section-016-children" aria-label="Expand subsection"><span class="toc-toggle-icon" aria-hidden="true"></span></button></div><div class="toc-children" id="section-016-children">                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-017">Scenario 1: I am a Python user and want to get started quickly</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-018">Scenario 2: I want to understand how the SDK works internally</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-019">Scenario 3: I want to change robot parameters</a></div></div>
+                <div class="toc-node" data-depth="2" data-level="3"><div class="toc-row"><a class="toc-link toc-level-3" href="#section-020">Scenario 4: I want to develop in C++</a></div></div></div></div>
+                <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-021">Dependency Map</a></div></div>
+                <div class="toc-node" data-depth="1" data-level="2"><div class="toc-row"><a class="toc-link toc-level-2" href="#section-022">FAQ</a></div></div></div></div>
             </nav>
         </aside>
 
         <section class="content-wrap">
             <article class="content-card">
                 <div class="doc-body">
-                    <h1 id="section-001" tabindex="-1">SDK Directory Guide</h1>
-                    <blockquote>
-                        <p>This guide explains what each folder in the Panthera-HT SDK is for and where you should start.</p>
-                    </blockquote>
-                    <hr />
-                    <h2 id="section-002" tabindex="-1">Overall Layout</h2>
-                    <pre><code class="language-plaintext">Panthera-HT_SDK/
+<h1 id="section-001" tabindex="-1">SDK Directory Guide</h1>
+<blockquote>
+<p>This guide explains what each folder in the Panthera-HT SDK is for and where you should start.</p>
+</blockquote>
+<h2 id="section-002" tabindex="-1">Overall Layout</h2>
+<pre><code class="language-plaintext">Panthera-HT_SDK/
 ├── panthera_cpp/           ← Low-level C++ implementation (advanced users)
 ├── panthera_python/        ← Python control stack (the main entry for most users)
 ├── LICENSE                 ← Open-source license
 └── README.md               ← Quick start overview
 </code></pre>
-                    <p>In short:</p>
-                    <ul>
-                        <li><p><code>panthera_cpp</code> contains the low-level C++ driver and robot logic.</p></li>
-                        <li><p><code>panthera_python</code> contains the Python-facing control interface and examples.</p></li>
-                        <li><p>Most users can stay inside <code>panthera_python</code>.</p></li>
-                    </ul>
-                    <hr />
-                    <h2 id="section-003" tabindex="-1">panthera_python/ - Main Python Workspace</h2>
-                    <p>This is the directory you will use most of the time. All Python examples live here.</p>
-                    <pre><code class="language-plaintext">panthera_python/
+<p>In short:</p>
+<ul>
+<li><code>panthera_cpp</code> contains the low-level C++ driver and robot logic.</li>
+<li><code>panthera_python</code> contains the Python-facing control interface and examples.</li>
+<li>Most users can stay inside <code>panthera_python</code>.</li>
+</ul>
+<hr />
+<h2 id="section-003" tabindex="-1">panthera_python/ - Main Python Workspace</h2>
+<p>This is the directory you will use most of the time. All Python examples live here.</p>
+<pre><code class="language-plaintext">panthera_python/
 ├── scripts/                    ← Examples and learning entry point
 ├── robot_param/                ← Robot configuration files
 ├── Panthera-HT_description/    ← 3D model and URDF assets
@@ -675,9 +658,9 @@
 ├── README.md                   ← Python SDK usage guide
 └── CMakeLists.txt              ← Build config for source builds
 </code></pre>
-                    <h3 id="section-004" tabindex="-1">scripts/ - Example Library</h3>
-                    <p>This folder contains the ready-to-run control examples, from basic inspection scripts to advanced trajectory and teleoperation demos.</p>
-                    <pre><code class="language-plaintext">scripts/
+<h3 id="section-004" tabindex="-1">scripts/ - Example Library</h3>
+<p>This folder contains the ready-to-run control examples, from basic inspection scripts to advanced trajectory and teleoperation demos.</p>
+<pre><code class="language-plaintext">scripts/
 ├── Panthera_lib/                              ← High-level control library
 │   ├── Panthera.py                            ← Main robot control class
 │   ├── recorder.py                            ← Trajectory record / replay helper
@@ -729,50 +712,73 @@
     ├── motor_control.py
     └── motor_README.md
 </code></pre>
-                    <p>Recommended learning path:</p>
-                    <ol>
-                        <li><p>Start with <code>0_robot_get_state.py</code> to confirm the hardware connection is healthy.</p></li>
-                        <li><p>Learn the basic motion APIs with the <code>1_</code> examples.</p></li>
-                        <li><p>Move on to compensation and interpolation with the <code>2_</code> and <code>3_</code> examples.</p></li>
-                        <li><p>Use the <code>5_</code>, <code>6_</code>, and <code>7_</code> examples as application references.</p></li>
-                        <li><p>Do not directly run the <code>motor_example/</code> scripts unless you are debugging a specific motor.</p></li>
-                    </ol>
-                    <p><code>Panthera_lib/</code> is the high-level wrapper used by almost every example. In day-to-day usage, <code>Panthera.py</code> is the core file you will build on.</p>
-                    <h4 id="section-005" tabindex="-1">Gripper Control</h4>
-                    <p>The gripper is the seventh motor in the chain. It is managed through <code>Panthera_lib</code> with an API style that matches the joint control interface.</p>
-                    <pre><code class="language-yaml">gripper_limits:
+<p>Recommended learning path:</p>
+<ol>
+<li>Start with <code>0_robot_get_state.py</code> to confirm the hardware connection is healthy.</li>
+<li>Learn the basic motion APIs with the <code>1_</code> examples.</li>
+<li>Move on to compensation and interpolation with the <code>2_</code> and <code>3_</code> examples.</li>
+<li>Use the <code>5_</code>, <code>6_</code>, and <code>7_</code> examples as application references.</li>
+<li>Do not directly run the <code>motor_example/</code> scripts unless you are debugging a specific motor.</li>
+</ol>
+<p><code>Panthera_lib/</code> is the high-level wrapper used by almost every example. In day-to-day usage, <code>Panthera.py</code> is the core file you will build on.</p>
+<h4 id="section-005" tabindex="-1">Gripper Control</h4>
+<p>The gripper is the seventh motor in the chain. It is managed through <code>Panthera_lib</code> with an API style that matches the joint control interface.</p>
+<pre><code class="language-yaml">gripper_limits:
   lower: 0.0   # fully closed (rad)
   upper: 2.0   # fully open (rad)
 </code></pre>
-                    <p>Common APIs:</p>
-                    <table>
-                        <thead>
-                            <tr><th>Method</th><th>Description</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><code>gripper_open(pos=1.6, vel=0.5, max_tqu=0.5)</code></td><td>Open the gripper</td></tr>
-                            <tr><td><code>gripper_close(pos=0.0, vel=0.5, max_tqu=0.5)</code></td><td>Close the gripper</td></tr>
-                            <tr><td><code>gripper_control(pos, vel, max_tqu)</code></td><td>Precise position / velocity / max torque control</td></tr>
-                            <tr><td><code>gripper_control_MIT(pos, vel, tqe, kp, kd)</code></td><td>MIT-style five-parameter control</td></tr>
-                            <tr><td><code>get_current_pos_gripper()</code></td><td>Read current gripper position</td></tr>
-                            <tr><td><code>get_current_vel_gripper()</code></td><td>Read current gripper velocity</td></tr>
-                            <tr><td><code>get_current_torque_gripper()</code></td><td>Read current gripper torque</td></tr>
-                        </tbody>
-                    </table>
-                    <p>Typical usage:</p>
-                    <pre><code class="language-python">from Panthera_lib import Panthera
+<p>Common APIs:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gripper_open(pos=1.6, vel=0.5, max_tqu=0.5)</code></td>
+<td>Open the gripper</td>
+</tr>
+<tr>
+<td><code>gripper_close(pos=0.0, vel=0.5, max_tqu=0.5)</code></td>
+<td>Close the gripper</td>
+</tr>
+<tr>
+<td><code>gripper_control(pos, vel, max_tqu)</code></td>
+<td>Precise position / velocity / max torque control</td>
+</tr>
+<tr>
+<td><code>gripper_control_MIT(pos, vel, tqe, kp, kd)</code></td>
+<td>MIT-style five-parameter control</td>
+</tr>
+<tr>
+<td><code>get_current_pos_gripper()</code></td>
+<td>Read current gripper position</td>
+</tr>
+<tr>
+<td><code>get_current_vel_gripper()</code></td>
+<td>Read current gripper velocity</td>
+</tr>
+<tr>
+<td><code>get_current_torque_gripper()</code></td>
+<td>Read current gripper torque</td>
+</tr>
+</tbody>
+</table>
+<p>Typical usage:</p>
+<pre><code class="language-python">from Panthera_lib import Panthera
 
-robot = Panthera("../robot_param/Leader.yaml")
+robot = Panthera(&quot;../robot_param/Leader.yaml&quot;)
 
 robot.gripper_open()
 robot.gripper_close()
 robot.gripper_control(1.0, 0.5, 0.5)
 </code></pre>
-                    <p>Commands outside <code>[0.0, 2.0]</code> are rejected for safety.</p>
-                    <hr />
-                    <h3 id="section-006" tabindex="-1">robot_param/ - Robot Configuration</h3>
-                    <p>This directory stores robot-level configuration, such as joint limits, torque limits, and motor IDs.</p>
-                    <pre><code class="language-plaintext">robot_param/
+<p>Commands outside <code>[0.0, 2.0]</code> are rejected for safety.</p>
+<h3 id="section-006" tabindex="-1">robot_param/ - Robot Configuration</h3>
+<p>This directory stores robot-level configuration, such as joint limits, torque limits, and motor IDs.</p>
+<pre><code class="language-plaintext">robot_param/
 ├── Leader.yaml                 ← Main arm config
 ├── Follower.yaml               ← Follower arm config
 └── motor_param/                ← Low-level motor config
@@ -782,9 +788,9 @@ robot.gripper_control(1.0, 0.5, 0.5)
     ├── motor_6.yaml
     └── robot_config.yaml
 </code></pre>
-                    <p>Example:</p>
-                    <pre><code class="language-yaml">robot:
-  name: "Panthera-HT"
+<p>Example:</p>
+<pre><code class="language-yaml">robot:
+  name: &quot;Panthera-HT&quot;
   joint_limits:
     lower: [-2.4, 0.0, 0.0, -1.6, -1.7, -2.5]
     upper: [2.4, 3.2, 4.0, 1.6, 1.7, 2.5]
@@ -792,16 +798,15 @@ robot.gripper_control(1.0, 0.5, 0.5)
   velocity_limits: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
   acceleration_limits: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0]
 </code></pre>
-                    <p>When should you edit these files:</p>
-                    <ul>
-                        <li><p>For a single-arm setup, make sure the correct <code>end_effector_link</code> is used for the arm model you are running.</p></li>
-                        <li><p>For a dual-arm setup, the master arm should use <code>Leader.yaml</code> and the follower arm should use <code>Follower.yaml</code>.</p></li>
-                        <li><p>Most users do not need to edit these files unless they are adjusting limits or hardware-specific parameters.</p></li>
-                    </ul>
-                    <hr />
-                    <h3 id="section-007" tabindex="-1">Panthera-HT_description/ - 3D Model and URDF Assets</h3>
-                    <p>This directory stores the URDF robot model and the mesh assets used by kinematics, dynamics, and visualization tooling.</p>
-                    <pre><code class="language-plaintext">Panthera-HT_description/
+<p>When should you edit these files:</p>
+<ul>
+<li>For a single-arm setup, make sure the correct <code>end_effector_link</code> is used for the arm model you are running.</li>
+<li>For a dual-arm setup, the master arm should use <code>Leader.yaml</code> and the follower arm should use <code>Follower.yaml</code>.</li>
+<li>Most users do not need to edit these files unless they are adjusting limits or hardware-specific parameters.</li>
+</ul>
+<h3 id="section-007" tabindex="-1">Panthera-HT_description/ - 3D Model and URDF Assets</h3>
+<p>This directory stores the URDF robot model and the mesh assets used by kinematics, dynamics, and visualization tooling.</p>
+<pre><code class="language-plaintext">Panthera-HT_description/
 ├── urdf/
 │   ├── Panthera-HT_description_leader.urdf
 │   └── Panthera-HT_description_follower.urdf
@@ -812,11 +817,10 @@ robot.gripper_control(1.0, 0.5, 0.5)
 ├── config/
 └── launch/
 </code></pre>
-                    <p>You usually do not need to edit this folder unless you are working with visualization, model geometry, or robot description data.</p>
-                    <hr />
-                    <h3 id="section-008" tabindex="-1">motor_whl/ - Prebuilt Motor Driver Wheels</h3>
-                    <p>This folder contains prebuilt Python wheels for the motor communication layer.</p>
-                    <pre><code class="language-plaintext">motor_whl/
+<p>You usually do not need to edit this folder unless you are working with visualization, model geometry, or robot description data.</p>
+<h3 id="section-008" tabindex="-1">motor_whl/ - Prebuilt Motor Driver Wheels</h3>
+<p>This folder contains prebuilt Python wheels for the motor communication layer.</p>
+<pre><code class="language-plaintext">motor_whl/
 ├── hightorque_robot-1.2.0-cp39-cp39-linux_x86_64.whl
 ├── hightorque_robot-1.2.0-cp310-cp310-linux_x86_64.whl
 ├── hightorque_robot-1.2.0-cp311-cp311-linux_x86_64.whl
@@ -826,90 +830,101 @@ robot.gripper_control(1.0, 0.5, 0.5)
 ├── hightorque_robot-1.0.0-cp311-cp311-linux_aarch64.whl
 └── hightorque_robot-1.0.0-cp312-cp312-linux_aarch64.whl
 </code></pre>
-                    <p>Install the wheel that matches your Python version and CPU architecture.</p>
-                    <hr />
-                    <h3 id="section-009" tabindex="-1">images/ - Documentation Assets</h3>
-                    <p>This folder stores the images used in the docs and README files.</p>
-                    <hr />
-                    <h3 id="section-010" tabindex="-1">src/ - Python Binding Source</h3>
-                    <p>This is the pybind11 bridge layer between the C++ implementation and the Python package.</p>
-                    <hr />
-                    <h3 id="section-011" tabindex="-1">Other Files</h3>
-                    <table>
-                        <thead>
-                            <tr><th>File</th><th>Purpose</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><code>requirements.txt</code></td><td>Python dependencies</td></tr>
-                            <tr><td><code>README.md</code></td><td>Python SDK guide</td></tr>
-                            <tr><td><code>CMakeLists.txt</code></td><td>Build config for source builds</td></tr>
-                            <tr><td><code>setup.py</code></td><td>Python package install script</td></tr>
-                            <tr><td><code>pyproject.toml</code></td><td>Python project config</td></tr>
-                        </tbody>
-                    </table>
-                    <hr />
-                    <h2 id="section-012" tabindex="-1">panthera_cpp/ - Lower-Level C++ Stack</h2>
-                    <p>This is the low-level C++ implementation that handles device communication and the core robot model logic.</p>
-                    <pre><code class="language-plaintext">panthera_cpp/
+<p>Install the wheel that matches your Python version and CPU architecture.</p>
+<h3 id="section-009" tabindex="-1">images/ - Documentation Assets</h3>
+<p>This folder stores the images used in the docs and README files.</p>
+<h3 id="section-010" tabindex="-1">src/ - Python Binding Source</h3>
+<p>This is the pybind11 bridge layer between the C++ implementation and the Python package.</p>
+<h3 id="section-011" tabindex="-1">Other Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>requirements.txt</code></td>
+<td>Python dependencies</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>Python SDK guide</td>
+</tr>
+<tr>
+<td><code>CMakeLists.txt</code></td>
+<td>Build config for source builds</td>
+</tr>
+<tr>
+<td><code>setup.py</code></td>
+<td>Python package install script</td>
+</tr>
+<tr>
+<td><code>pyproject.toml</code></td>
+<td>Python project config</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-012" tabindex="-1">panthera_cpp/ - Lower-Level C++ Stack</h2>
+<p>This is the low-level C++ implementation that handles device communication and the core robot model logic.</p>
+<pre><code class="language-plaintext">panthera_cpp/
 ├── motor_cpp/                  ← Motor communication layer
 ├── robot_cpp/                  ← Robot control layer
 └── README.md                   ← C++ SDK guide
 </code></pre>
-                    <p>Python users usually do not need to modify this part directly.</p>
-                    <h3 id="section-013" tabindex="-1">motor_cpp/ - Motor Driver Layer</h3>
-                    <p>This layer communicates with motors over CAN and exposes the low-level control modes.</p>
-                    <p>Core responsibilities:</p>
-                    <ul>
-                        <li><p>CAN communication</p></li>
-                        <li><p>Motor state feedback</p></li>
-                        <li><p>Position / velocity / torque / MIT control modes</p></li>
-                        <li><p>Multiple motor model support</p></li>
-                    </ul>
-                    <hr />
-                    <h3 id="section-014" tabindex="-1">robot_cpp/ - Robot Control Layer</h3>
-                    <p>This layer builds on the motor driver layer and provides kinematics, dynamics, gravity compensation, Jacobians, and trajectory logic.</p>
-                    <hr />
-                    <h2 id="section-015" tabindex="-1">Root-Level Files</h2>
-                    <pre><code class="language-plaintext">Panthera-HT_SDK/
+<p>Python users usually do not need to modify this part directly.</p>
+<h3 id="section-013" tabindex="-1">motor_cpp/ - Motor Driver Layer</h3>
+<p>This layer communicates with motors over CAN and exposes the low-level control modes.</p>
+<p>Core responsibilities:</p>
+<ul>
+<li>CAN communication</li>
+<li>Motor state feedback</li>
+<li>Position / velocity / torque / MIT control modes</li>
+<li>Multiple motor model support</li>
+</ul>
+<h3 id="section-014" tabindex="-1">robot_cpp/ - Robot Control Layer</h3>
+<p>This layer builds on the motor driver layer and provides kinematics, dynamics, gravity compensation, Jacobians, and trajectory logic.</p>
+<hr />
+<h2 id="section-015" tabindex="-1">Root-Level Files</h2>
+<pre><code class="language-plaintext">Panthera-HT_SDK/
 ├── LICENSE                     ← MIT license
 └── README.md                   ← Project overview and quick start
 </code></pre>
-                    <hr />
-                    <h2 id="section-016" tabindex="-1">Quick Navigation: Where Should I Start?</h2>
-                    <h3 id="section-017" tabindex="-1">Scenario 1: I am a Python user and want to get started quickly</h3>
-                    <p>Focus on:</p>
-                    <ul>
-                        <li><p><code>panthera_python/scripts/</code></p></li>
-                        <li><p><code>panthera_python/README.md</code></p></li>
-                        <li><p><code>panthera_python/robot_param/</code></p></li>
-                    </ul>
-                    <hr />
-                    <h3 id="section-018" tabindex="-1">Scenario 2: I want to understand how the SDK works internally</h3>
-                    <p>Recommended reading order:</p>
-                    <ol>
-                        <li><p><code>panthera_python/scripts/Panthera_lib/Panthera.py</code></p></li>
-                        <li><p><code>panthera_cpp/motor_cpp</code></p></li>
-                        <li><p><code>panthera_cpp/robot_cpp</code></p></li>
-                    </ol>
-                    <hr />
-                    <h3 id="section-019" tabindex="-1">Scenario 3: I want to change robot parameters</h3>
-                    <p>Start with:</p>
-                    <ul>
-                        <li><p><code>robot_param/Leader.yaml</code></p></li>
-                        <li><p><code>robot_param/Follower.yaml</code></p></li>
-                        <li><p><code>robot_param/motor_param/</code></p></li>
-                    </ul>
-                    <hr />
-                    <h3 id="section-020" tabindex="-1">Scenario 4: I want to develop in C++</h3>
-                    <p>Focus on:</p>
-                    <ul>
-                        <li><p><code>panthera_cpp/motor_cpp</code></p></li>
-                        <li><p><code>panthera_cpp/robot_cpp</code></p></li>
-                        <li><p><code>panthera_cpp/README.md</code></p></li>
-                    </ul>
-                    <hr />
-                    <h2 id="section-021" tabindex="-1">Dependency Map</h2>
-                    <pre><code class="language-plaintext">Your Python script
+<hr />
+<h2 id="section-016" tabindex="-1">Quick Navigation: Where Should I Start?</h2>
+<h3 id="section-017" tabindex="-1">Scenario 1: I am a Python user and want to get started quickly</h3>
+<p>Focus on:</p>
+<ul>
+<li><code>panthera_python/scripts/</code></li>
+<li><code>panthera_python/README.md</code></li>
+<li><code>panthera_python/robot_param/</code></li>
+</ul>
+<h3 id="section-018" tabindex="-1">Scenario 2: I want to understand how the SDK works internally</h3>
+<p>Recommended reading order:</p>
+<ol>
+<li><code>panthera_python/scripts/Panthera_lib/Panthera.py</code></li>
+<li><code>panthera_cpp/motor_cpp</code></li>
+<li><code>panthera_cpp/robot_cpp</code></li>
+</ol>
+<h3 id="section-019" tabindex="-1">Scenario 3: I want to change robot parameters</h3>
+<p>Start with:</p>
+<ul>
+<li><code>robot_param/Leader.yaml</code></li>
+<li><code>robot_param/Follower.yaml</code></li>
+<li><code>robot_param/motor_param/</code></li>
+</ul>
+<h3 id="section-020" tabindex="-1">Scenario 4: I want to develop in C++</h3>
+<p>Focus on:</p>
+<ul>
+<li><code>panthera_cpp/motor_cpp</code></li>
+<li><code>panthera_cpp/robot_cpp</code></li>
+<li><code>panthera_cpp/README.md</code></li>
+</ul>
+<hr />
+<h2 id="section-021" tabindex="-1">Dependency Map</h2>
+<pre><code class="language-plaintext">Your Python script
     ↓ import
 Panthera_lib
     ↓ import
@@ -919,20 +934,72 @@ panthera_cpp/motor_cpp
     ↓ CAN communication
 Robot hardware
 </code></pre>
-                    <hr />
-                    <h2 id="section-022" tabindex="-1">FAQ</h2>
-                    <p>Q1: Do I need to compile the C++ code if I only want to use Python?<br />
-                    A: Usually no. Install the matching wheel from <code>motor_whl/</code>.</p>
-                    <p>Q2: What is the difference between <code>Panthera_lib</code> and <code>hightorque_robot</code>?<br />
-                    A: <code>hightorque_robot</code> is the low-level Python binding, while <code>Panthera_lib</code> is the high-level SDK wrapper used by the examples.</p>
-                    <p>Q3: When should I use <code>Leader.yaml</code> vs <code>Follower.yaml</code>?<br />
-                    A: Use the file that matches the arm role and end-effector definition in your setup.</p>
+<hr />
+<h2 id="section-022" tabindex="-1">FAQ</h2>
+<p>Q1: Do I need to compile the C++ code if I only want to use Python?<br />
+A: Usually no. Install the matching wheel from <code>motor_whl/</code>.</p>
+<p>Q2: What is the difference between <code>Panthera_lib</code> and <code>hightorque_robot</code>?<br />
+A: <code>hightorque_robot</code> is the low-level Python binding, while <code>Panthera_lib</code> is the high-level SDK wrapper used by the examples.</p>
+<p>Q3: When should I use <code>Leader.yaml</code> vs <code>Follower.yaml</code>?<br />
+A: Use the file that matches the arm role and end-effector definition in your setup.</p>
+
                 </div>
             </article>
         </section>
     </main>
 
     <script>
+        const headingMeta = [{"id": "section-001", "level": 1, "label": "SDK Directory Guide"}, {"id": "section-002", "level": 2, "label": "Overall Layout"}, {"id": "section-003", "level": 2, "label": "panthera_python/ - Main Python Workspace"}, {"id": "section-004", "level": 3, "label": "scripts/ - Example Library"}, {"id": "section-005", "level": 4, "label": "Gripper Control"}, {"id": "section-006", "level": 3, "label": "robot_param/ - Robot Configuration"}, {"id": "section-007", "level": 3, "label": "Panthera-HT_description/ - 3D Model and URDF Assets"}, {"id": "section-008", "level": 3, "label": "motor_whl/ - Prebuilt Motor Driver Wheels"}, {"id": "section-009", "level": 3, "label": "images/ - Documentation Assets"}, {"id": "section-010", "level": 3, "label": "src/ - Python Binding Source"}, {"id": "section-011", "level": 3, "label": "Other Files"}, {"id": "section-012", "level": 2, "label": "panthera_cpp/ - Lower-Level C++ Stack"}, {"id": "section-013", "level": 3, "label": "motor_cpp/ - Motor Driver Layer"}, {"id": "section-014", "level": 3, "label": "robot_cpp/ - Robot Control Layer"}, {"id": "section-015", "level": 2, "label": "Root-Level Files"}, {"id": "section-016", "level": 2, "label": "Quick Navigation: Where Should I Start?"}, {"id": "section-017", "level": 3, "label": "Scenario 1: I am a Python user and want to get started quickly"}, {"id": "section-018", "level": 3, "label": "Scenario 2: I want to understand how the SDK works internally"}, {"id": "section-019", "level": 3, "label": "Scenario 3: I want to change robot parameters"}, {"id": "section-020", "level": 3, "label": "Scenario 4: I want to develop in C++"}, {"id": "section-021", "level": 2, "label": "Dependency Map"}, {"id": "section-022", "level": 2, "label": "FAQ"}];
+        const sidebar = document.getElementById("guide-sidebar");
+        const toggle = document.querySelector(".mobile-sidebar-toggle");
+        const tocLinks = Array.from(document.querySelectorAll(".toc-link"));
+        const treeToggles = Array.from(document.querySelectorAll(".toc-toggle"));
+
+        if (toggle && sidebar) {
+            toggle.addEventListener("click", () => {
+                const opened = sidebar.classList.toggle("is-open");
+                toggle.setAttribute("aria-expanded", String(opened));
+                toggle.textContent = opened ? "Hide Contents" : "View Contents";
+            });
+
+            tocLinks.forEach((link) => {
+                link.addEventListener("click", () => {
+                    if (window.innerWidth <= 1080) {
+                        sidebar.classList.remove("is-open");
+                        toggle.setAttribute("aria-expanded", "false");
+                        toggle.textContent = "View Contents";
+                    }
+                });
+            });
+        }
+
+        treeToggles.forEach((button) => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const node = button.closest(".toc-node");
+                if (!node) {
+                    return;
+                }
+
+                const opened = node.classList.toggle("is-open");
+                button.setAttribute("aria-expanded", String(opened));
+                button.setAttribute("aria-label", opened ? "Collapse subsection" : "Expand subsection");
+            });
+        });
+
+        const sectionIds = headingMeta.map((item) => item.id);
+        const sections = sectionIds
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+        let activeSectionId = "";
+
+        const headingMeta = Array.from(
+            document.querySelectorAll(".doc-body h1[id], .doc-body h2[id], .doc-body h3[id], .doc-body h4[id], .doc-body h5[id], .doc-body h6[id]")
+        ).map((heading) => ({
+            id: heading.id,
+            label: heading.textContent ? heading.textContent.trim() : "",
+        }));
         const root = document.documentElement;
         const sidebar = document.getElementById("guide-sidebar");
         const toc = document.querySelector(".toc");
@@ -944,8 +1011,6 @@ Robot hardware
         const treeToggles = Array.from(document.querySelectorAll(".toc-toggle"));
         const treeNodes = Array.from(document.querySelectorAll(".toc-node"))
             .filter((node) => node.querySelector(":scope > .toc-children"));
-        const sections = Array.from(document.querySelectorAll(".doc-body h1[id], .doc-body h2[id], .doc-body h3[id], .doc-body h4[id]"));
-        let activeSectionId = "";
 
         function applyTheme(theme) {
             root.dataset.theme = theme;
@@ -953,7 +1018,7 @@ Robot hardware
                 themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
             }
             if (themeToggleLabel) {
-                themeToggleLabel.textContent = theme === "dark" ? "Light" : "Dark";
+                themeToggleLabel.textContent = theme === "dark" ? "浅色" : "深色";
             }
         }
 
@@ -983,7 +1048,7 @@ Robot hardware
 
             if (button) {
                 button.setAttribute("aria-expanded", String(opened));
-                button.setAttribute("aria-label", opened ? "Collapse subsection" : "Expand subsection");
+                button.setAttribute("aria-label", opened ? "收起子章节" : "展开子章节");
             }
 
             if (opened) {
@@ -1041,7 +1106,7 @@ Robot hardware
             toggle.addEventListener("click", () => {
                 const opened = sidebar.classList.toggle("is-open");
                 toggle.setAttribute("aria-expanded", String(opened));
-                toggle.textContent = opened ? "Hide Contents" : "View Contents";
+                toggle.textContent = opened ? "收起章节目录" : "查看章节目录";
             });
 
             tocLinks.forEach((link) => {
@@ -1049,7 +1114,7 @@ Robot hardware
                     if (window.innerWidth <= 1080) {
                         sidebar.classList.remove("is-open");
                         toggle.setAttribute("aria-expanded", "false");
-                        toggle.textContent = "View Contents";
+                        toggle.textContent = "查看章节目录";
                     }
                 });
             });
@@ -1071,6 +1136,12 @@ Robot hardware
         });
 
         syncTreeHeights();
+
+        const sectionIds = headingMeta.map((item) => item.id);
+        const sections = sectionIds
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+        let activeSectionId = "";
 
         function expandAncestorNodes(link) {
             let parent = link.closest(".toc-children");
@@ -1155,7 +1226,6 @@ Robot hardware
             }
 
             activeSectionId = id;
-
             tocLinks.forEach((link) => {
                 const active = link.getAttribute("href") === `#${id}`;
                 link.classList.toggle("is-active", active);
@@ -1203,6 +1273,18 @@ Robot hardware
                 setActiveLink(current.id);
             }
         }
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                throwOnError: false
+            });
+        });
     </script>
 </body>
 </html>
