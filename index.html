@@ -421,6 +421,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            justify-content: flex-end;
             gap: 12px;
         }
 
@@ -739,37 +740,8 @@
             text-align: center;
         }
 
-        .video-description {
-            color: #666;
-            font-size: 16px;
-            font-weight: 600;
-            text-align: center;
-            margin: 0;
-        }
-
         .video-title-break {
             display: none;
-        }
-
-        .video-nav {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-            justify-content: center;
-            width: 144px;
-        }
-
-        .video-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: min(1200px, calc(100vw - 64px));
-            gap: 24px;
-            margin-top: 22px;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-            min-height: 64px;
         }
 
         .video-carousel {
@@ -784,31 +756,8 @@
         }
 
         .video-slide {
-            position: absolute;
-            left: 50%;
-            top: 50%;
             width: 100%;
             height: 100%;
-            transition: transform 0.18s ease, opacity 0.18s ease;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            will-change: transform, opacity;
-        }
-
-        .video-slide.is-active {
-            z-index: 3;
-            opacity: 1;
-        }
-
-        .video-slide.is-neighbor {
-            z-index: 2;
-            opacity: 0;
-        }
-
-        .video-slide.is-hidden {
-            z-index: 1;
-            opacity: 0;
-            pointer-events: none;
         }
 
         .video-slide-inner {
@@ -819,10 +768,6 @@
             overflow: hidden;
             background: #000;
             border-radius: 16px;
-        }
-
-        .video-slide:not(.is-active) .video-slide-inner {
-            pointer-events: none;
         }
 
         .video-cover-shell,
@@ -905,16 +850,16 @@
         .video-cta-wrap {
             display: flex;
             justify-content: flex-end;
-            position: static;
-            margin-left: auto;
+            width: min(1200px, calc(100vw - 64px));
+            margin: 22px auto 0;
         }
 
         .video-cta {
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             gap: 12px;
-            width: min(100%, 320px);
-            padding: 14px 18px;
+            padding: 14px 24px 14px 18px;
             border-radius: 999px;
             border: 1px solid var(--video-border-inverse);
             background: #111;
@@ -954,7 +899,6 @@
         .video-cta-icon {
             width: 30px;
             height: 21px;
-            margin-right: auto;
             color: #fff;
             flex: 0 0 auto;
         }
@@ -978,45 +922,6 @@
 
         .video-cta:hover .video-cta-arrow {
             transform: translateY(2px) rotate(-45deg);
-        }
-
-        .video-nav-btn {
-            width: 60px;
-            height: 60px;
-            flex: 0 0 auto;
-            border-radius: 50%;
-            border: 1px solid var(--video-border-mid);
-            background: #fff;
-            color: #222;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
-            transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .video-nav-btn:hover {
-            background: #222;
-            border-color: #222;
-            color: #fff;
-            box-shadow: 0 10px 22px rgba(17, 24, 39, 0.18);
-            transform: translateY(-1px);
-        }
-
-        .video-arrow {
-            width: 13px;
-            height: 13px;
-            border-top: 2px solid currentColor;
-            border-right: 2px solid currentColor;
-        }
-
-        .video-arrow.left {
-            transform: translateX(2px) rotate(-135deg);
-        }
-
-        .video-arrow.right {
-            transform: translateX(-2px) rotate(45deg);
         }
 
         /* 文档下拉菜单 */
@@ -1215,16 +1120,6 @@
                 display: none;
             }
 
-            .video-nav {
-                position: static;
-                gap: 12px;
-                width: 100%;
-            }
-
-            .video-nav-btn {
-                width: 48px;
-                height: 48px;
-            }
 
             .video-carousel {
                 width: 100%;
@@ -1243,13 +1138,6 @@
                 font-size: 13px;
             }
 
-            .video-controls {
-                flex-direction: column;
-                align-items: stretch;
-                width: 100%;
-                margin-top: 8px;
-                min-height: 0;
-            }
 
             .video-cta-wrap {
                 position: static;
@@ -1430,7 +1318,7 @@
                         <div class="param-value" data-target="4.35" data-suffix="kg">0kg</div>
                     </div>
                     <div class="param-item">
-                        <div class="param-label">最大负载</div>
+                        <div class="param-label">最大静态负载</div>
                         <div class="param-value" data-target="3.5" data-suffix="kg">0kg</div>
                     </div>
                     <div class="param-item">
@@ -1572,11 +1460,10 @@
             <div class="video-section-inner">
                 <div class="video-head">
                     <h2 class="video-title">产品视频</h2>
-                    <p class="video-description">展示产品的运行效果和二次开发案例</p>
                 </div>
                 <div class="video-carousel" id="video-carousel">
                     <article class="video-slide" data-index="0"
-                        data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
+                        data-page-url="https://www.bilibili.com/video/BV1Bc9aBnEKS">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="播放视频1">
                                 <img class="video-cover-image" src="images/视频封面/main.png" alt="视频1封面" loading="lazy"
@@ -1590,48 +1477,9 @@
                                 title="Panthera-HT Video 1" controls playsinline preload="metadata"></video>
                         </div>
                     </article>
-                    <article class="video-slide" data-index="1"
-                        data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
-                        <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="播放视频2">
-                                <img class="video-cover-image" src="images/视频封面/2.png" alt="视频2封面" loading="lazy"
-                                    referrerpolicy="no-referrer">
-                                <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
-                                        focusable="false">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg></span>
-                            </button>
-                            <video class="video-player-frame video-media-hidden" data-src="video/2.mp4"
-                                title="Panthera-HT Video 2" controls playsinline preload="metadata"></video>
-                        </div>
-                    </article>
-                    <article class="video-slide" data-index="2"
-                        data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
-                        <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="播放视频3">
-                                <img class="video-cover-image" src="images/视频封面/3.png" alt="视频3封面" loading="lazy"
-                                    referrerpolicy="no-referrer">
-                                <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
-                                        focusable="false">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg></span>
-                            </button>
-                            <video class="video-player-frame video-media-hidden" data-src="video/3.mp4"
-                                title="Panthera-HT Video 3" controls playsinline preload="metadata"></video>
-                        </div>
-                    </article>
                 </div>
-                <div class="video-controls">
-                    <div class="video-nav">
-                        <button type="button" class="video-nav-btn" id="video-nav-left" aria-label="切换到上一个视频">
-                            <span class="video-arrow left"></span>
-                        </button>
-                        <button type="button" class="video-nav-btn" id="video-nav-right" aria-label="切换到下一个视频">
-                            <span class="video-arrow right"></span>
-                        </button>
-                    </div>
-                    <div class="video-cta-wrap">
-                        <a class="video-cta" id="video-cta-link" href="video/main.mp4" target="_blank"
+                <div class="video-cta-wrap">
+                        <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS" target="_blank"
                             rel="noopener noreferrer" aria-label="在新窗口打开当前视频">
                             <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
                                 <path
@@ -1660,10 +1508,6 @@
         const videoFrames = Array.from(document.querySelectorAll(".video-player-frame"));
         const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
         const videoCtaLink = document.getElementById("video-cta-link");
-        const videoNavLeft = document.getElementById("video-nav-left");
-        const videoNavRight = document.getElementById("video-nav-right");
-        let activeVideoIndex = 0;
-        let playingVideoIndex = -1;
 
         videoCards.forEach((card) => {
             const frame = card.querySelector(".video-player-frame");
@@ -1675,85 +1519,23 @@
             frame.controls = false;
         });
 
-        const normalizeVideoIndex = (index) => {
-            const count = videoCards.length;
-            return ((index % count) + count) % count;
-        };
-
-        const getVideoDelta = (index) => {
-            let delta = index - activeVideoIndex;
-            const half = videoCards.length / 2;
-            if (delta > half) delta -= videoCards.length;
-            if (delta < -half) delta += videoCards.length;
-            return delta;
-        };
-
-        const updateVideoCta = () => {
-            if (!videoCtaLink || !videoCards.length) return;
-            const activeCard = videoCards[activeVideoIndex];
-            const pageUrl = activeCard?.dataset?.pageUrl;
-            if (!pageUrl) return;
-            videoCtaLink.href = pageUrl;
-        };
-
-        const resetVideoCardMedia = (card, options = {}) => {
-            const { rewind = true } = options;
-            const frame = card.querySelector(".video-player-frame");
-            const coverShell = card.querySelector(".video-cover-shell");
-            if (!frame || !coverShell) return;
-
-            frame.classList.add("video-media-hidden");
-            frame.classList.remove("is-ready");
-            delete frame.dataset.loadToken;
-            frame.controls = false;
-
-            coverShell.classList.remove("hidden");
-
-            frame.pause();
-            if (rewind) {
-                frame.currentTime = 0;
-            }
-        };
-
-        const renderVideoCarousel = () => {
-            videoCards.forEach((card, index) => {
-                const delta = getVideoDelta(index);
-                const isCenter = delta === 0;
-                const isNeighbor = Math.abs(delta) === 1;
-                card.classList.toggle("is-active", isCenter);
-                card.classList.toggle("is-neighbor", isNeighbor);
-                card.classList.toggle("is-hidden", !isCenter && !isNeighbor);
-
-                if (isCenter) {
-                    card.style.transform = "translate(-50%, -50%)";
-                    const frame = card.querySelector(".video-player-frame");
-                    const coverShell = card.querySelector(".video-cover-shell");
-                    if (frame && coverShell) {
-                        const shouldPlay = index === playingVideoIndex;
-                        if (shouldPlay) {
-                            frame.classList.remove("video-media-hidden");
-                            coverShell.classList.toggle("hidden", frame.classList.contains("is-ready"));
-                        }
-                    }
-                    return;
-                }
-
-                const translatePercent = isNeighbor ? delta * 56 : (delta < 0 ? -132 : 132);
-                card.style.transform = `translate(calc(-50% + ${translatePercent}%), -50%)`;
-            });
-
-            updateVideoCta();
-        };
-
         const pauseAllVideos = () => {
-            playingVideoIndex = -1;
             videoCards.forEach((card) => {
-                resetVideoCardMedia(card);
+                const frame = card.querySelector(".video-player-frame");
+                const coverShell = card.querySelector(".video-cover-shell");
+                if (!frame || !coverShell) return;
+                frame.classList.add("video-media-hidden");
+                frame.classList.remove("is-ready");
+                delete frame.dataset.loadToken;
+                frame.controls = false;
+                coverShell.classList.remove("hidden");
+                frame.pause();
+                frame.currentTime = 0;
             });
         };
 
         const playCenterVideo = () => {
-            const centerCard = videoCards[activeVideoIndex];
+            const centerCard = videoCards[0];
             if (!centerCard) return;
             const frame = centerCard.querySelector(".video-player-frame");
             const coverShell = centerCard.querySelector(".video-cover-shell");
@@ -1768,20 +1550,17 @@
             frame.poster = coverImage.currentSrc || coverImage.src;
 
             frame.addEventListener("playing", () => {
-                if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
+                if (frame.dataset.loadToken !== loadToken) return;
                 frame.controls = true;
                 requestAnimationFrame(() => {
-                    if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
+                    if (frame.dataset.loadToken !== loadToken) return;
                     frame.classList.add("is-ready");
                     coverShell.classList.add("hidden");
                 });
             }, { once: true });
 
-            playingVideoIndex = activeVideoIndex;
-            renderVideoCarousel();
-
             requestAnimationFrame(async () => {
-                if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
+                if (frame.dataset.loadToken !== loadToken) return;
                 try {
                     frame.currentTime = 0;
                     await frame.play();
@@ -1792,55 +1571,15 @@
             });
         };
 
-        const setActiveVideoIndex = (nextIndex) => {
-            const previousPlayingIndex = playingVideoIndex;
-            playingVideoIndex = -1;
-            activeVideoIndex = normalizeVideoIndex(nextIndex);
-            renderVideoCarousel();
-
-            // 延迟重置之前播放的视频，避免闪黑
-            if (previousPlayingIndex !== -1) {
-                setTimeout(() => {
-                    const previousCard = videoCards[previousPlayingIndex];
-                    if (previousCard && previousPlayingIndex !== activeVideoIndex) {
-                        resetVideoCardMedia(previousCard);
-                    }
-                }, 300);
-            }
-        };
-
-        if (videoNavLeft) {
-            videoNavLeft.addEventListener("click", () => {
-                setActiveVideoIndex(activeVideoIndex - 1);
-            });
-        }
-
-        if (videoNavRight) {
-            videoNavRight.addEventListener("click", () => {
-                setActiveVideoIndex(activeVideoIndex + 1);
-            });
-        }
-
-        videoCards.forEach((card, index) => {
-            card.addEventListener("click", () => {
-                if (index === activeVideoIndex) return;
-                setActiveVideoIndex(index);
-            });
-        });
-
-        videoCoverShells.forEach((coverShell, index) => {
-            coverShell.addEventListener("click", (event) => {
-                event.stopPropagation();
-                if (index !== activeVideoIndex) return;
+        videoCoverShells.forEach((shell) => {
+            shell.addEventListener("click", (event) => {
+                event.preventDefault();
+                pauseAllVideos();
                 playCenterVideo();
             });
         });
 
-        if (videoCards.length) {
-            renderVideoCarousel();
-        }
-
-        // 技术参数动态计数效果
+                // 技术参数动态计数效果
         function animateCounter(element, target, duration = 1500) {
             const suffix = element.dataset.suffix || '';
             const start = 0;
