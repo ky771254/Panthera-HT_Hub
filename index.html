@@ -702,7 +702,8 @@
 
         .feature-content h3 {
             font-size: 40px;
-            margin-bottom: 24px color: #222;
+            margin-bottom: 24px;
+            color: #222;
         }
 
         .feature-content p {
@@ -1443,10 +1444,10 @@
                     <div class="viewer-speed">
                         <div class="viewer-speed-header">
                             <span class="viewer-speed-label">模拟关节速度</span>
-                            <span class="viewer-speed-value" id="joint-speed-value">120掳/s</span>
+                            <span class="viewer-speed-value" id="joint-speed-value">120°/s</span>
                         </div>
-                        <input class="viewer-speed-slider" id="joint-speed" type="range" min="30" max="360" step="10" value="120"
-                            aria-label="绾挎€ч€熷害">
+                        <input class="viewer-speed-slider" id="joint-speed" type="range" min="30" max="360" step="10"
+                            value="120" aria-label="模拟关节速度">
                         <div class="viewer-speed-limits">
                             <span>30</span>
                             <span>360</span>
@@ -1493,308 +1494,326 @@
                     </article>
                 </div>
                 <div class="video-cta-wrap">
-                        <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS" target="_blank"
-                            rel="noopener noreferrer" aria-label="在新窗口打开当前视频">
-                            <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
-                                <path
-                                    d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
-                                    fill="currentColor" />
-                            </svg>
-                            <span class="video-cta-text">在Bilibili中观看</span>
-                            <span class="video-cta-arrow" aria-hidden="true"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- LeRobot AI Workflow -->
-        <section class="lerobot-section">
-            <style>
-                .lerobot-section {
-                    width: 100vw;
-                    margin-left: 50%;
-                    transform: translateX(-50%);
-                    box-sizing: border-box;
-                    background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
-                    margin-top: 0px;
-                    padding: 220px 24px 80px;
-                    color: #e8e8ed;
-                }
-
-                .lerobot-inner {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    zoom: 1.1;
-                }
-
-                .lerobot-header {
-                    text-align: center;
-                    margin-bottom: 72px;
-                }
-
-                .lerobot-title {
-                    font-family: 'Outfit', sans-serif;
-                    font-size: 42px;
-                    font-weight: 700;
-                    letter-spacing: -0.02em;
-                    margin: 0 0 12px;
-                    color: #f0f0f5;
-                }
-
-                .lerobot-subtitle {
-                    font-size: 17px;
-                    color: #8b8b98;
-                    margin: 0;
-                    font-weight: 400;
-                }
-
-                .lerobot-flow {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 20px;
-                    margin-bottom:67px;
-                    transform: scale(1.0);
-                    transform-origin: center top;
-                }
-
-                .lerobot-flow-step {
-                    background: #1f1f25;
-                    border-radius: 16px;
-                    overflow: hidden;
-                }
-
-                .lerobot-flow-step img {
-                    width: 100%;
-                    aspect-ratio: 16 / 10;
-                    object-fit: cover;
-                    display: block;
-                }
-
-                .lerobot-flow-label {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 16px 20px;
-                    font-size: 16px;
-                    font-weight: 500;
-                    color: #a0a0ac;
-                }
-
-                .lerobot-flow-label .arrow {
-                    color: #555;
-                    margin-left: auto;
-                }
-
-                .lerobot-flow-step:last-child .lerobot-flow-label .arrow {
-                    display: none;
-                }
-
-                .lerobot-flow-step .step-num {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 22px;
-                    height: 22px;
-                    border-radius: 50%;
-                    background: #2a2a32;
-                    font-size: 12px;
-                    font-weight: 600;
-                    color: #7db9f8;
-                    flex: 0 0 auto;
-                }
-
-                .lerobot-video-wrap {
-                    margin-bottom: 72px;
-                    border-radius: 16px;
-                    overflow: hidden;
-                    background: #000;
-                    aspect-ratio: 16 / 9;
-                    box-shadow: 0 0 22px rgba(125, 185, 248, 0.35);
-                }
-
-                .lerobot-video-wrap video {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    display: block;
-                }
-
-                .lerobot-cards {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 20px;
-                    margin-bottom: 64px;
-                }
-
-                .lerobot-card {
-                    background: #1f1f25;
-                    border-radius: 16px;
-                    padding: 28px 24px 32px;
-                }
-
-                .lerobot-card h3 {
-                    font-family: 'Outfit', sans-serif;
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin: 0 0 10px;
-                    color: #f0f0f5;
-                }
-
-                .lerobot-card p {
-                    font-size: 14px;
-                    line-height: 1.6;
-                    color: #8b8b98;
-                    margin: 0;
-                }
-
-                .lerobot-card .card-icon {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 10px;
-                    background: #2a2a32;
-                    margin-bottom: 16px;
-                    font-size: 18px;
-                }
-
-                .lerobot-code {
-                    background: #1f1f25;
-                    border-radius: 16px;
-                    padding: 24px 28px;
-                    margin-bottom: 48px;
-                    font-family: 'SFMono-Regular', 'Consolas', monospace;
-                    font-size: 14px;
-                    line-height: 1.7;
-                    color: #c0c0cc;
-                    overflow-x: auto;
-                }
-
-                .lerobot-code .keyword { color: #7db9f8; }
-                .lerobot-code .string { color: #a8d5a2; }
-                .lerobot-code .comment { color: #6a6a76; }
-
-                .lerobot-cta {
-                    display: flex;
-                    gap: 16px;
-                    justify-content: center;
-                    flex-wrap: wrap;
-                }
-
-                .lerobot-cta a {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 12px 28px;
-                    border-radius: 999px;
-                    font-size: 15px;
-                    font-weight: 500;
-                    text-decoration: none;
-                    transition: transform 0.2s ease, box-shadow 0.2s ease;
-                }
-
-                .lerobot-cta a:hover { transform: translateY(-2px); }
-
-                .lerobot-cta .btn-primary {
-                    background: #7db9f8;
-                    color: #0a0a0c;
-                }
-
-                .lerobot-cta .btn-secondary {
-                    border: 1px solid #333;
-                    color: #c0c0cc;
-                    background: transparent;
-                }
-
-                .lerobot-cta .btn-secondary:hover {
-                    background: #1e1e24;
-                    border-color: #555;
-                }
-
-                @media (max-width: 860px) {
-                    .lerobot-flow,
-                    .lerobot-cards { grid-template-columns: 1fr; }
-                    .lerobot-title { font-size: 30px; }
-                }
-            </style>
-
-            <div class="lerobot-inner">
-                <div class="lerobot-header">
-                    <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
-                    <p class="lerobot-subtitle">直接进行数据采集到策略部署——无需重新适配</p>
-                </div>
-
-                <div class="lerobot-flow">
-                    <div class="lerobot-flow-step">
-                        <img src="images/lerobot/1.png" alt="Data collection" loading="lazy">
-                        <div class="lerobot-flow-label">
-                            <span class="step-num">1</span>
-                            <span>数据采集</span>
-                            <span class="arrow">→</span>
-                        </div>
-                    </div>
-                    <div class="lerobot-flow-step">
-                        <img src="images/lerobot/2.png" alt="Policy training" loading="lazy">
-                        <div class="lerobot-flow-label">
-                            <span class="step-num">2</span>
-                            <span>策略训练</span>
-                            <span class="arrow">→</span>
-                        </div>
-                    </div>
-                    <div class="lerobot-flow-step">
-                        <img src="images/lerobot/3.png" alt="Deployment" loading="lazy">
-                        <div class="lerobot-flow-label">
-                            <span class="step-num">3</span>
-                            <span>真机部署</span>
-                            <span class="arrow">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lerobot-video-wrap">
-                    <video src="video/lerobot.mp4" controls playsinline preload="metadata"></video>
-                </div>
-
-                <div class="lerobot-cards">
-                    <div class="lerobot-card">
-                        <div class="card-icon">🤖</div>
-                        <h3>原生LeRobot集成</h3>
-                        <p>数据格式原生兼容 LeRobot/Hugging Face 生态，采集训练无需额外转换适配。</p>
-                    </div>
-                    <div class="lerobot-card">
-                        <div class="card-icon">🧩</div>
-                        <h3>标准化训练数据</h3>
-                        <p>采集数据可直接用于策略训练，减少格式转换与重复适配。</p>
-                    </div>
-                    <div class="lerobot-card">
-                        <div class="card-icon">⚡</div>
-                        <h3>快速跑通首个策略</h3>
-                        <p>从开箱到跑通模仿学习，24小时内完成，快速验证你的想法。</p>
-                    </div>
-                </div>
-
-                <div class="lerobot-code">
-                    <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
-                    <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span> PantheraLeader, PantheraFollower<br>
-                    <br>
-                    leader = PantheraLeader(...)<br>
-                    follower = PantheraFollower(...)<br>
-                    <br>
-                    leader.<span class="keyword">connect</span>()<br>
-                    follower.<span class="keyword">connect</span>()<br>
-                    <br>
-                    action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment"># {"joint1.pos": 0.1, ...}</span><br>
-                    follower.<span class="keyword">send_action</span>(action)
-                </div>
-
-                <div class="lerobot-cta">
-                    <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank" rel="noopener">View LeRobot Integration Docs →</a>
+                    <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS"
+                        target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开当前视频">
+                        <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
+                            <path
+                                d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
+                                fill="currentColor" />
+                        </svg>
+                        <span class="video-cta-text">在Bilibili中观看</span>
+                        <span class="video-cta-arrow" aria-hidden="true"></span>
+                    </a>
                 </div>
             </div>
         </section>
     </div>
+
+    <!-- LeRobot AI Workflow -->
+    <section class="lerobot-section">
+        <style>
+            .lerobot-section {
+                width: 100vw;
+                margin-left: 50%;
+                transform: translateX(-50%);
+                box-sizing: border-box;
+                background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
+                margin-top: 0px;
+                padding: 220px 24px 80px;
+                color: #e8e8ed;
+            }
+
+            .lerobot-inner {
+                max-width: 1200px;
+                margin: 0 auto;
+                zoom: 1.1;
+            }
+
+            .lerobot-header {
+                text-align: center;
+                margin-bottom: 72px;
+            }
+
+            .lerobot-title {
+                font-family: 'Outfit', sans-serif;
+                font-size: 42px;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                margin: 0 0 12px;
+                color: #f0f0f5;
+            }
+
+            .lerobot-subtitle {
+                font-size: 17px;
+                color: #8b8b98;
+                margin: 0;
+                font-weight: 400;
+            }
+
+            .lerobot-flow {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                margin-bottom: 67px;
+                transform: scale(1.0);
+                transform-origin: center top;
+            }
+
+            .lerobot-flow-step {
+                background: #1f1f25;
+                border-radius: 16px;
+                overflow: hidden;
+            }
+
+            .lerobot-flow-step img {
+                width: 100%;
+                aspect-ratio: 16 / 10;
+                object-fit: cover;
+                display: block;
+            }
+
+            .lerobot-flow-label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 16px 20px;
+                font-size: 16px;
+                font-weight: 500;
+                color: #a0a0ac;
+            }
+
+            .lerobot-flow-label .arrow {
+                color: #555;
+                margin-left: auto;
+            }
+
+            .lerobot-flow-step:last-child .lerobot-flow-label .arrow {
+                display: none;
+            }
+
+            .lerobot-flow-step .step-num {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: #2a2a32;
+                font-size: 12px;
+                font-weight: 600;
+                color: #7db9f8;
+                flex: 0 0 auto;
+            }
+
+            .lerobot-video-wrap {
+                margin-bottom: 72px;
+                border-radius: 16px;
+                overflow: hidden;
+                background: #000;
+                aspect-ratio: 16 / 9;
+                box-shadow: 0 0 22px rgba(125, 185, 248, 0.35);
+            }
+
+            .lerobot-video-wrap video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .lerobot-cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                margin-bottom: 64px;
+            }
+
+            .lerobot-card {
+                background: #1f1f25;
+                border-radius: 16px;
+                padding: 28px 24px 32px;
+            }
+
+            .lerobot-card h3 {
+                font-family: 'Outfit', sans-serif;
+                font-size: 18px;
+                font-weight: 600;
+                margin: 0 0 10px;
+                color: #f0f0f5;
+            }
+
+            .lerobot-card p {
+                font-size: 14px;
+                line-height: 1.6;
+                color: #8b8b98;
+                margin: 0;
+            }
+
+            .lerobot-card .card-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                background: #2a2a32;
+                margin-bottom: 16px;
+                font-size: 18px;
+            }
+
+            .lerobot-code {
+                background: #1f1f25;
+                border-radius: 16px;
+                padding: 24px 28px;
+                margin-bottom: 48px;
+                font-family: 'SFMono-Regular', 'Consolas', monospace;
+                font-size: 14px;
+                line-height: 1.7;
+                color: #c0c0cc;
+                overflow-x: auto;
+            }
+
+            .lerobot-code .keyword {
+                color: #7db9f8;
+            }
+
+            .lerobot-code .string {
+                color: #a8d5a2;
+            }
+
+            .lerobot-code .comment {
+                color: #6a6a76;
+            }
+
+            .lerobot-cta {
+                display: flex;
+                gap: 16px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .lerobot-cta a {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 28px;
+                border-radius: 999px;
+                font-size: 15px;
+                font-weight: 500;
+                text-decoration: none;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .lerobot-cta a:hover {
+                transform: translateY(-2px);
+            }
+
+            .lerobot-cta .btn-primary {
+                background: #7db9f8;
+                color: #0a0a0c;
+            }
+
+            .lerobot-cta .btn-secondary {
+                border: 1px solid #333;
+                color: #c0c0cc;
+                background: transparent;
+            }
+
+            .lerobot-cta .btn-secondary:hover {
+                background: #1e1e24;
+                border-color: #555;
+            }
+
+            @media (max-width: 860px) {
+
+                .lerobot-flow,
+                .lerobot-cards {
+                    grid-template-columns: 1fr;
+                }
+
+                .lerobot-title {
+                    font-size: 30px;
+                }
+            }
+        </style>
+
+        <div class="lerobot-inner">
+            <div class="lerobot-header">
+                <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
+                <p class="lerobot-subtitle">直接进行数据采集到策略部署——无需重新适配</p>
+            </div>
+
+            <div class="lerobot-flow">
+                <div class="lerobot-flow-step">
+                    <img src="images/lerobot/1.png" alt="Data collection" loading="lazy">
+                    <div class="lerobot-flow-label">
+                        <span class="step-num">1</span>
+                        <span>数据采集</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+                <div class="lerobot-flow-step">
+                    <img src="images/lerobot/2.png" alt="Policy training" loading="lazy">
+                    <div class="lerobot-flow-label">
+                        <span class="step-num">2</span>
+                        <span>策略训练</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+                <div class="lerobot-flow-step">
+                    <img src="images/lerobot/3.png" alt="Deployment" loading="lazy">
+                    <div class="lerobot-flow-label">
+                        <span class="step-num">3</span>
+                        <span>真机部署</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lerobot-video-wrap">
+                <video src="video/lerobot.mp4" controls playsinline preload="metadata"></video>
+            </div>
+
+            <div class="lerobot-cards">
+                <div class="lerobot-card">
+                    <div class="card-icon">🤖</div>
+                    <h3>原生LeRobot集成</h3>
+                    <p>数据格式原生兼容 LeRobot/Hugging Face 生态，采集训练无需额外转换适配。</p>
+                </div>
+                <div class="lerobot-card">
+                    <div class="card-icon">🧩</div>
+                    <h3>标准化训练数据</h3>
+                    <p>采集数据可直接用于策略训练，减少格式转换与重复适配。</p>
+                </div>
+                <div class="lerobot-card">
+                    <div class="card-icon">⚡</div>
+                    <h3>快速跑通首个策略</h3>
+                    <p>从开箱到跑通模仿学习，24小时内完成，快速验证你的想法。</p>
+                </div>
+            </div>
+
+            <div class="lerobot-code">
+                <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
+                <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span>
+                PantheraLeader, PantheraFollower<br>
+                <br>
+                leader = PantheraLeader(...)<br>
+                follower = PantheraFollower(...)<br>
+                <br>
+                leader.<span class="keyword">connect</span>()<br>
+                follower.<span class="keyword">connect</span>()<br>
+                <br>
+                action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment">#
+                    {"joint1.pos": 0.1, ...}</span><br>
+                follower.<span class="keyword">send_action</span>(action)
+            </div>
+
+            <div class="lerobot-cta">
+                <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank"
+                    rel="noopener">View LeRobot Integration Docs →</a>
+            </div>
+        </div>
+    </section>
     <script type="module" src="viewer.js"></script>
     <script>
         const navBrandTop = document.getElementById("nav-brand-top");
@@ -1895,7 +1914,7 @@
             });
         });
 
-                // 技术参数动态计数效果
+        // 技术参数动态计数效果
         function animateCounter(element, target, duration = 1500) {
             const suffix = element.dataset.suffix || '';
             const start = 0;

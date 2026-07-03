@@ -1467,7 +1467,8 @@
             <div class="viewer-shell">
                 <aside class="viewer-sidebar">
                     <div>
-                        <p class="viewer-panel-copy">Drag joints on the model directly, or use the Joint1 to Joint6 sliders to adjust the pose.
+                        <p class="viewer-panel-copy">Drag joints on the model directly, or use the Joint1 to Joint6
+                            sliders to adjust the pose.
                         </p>
                     </div>
                     <div class="viewer-speed">
@@ -1510,8 +1511,8 @@
                         data-page-url="https://www.bilibili.com/video/BV1Bc9aBnEKS">
                         <div class="video-slide-inner">
                             <button type="button" class="video-cover-shell" aria-label="Play video 1">
-                                <img class="video-cover-image" src="images/视频封面/main.png" alt="Video 1 cover" loading="lazy"
-                                    referrerpolicy="no-referrer">
+                                <img class="video-cover-image" src="images/视频封面/main.png" alt="Video 1 cover"
+                                    loading="lazy" referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
                                         <path d="M8 5v14l11-7z" />
@@ -1523,237 +1524,254 @@
                     </article>
                 </div>
                 <div class="video-cta-wrap">
-                    <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS" target="_blank"
-                        rel="noopener noreferrer" aria-label="Open current video in a new window">
+                    <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS"
+                        target="_blank" rel="noopener noreferrer" aria-label="Open current video in a new window">
                         <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
                             <path
                                 d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
                                 fill="currentColor" />
                         </svg>
-                        <span class="video-cta-text">Watch on Bilibili</span>
+                        <span class="video-cta-text">Watch on X</span>
                         <span class="video-cta-arrow" aria-hidden="true"></span>
                     </a>
                 </div>
             </div>
         </section>
+    </div>
 
-        <!-- LeRobot AI Workflow -->
-        <section class="lerobot-section">
-            <style>
-                .lerobot-section {
-                    width: 100vw;
-                    margin-left: 50%;
-                    transform: translateX(-50%);
-                    box-sizing: border-box;
-                    background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
-                    margin-top: 0px;
-                    padding: 220px 24px 80px;
-                    color: #e8e8ed;
-                }
+    <!-- LeRobot AI Workflow -->
+    <section class="lerobot-section">
+        <style>
+            .lerobot-section {
+                width: 100vw;
+                margin-left: 50%;
+                transform: translateX(-50%);
+                box-sizing: border-box;
+                background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
+                margin-top: 0px;
+                padding: 220px 24px 80px;
+                color: #e8e8ed;
+            }
 
-                .lerobot-inner {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    zoom: 1.1;
-                }
+            .lerobot-inner {
+                max-width: 1200px;
+                margin: 0 auto;
+                zoom: 1.1;
+            }
 
-                .lerobot-header {
-                    text-align: center;
-                    margin-bottom: 72px;
+            .lerobot-header {
+                text-align: center;
+                margin-bottom: 72px;
+            }
+
+            .lerobot-title {
+                font-family: 'Outfit', sans-serif;
+                font-size: 42px;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                margin: 0 0 12px;
+                color: #f0f0f5;
+            }
+
+            .lerobot-subtitle {
+                font-size: 17px;
+                color: #8b8b98;
+                margin: 0;
+                font-weight: 400;
+            }
+
+            .lerobot-flow {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                margin-bottom: 67px;
+                transform: scale(1.0);
+                transform-origin: center top;
+            }
+
+            .lerobot-flow-step {
+                background: #1f1f25;
+                border-radius: 16px;
+                overflow: hidden;
+            }
+
+            .lerobot-flow-step img {
+                width: 100%;
+                aspect-ratio: 16 / 10;
+                object-fit: cover;
+                display: block;
+            }
+
+            .lerobot-flow-label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 16px 20px;
+                font-size: 16px;
+                font-weight: 500;
+                color: #a0a0ac;
+            }
+
+            .lerobot-flow-label .arrow {
+                color: #555;
+                margin-left: auto;
+            }
+
+            .lerobot-flow-step:last-child .lerobot-flow-label .arrow {
+                display: none;
+            }
+
+            .lerobot-flow-step .step-num {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: #2a2a32;
+                font-size: 12px;
+                font-weight: 600;
+                color: #7db9f8;
+                flex: 0 0 auto;
+            }
+
+            .lerobot-video-wrap {
+                margin-bottom: 72px;
+                border-radius: 16px;
+                overflow: hidden;
+                background: #000;
+                aspect-ratio: 16 / 9;
+                box-shadow: 0 0 22px rgba(125, 185, 248, 0.35);
+            }
+
+            .lerobot-video-wrap video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .lerobot-cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                margin-bottom: 64px;
+            }
+
+            .lerobot-card {
+                background: #1f1f25;
+                border-radius: 16px;
+                padding: 28px 24px 32px;
+            }
+
+            .lerobot-card h3 {
+                font-family: 'Outfit', sans-serif;
+                font-size: 18px;
+                font-weight: 600;
+                margin: 0 0 10px;
+                color: #f0f0f5;
+            }
+
+            .lerobot-card p {
+                font-size: 14px;
+                line-height: 1.6;
+                color: #8b8b98;
+                margin: 0;
+            }
+
+            .lerobot-card .card-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                background: #2a2a32;
+                margin-bottom: 16px;
+                font-size: 18px;
+            }
+
+            .lerobot-code {
+                background: #1f1f25;
+                border-radius: 16px;
+                padding: 24px 28px;
+                margin-bottom: 48px;
+                font-family: 'SFMono-Regular', 'Consolas', monospace;
+                font-size: 14px;
+                line-height: 1.7;
+                color: #c0c0cc;
+                overflow-x: auto;
+            }
+
+            .lerobot-code .keyword {
+                color: #7db9f8;
+            }
+
+            .lerobot-code .string {
+                color: #a8d5a2;
+            }
+
+            .lerobot-code .comment {
+                color: #6a6a76;
+            }
+
+            .lerobot-cta {
+                display: flex;
+                gap: 16px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .lerobot-cta a {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 28px;
+                border-radius: 999px;
+                font-size: 15px;
+                font-weight: 500;
+                text-decoration: none;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .lerobot-cta a:hover {
+                transform: translateY(-2px);
+            }
+
+            .lerobot-cta .btn-primary {
+                background: #7db9f8;
+                color: #0a0a0c;
+            }
+
+            .lerobot-cta .btn-secondary {
+                border: 1px solid #333;
+                color: #c0c0cc;
+                background: transparent;
+            }
+
+            .lerobot-cta .btn-secondary:hover {
+                background: #1e1e24;
+                border-color: #555;
+            }
+
+            @media (max-width: 860px) {
+
+                .lerobot-flow,
+                .lerobot-cards {
+                    grid-template-columns: 1fr;
                 }
 
                 .lerobot-title {
-                    font-family: 'Outfit', sans-serif;
-                    font-size: 42px;
-                    font-weight: 700;
-                    letter-spacing: -0.02em;
-                    margin: 0 0 12px;
-                    color: #f0f0f5;
+                    font-size: 30px;
                 }
+            }
+        </style>
 
-                .lerobot-subtitle {
-                    font-size: 17px;
-                    color: #8b8b98;
-                    margin: 0;
-                    font-weight: 400;
-                }
-
-                .lerobot-flow {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 20px;
-                    margin-bottom:67px;
-                    transform: scale(1.0);
-                    transform-origin: center top;
-                }
-
-                .lerobot-flow-step {
-                    background: #1f1f25;
-                    border-radius: 16px;
-                    overflow: hidden;
-                }
-
-                .lerobot-flow-step img {
-                    width: 100%;
-                    aspect-ratio: 16 / 10;
-                    object-fit: cover;
-                    display: block;
-                }
-
-                .lerobot-flow-label {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 16px 20px;
-                    font-size: 16px;
-                    font-weight: 500;
-                    color: #a0a0ac;
-                }
-
-                .lerobot-flow-label .arrow {
-                    color: #555;
-                    margin-left: auto;
-                }
-
-                .lerobot-flow-step:last-child .lerobot-flow-label .arrow {
-                    display: none;
-                }
-
-                .lerobot-flow-step .step-num {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 22px;
-                    height: 22px;
-                    border-radius: 50%;
-                    background: #2a2a32;
-                    font-size: 12px;
-                    font-weight: 600;
-                    color: #7db9f8;
-                    flex: 0 0 auto;
-                }
-
-                .lerobot-video-wrap {
-                    margin-bottom: 72px;
-                    border-radius: 16px;
-                    overflow: hidden;
-                    background: #000;
-                    aspect-ratio: 16 / 9;
-                    box-shadow: 0 0 22px rgba(125, 185, 248, 0.35);
-                }
-
-                .lerobot-video-wrap video {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    display: block;
-                }
-
-                .lerobot-cards {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 20px;
-                    margin-bottom: 64px;
-                }
-
-                .lerobot-card {
-                    background: #1f1f25;
-                    border-radius: 16px;
-                    padding: 28px 24px 32px;
-                }
-
-                .lerobot-card h3 {
-                    font-family: 'Outfit', sans-serif;
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin: 0 0 10px;
-                    color: #f0f0f5;
-                }
-
-                .lerobot-card p {
-                    font-size: 14px;
-                    line-height: 1.6;
-                    color: #8b8b98;
-                    margin: 0;
-                }
-
-                .lerobot-card .card-icon {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 10px;
-                    background: #2a2a32;
-                    margin-bottom: 16px;
-                    font-size: 18px;
-                }
-
-                .lerobot-code {
-                    background: #1f1f25;
-                    border-radius: 16px;
-                    padding: 24px 28px;
-                    margin-bottom: 48px;
-                    font-family: 'SFMono-Regular', 'Consolas', monospace;
-                    font-size: 14px;
-                    line-height: 1.7;
-                    color: #c0c0cc;
-                    overflow-x: auto;
-                }
-
-                .lerobot-code .keyword { color: #7db9f8; }
-                .lerobot-code .string { color: #a8d5a2; }
-                .lerobot-code .comment { color: #6a6a76; }
-
-                .lerobot-cta {
-                    display: flex;
-                    gap: 16px;
-                    justify-content: center;
-                    flex-wrap: wrap;
-                }
-
-                .lerobot-cta a {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 12px 28px;
-                    border-radius: 999px;
-                    font-size: 15px;
-                    font-weight: 500;
-                    text-decoration: none;
-                    transition: transform 0.2s ease, box-shadow 0.2s ease;
-                }
-
-                .lerobot-cta a:hover { transform: translateY(-2px); }
-
-                .lerobot-cta .btn-primary {
-                    background: #7db9f8;
-                    color: #0a0a0c;
-                }
-
-                .lerobot-cta .btn-secondary {
-                    border: 1px solid #333;
-                    color: #c0c0cc;
-                    background: transparent;
-                }
-
-                .lerobot-cta .btn-secondary:hover {
-                    background: #1e1e24;
-                    border-color: #555;
-                }
-
-                @media (max-width: 860px) {
-                    .lerobot-flow,
-                    .lerobot-cards { grid-template-columns: 1fr; }
-                    .lerobot-title { font-size: 30px; }
-                }
-            </style>
-
-            <div class="lerobot-inner">
-                <div class="lerobot-header">
-                    <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
-                    <p class="lerobot-subtitle">From data collection to policy deployment — no extra adapter work</p>
-                </div>
+        <div class="lerobot-inner">
+            <div class="lerobot-header">
+                <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
+                <p class="lerobot-subtitle">From data collection to policy deployment — no extra adapter work</p>
+            </div>
 
                 <div class="lerobot-flow">
                     <div class="lerobot-flow-step">
@@ -1783,30 +1801,34 @@
                 </div>
 
                 <div class="lerobot-video-wrap">
-                    <video src="video/lerobot.mp4" controls playsinline preload="metadata"></video>
+                    <video src="video/lerobot_en.mp4" controls playsinline preload="metadata"></video>
                 </div>
 
                 <div class="lerobot-cards">
                     <div class="lerobot-card">
                         <div class="card-icon">🤖</div>
                         <h3>Native LeRobot Integration</h3>
-                        <p>Data format is natively compatible with the LeRobot/Hugging Face ecosystem, with no extra conversion needed for collection and training。</p>
+                        <p>Data format is natively compatible with the LeRobot/Hugging Face ecosystem, with no extra
+                            conversion needed for collection and training。</p>
                     </div>
                     <div class="lerobot-card">
                         <div class="card-icon">🧩</div>
                         <h3>Standardized Training Data</h3>
-                        <p>Collected data can be used directly for policy training, reducing format conversion and repeated adaptation。</p>
+                        <p>Collected data can be used directly for policy training, reducing format conversion and
+                            repeated adaptation。</p>
                     </div>
                     <div class="lerobot-card">
                         <div class="card-icon">⚡</div>
                         <h3>Fast First Policy</h3>
-                        <p>Go from unboxing to a working imitation-learning policy within 24 hours, so ideas can be validated quickly。</p>
+                        <p>Go from unboxing to a working imitation-learning policy within 24 hours, so ideas can be
+                            validated quickly。</p>
                     </div>
                 </div>
 
                 <div class="lerobot-code">
                     <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
-                    <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span> PantheraLeader, PantheraFollower<br>
+                    <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span>
+                    PantheraLeader, PantheraFollower<br>
                     <br>
                     leader = PantheraLeader(...)<br>
                     follower = PantheraFollower(...)<br>
@@ -1814,16 +1836,17 @@
                     leader.<span class="keyword">connect</span>()<br>
                     follower.<span class="keyword">connect</span>()<br>
                     <br>
-                    action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment"># {"joint1.pos": 0.1, ...}</span><br>
+                    action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment">#
+                        {"joint1.pos": 0.1, ...}</span><br>
                     follower.<span class="keyword">send_action</span>(action)
                 </div>
 
                 <div class="lerobot-cta">
-                    <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank" rel="noopener">View LeRobot Integration Docs →</a>
+                    <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot"
+                        target="_blank" rel="noopener">View LeRobot Integration Docs →</a>
                 </div>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
     <script type="module" src="viewer.js"></script>
     <script>
         // Translate viewer status messages from Chinese to English
