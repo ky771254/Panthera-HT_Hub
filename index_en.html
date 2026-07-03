@@ -37,6 +37,13 @@
             align-items: center;
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.24s ease, opacity 0.24s ease;
+        }
+
+        .navbar.navbar-hidden {
+            transform: translateX(-50%) translateY(-80px);
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Panthera-HT 品牌名 */
@@ -105,7 +112,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 80px 20px;
+            padding: 80px 20px 0;
         }
 
         /* 产品概览 */
@@ -758,41 +765,12 @@
             text-align: center;
         }
 
-        .video-description {
-            color: #666;
-            font-size: 16px;
-            font-weight: 600;
-            text-align: center;
-            margin: 0;
-        }
-
         .video-title-break {
             display: none;
         }
 
-        .video-nav {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-            justify-content: center;
-            width: 144px;
-        }
-
-        .video-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: min(1200px, calc(100vw - 64px));
-            gap: 24px;
-            margin-top: 22px;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-            min-height: 64px;
-        }
-
         .video-carousel {
-            width: min(1200px, calc(100vw - 64px));
+            width: min(1260px, calc(100vw - 64px));
             position: relative;
             aspect-ratio: 16 / 9;
             height: auto;
@@ -803,31 +781,8 @@
         }
 
         .video-slide {
-            position: absolute;
-            left: 50%;
-            top: 50%;
             width: 100%;
             height: 100%;
-            transition: transform 0.18s ease, opacity 0.18s ease;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            will-change: transform, opacity;
-        }
-
-        .video-slide.is-active {
-            z-index: 3;
-            opacity: 1;
-        }
-
-        .video-slide.is-neighbor {
-            z-index: 2;
-            opacity: 0;
-        }
-
-        .video-slide.is-hidden {
-            z-index: 1;
-            opacity: 0;
-            pointer-events: none;
         }
 
         .video-slide-inner {
@@ -838,10 +793,6 @@
             overflow: hidden;
             background: #000;
             border-radius: 16px;
-        }
-
-        .video-slide:not(.is-active) .video-slide-inner {
-            pointer-events: none;
         }
 
         .video-cover-shell,
@@ -924,16 +875,16 @@
         .video-cta-wrap {
             display: flex;
             justify-content: flex-end;
-            position: static;
-            margin-left: auto;
+            width: min(1200px, calc(100vw - 64px));
+            margin: 22px auto 0;
         }
 
         .video-cta {
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             gap: 12px;
-            width: min(100%, 320px);
-            padding: 14px 18px;
+            padding: 14px 24px 14px 18px;
             border-radius: 999px;
             border: 1px solid var(--video-border-inverse);
             background: #111;
@@ -973,7 +924,6 @@
         .video-cta-icon {
             width: 30px;
             height: 21px;
-            margin-right: auto;
             color: #fff;
             flex: 0 0 auto;
         }
@@ -999,45 +949,6 @@
             transform: translateY(2px) rotate(-45deg);
         }
 
-        .video-nav-btn {
-            width: 60px;
-            height: 60px;
-            flex: 0 0 auto;
-            border-radius: 50%;
-            border: 1px solid var(--video-border-mid);
-            background: #fff;
-            color: #222;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
-            transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .video-nav-btn:hover {
-            background: #222;
-            border-color: #222;
-            color: #fff;
-            box-shadow: 0 10px 22px rgba(17, 24, 39, 0.18);
-            transform: translateY(-1px);
-        }
-
-        .video-arrow {
-            width: 13px;
-            height: 13px;
-            border-top: 2px solid currentColor;
-            border-right: 2px solid currentColor;
-        }
-
-        .video-arrow.left {
-            transform: translateX(2px) rotate(-135deg);
-        }
-
-        .video-arrow.right {
-            transform: translateX(-2px) rotate(45deg);
-        }
-
         /* 文档下拉菜单 */
         .dropdown {
             position: relative;
@@ -1055,22 +966,28 @@
         }
 
         .dropdown-content {
-            display: none;
             position: absolute;
             top: calc(100% + 10px);
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(6px);
             background: #ffffff;
             min-width: 200px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             border-radius: 8px;
             z-index: 1001;
             padding: 8px 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
         }
 
         .dropdown:hover .dropdown-content,
-        .dropdown:hover .dropdown-content:hover {
-            display: block;
+        .dropdown:focus-within .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
         }
 
         .dropdown-content a {
@@ -1234,17 +1151,6 @@
                 display: none;
             }
 
-            .video-nav {
-                position: static;
-                gap: 12px;
-                width: 100%;
-            }
-
-            .video-nav-btn {
-                width: 48px;
-                height: 48px;
-            }
-
             .video-carousel {
                 width: 100%;
                 height: auto;
@@ -1260,14 +1166,6 @@
                 width: 72px;
                 height: 72px;
                 font-size: 13px;
-            }
-
-            .video-controls {
-                flex-direction: column;
-                align-items: stretch;
-                width: 100%;
-                margin-top: 8px;
-                min-height: 0;
             }
 
             .video-cta-wrap {
@@ -1414,6 +1312,7 @@
                 <div class="dropdown-content">
                     <a href="documents/Panthera-HT Parameter Manual.pdf" target="_blank">Parameter Manual</a>
                     <a href="documents/Panthera-HT Quick Start Guide.pdf" target="_blank">Quick Start Guide</a>
+                    <a href="documents/Panthera-HT Database.pdf" target="_blank">Database</a>
                 </div>
             </div>
             <a href="guide_en.html" target="_blank" rel="noopener noreferrer" class="navbar-link-strong">GUIDE</a>
@@ -1605,76 +1504,322 @@
             <div class="video-section-inner">
                 <div class="video-head">
                     <h2 class="video-title">Product Videos</h2>
-                    <p class="video-description">Showcasing the arm in action and custom development use cases</p>
                 </div>
                 <div class="video-carousel" id="video-carousel">
                     <article class="video-slide" data-index="0"
-                        data-page-url="https://www.bilibili.com/video/BV14kcgztEDi">
+                        data-page-url="https://www.bilibili.com/video/BV1Bc9aBnEKS">
                         <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="Play Video 1">
-                                <img class="video-cover-image" src="images/视频封面/1.png" alt="Video 1 Cover"
-                                    loading="lazy" referrerpolicy="no-referrer">
+                            <button type="button" class="video-cover-shell" aria-label="Play video 1">
+                                <img class="video-cover-image" src="images/视频封面/main.png" alt="Video 1 cover" loading="lazy"
+                                    referrerpolicy="no-referrer">
                                 <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
                                         focusable="false">
                                         <path d="M8 5v14l11-7z" />
                                     </svg></span>
                             </button>
-                            <video class="video-player-frame video-media-hidden" data-src="video/1.mp4"
-                                title="Panthera-HT Video 1" controls playsinline preload="metadata"></video>
-                        </div>
-                    </article>
-                    <article class="video-slide" data-index="1"
-                        data-page-url="https://www.bilibili.com/video/BV1JQPfz4EPN">
-                        <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="Play Video 2">
-                                <img class="video-cover-image" src="images/视频封面/2.png" alt="Video 2 Cover"
-                                    loading="lazy" referrerpolicy="no-referrer">
-                                <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
-                                        focusable="false">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg></span>
-                            </button>
-                            <video class="video-player-frame video-media-hidden" data-src="video/2.mp4"
-                                title="Panthera-HT Video 2" controls playsinline preload="metadata"></video>
-                        </div>
-                    </article>
-                    <article class="video-slide" data-index="2"
-                        data-page-url="https://www.bilibili.com/video/BV13KcDzLE3F">
-                        <div class="video-slide-inner">
-                            <button type="button" class="video-cover-shell" aria-label="Play Video 3">
-                                <img class="video-cover-image" src="images/视频封面/3.png" alt="Video 3 Cover"
-                                    loading="lazy" referrerpolicy="no-referrer">
-                                <span class="video-cover-play" aria-hidden="true"><svg viewBox="0 0 24 24"
-                                        focusable="false">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg></span>
-                            </button>
-                            <video class="video-player-frame video-media-hidden" data-src="video/3.mp4"
-                                title="Panthera-HT Video 3" controls playsinline preload="metadata"></video>
+                            <video class="video-player-frame" src="video/main_en.mp4" title="Panthera-HT Video 1"
+                                controls playsinline preload="metadata"></video>
                         </div>
                     </article>
                 </div>
-                <div class="video-controls">
-                    <div class="video-nav">
-                        <button type="button" class="video-nav-btn" id="video-nav-left" aria-label="Previous video">
-                            <span class="video-arrow left"></span>
-                        </button>
-                        <button type="button" class="video-nav-btn" id="video-nav-right" aria-label="Next video">
-                            <span class="video-arrow right"></span>
-                        </button>
+                <div class="video-cta-wrap">
+                    <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS" target="_blank"
+                        rel="noopener noreferrer" aria-label="Open current video in a new window">
+                        <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
+                            <path
+                                d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
+                                fill="currentColor" />
+                        </svg>
+                        <span class="video-cta-text">Watch on Bilibili</span>
+                        <span class="video-cta-arrow" aria-hidden="true"></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- LeRobot AI Workflow -->
+        <section class="lerobot-section">
+            <style>
+                .lerobot-section {
+                    width: 100vw;
+                    margin-left: 50%;
+                    transform: translateX(-50%);
+                    box-sizing: border-box;
+                    background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
+                    margin-top: 0px;
+                    padding: 220px 24px 80px;
+                    color: #e8e8ed;
+                }
+
+                .lerobot-inner {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    zoom: 1.1;
+                }
+
+                .lerobot-header {
+                    text-align: center;
+                    margin-bottom: 72px;
+                }
+
+                .lerobot-title {
+                    font-family: 'Outfit', sans-serif;
+                    font-size: 42px;
+                    font-weight: 700;
+                    letter-spacing: -0.02em;
+                    margin: 0 0 12px;
+                    color: #f0f0f5;
+                }
+
+                .lerobot-subtitle {
+                    font-size: 17px;
+                    color: #8b8b98;
+                    margin: 0;
+                    font-weight: 400;
+                }
+
+                .lerobot-flow {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 20px;
+                    margin-bottom:67px;
+                    transform: scale(1.0);
+                    transform-origin: center top;
+                }
+
+                .lerobot-flow-step {
+                    background: #1f1f25;
+                    border-radius: 16px;
+                    overflow: hidden;
+                }
+
+                .lerobot-flow-step img {
+                    width: 100%;
+                    aspect-ratio: 16 / 10;
+                    object-fit: cover;
+                    display: block;
+                }
+
+                .lerobot-flow-label {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 16px 20px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #a0a0ac;
+                }
+
+                .lerobot-flow-label .arrow {
+                    color: #555;
+                    margin-left: auto;
+                }
+
+                .lerobot-flow-step:last-child .lerobot-flow-label .arrow {
+                    display: none;
+                }
+
+                .lerobot-flow-step .step-num {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    background: #2a2a32;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: #7db9f8;
+                    flex: 0 0 auto;
+                }
+
+                .lerobot-video-wrap {
+                    margin-bottom: 72px;
+                    border-radius: 16px;
+                    overflow: hidden;
+                    background: #000;
+                    aspect-ratio: 16 / 9;
+                    box-shadow: 0 0 22px rgba(125, 185, 248, 0.35);
+                }
+
+                .lerobot-video-wrap video {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    display: block;
+                }
+
+                .lerobot-cards {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 20px;
+                    margin-bottom: 64px;
+                }
+
+                .lerobot-card {
+                    background: #1f1f25;
+                    border-radius: 16px;
+                    padding: 28px 24px 32px;
+                }
+
+                .lerobot-card h3 {
+                    font-family: 'Outfit', sans-serif;
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin: 0 0 10px;
+                    color: #f0f0f5;
+                }
+
+                .lerobot-card p {
+                    font-size: 14px;
+                    line-height: 1.6;
+                    color: #8b8b98;
+                    margin: 0;
+                }
+
+                .lerobot-card .card-icon {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 10px;
+                    background: #2a2a32;
+                    margin-bottom: 16px;
+                    font-size: 18px;
+                }
+
+                .lerobot-code {
+                    background: #1f1f25;
+                    border-radius: 16px;
+                    padding: 24px 28px;
+                    margin-bottom: 48px;
+                    font-family: 'SFMono-Regular', 'Consolas', monospace;
+                    font-size: 14px;
+                    line-height: 1.7;
+                    color: #c0c0cc;
+                    overflow-x: auto;
+                }
+
+                .lerobot-code .keyword { color: #7db9f8; }
+                .lerobot-code .string { color: #a8d5a2; }
+                .lerobot-code .comment { color: #6a6a76; }
+
+                .lerobot-cta {
+                    display: flex;
+                    gap: 16px;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                }
+
+                .lerobot-cta a {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 12px 28px;
+                    border-radius: 999px;
+                    font-size: 15px;
+                    font-weight: 500;
+                    text-decoration: none;
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                }
+
+                .lerobot-cta a:hover { transform: translateY(-2px); }
+
+                .lerobot-cta .btn-primary {
+                    background: #7db9f8;
+                    color: #0a0a0c;
+                }
+
+                .lerobot-cta .btn-secondary {
+                    border: 1px solid #333;
+                    color: #c0c0cc;
+                    background: transparent;
+                }
+
+                .lerobot-cta .btn-secondary:hover {
+                    background: #1e1e24;
+                    border-color: #555;
+                }
+
+                @media (max-width: 860px) {
+                    .lerobot-flow,
+                    .lerobot-cards { grid-template-columns: 1fr; }
+                    .lerobot-title { font-size: 30px; }
+                }
+            </style>
+
+            <div class="lerobot-inner">
+                <div class="lerobot-header">
+                    <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
+                    <p class="lerobot-subtitle">From data collection to policy deployment — no extra adapter work</p>
+                </div>
+
+                <div class="lerobot-flow">
+                    <div class="lerobot-flow-step">
+                        <img src="images/lerobot/1.png" alt="Data collection" loading="lazy">
+                        <div class="lerobot-flow-label">
+                            <span class="step-num">1</span>
+                            <span>Data Collection</span>
+                            <span class="arrow">→</span>
+                        </div>
                     </div>
-                    <div class="video-cta-wrap">
-                        <a class="video-cta" id="video-cta-link" href="video/1.mp4" target="_blank"
-                            rel="noopener noreferrer" aria-label="Open current video in new window">
-                            <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
-                                <path
-                                    d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
-                                    fill="currentColor" />
-                            </svg>
-                            <span class="video-cta-text">Watch on Bilibili</span>
-                            <span class="video-cta-arrow" aria-hidden="true"></span>
-                        </a>
+                    <div class="lerobot-flow-step">
+                        <img src="images/lerobot/2.png" alt="Policy training" loading="lazy">
+                        <div class="lerobot-flow-label">
+                            <span class="step-num">2</span>
+                            <span>Policy Training</span>
+                            <span class="arrow">→</span>
+                        </div>
                     </div>
+                    <div class="lerobot-flow-step">
+                        <img src="images/lerobot/3.png" alt="Deployment" loading="lazy">
+                        <div class="lerobot-flow-label">
+                            <span class="step-num">3</span>
+                            <span>Real-World Deployment</span>
+                            <span class="arrow">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lerobot-video-wrap">
+                    <video src="video/lerobot.mp4" controls playsinline preload="metadata"></video>
+                </div>
+
+                <div class="lerobot-cards">
+                    <div class="lerobot-card">
+                        <div class="card-icon">🤖</div>
+                        <h3>Native LeRobot Integration</h3>
+                        <p>Data format is natively compatible with the LeRobot/Hugging Face ecosystem, with no extra conversion needed for collection and training。</p>
+                    </div>
+                    <div class="lerobot-card">
+                        <div class="card-icon">🧩</div>
+                        <h3>Standardized Training Data</h3>
+                        <p>Collected data can be used directly for policy training, reducing format conversion and repeated adaptation。</p>
+                    </div>
+                    <div class="lerobot-card">
+                        <div class="card-icon">⚡</div>
+                        <h3>Fast First Policy</h3>
+                        <p>Go from unboxing to a working imitation-learning policy within 24 hours, so ideas can be validated quickly。</p>
+                    </div>
+                </div>
+
+                <div class="lerobot-code">
+                    <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
+                    <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span> PantheraLeader, PantheraFollower<br>
+                    <br>
+                    leader = PantheraLeader(...)<br>
+                    follower = PantheraFollower(...)<br>
+                    <br>
+                    leader.<span class="keyword">connect</span>()<br>
+                    follower.<span class="keyword">connect</span>()<br>
+                    <br>
+                    action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment"># {"joint1.pos": 0.1, ...}</span><br>
+                    follower.<span class="keyword">send_action</span>(action)
+                </div>
+
+                <div class="lerobot-cta">
+                    <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank" rel="noopener">View LeRobot Integration Docs →</a>
                 </div>
             </div>
         </section>
@@ -1710,189 +1855,48 @@
             });
         }
 
+        // Navbar auto-hide on scroll direction
+        const navbar = document.querySelector(".navbar");
+        if (navbar) {
+            let lastScrollY = window.scrollY;
+            window.addEventListener("scroll", () => {
+                const currentScrollY = window.scrollY;
+                if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                    navbar.classList.add("navbar-hidden");
+                } else {
+                    navbar.classList.remove("navbar-hidden");
+                }
+                lastScrollY = currentScrollY;
+            }, { passive: true });
+        }
+
         const videoCards = Array.from(document.querySelectorAll(".video-slide"));
         const videoFrames = Array.from(document.querySelectorAll(".video-player-frame"));
         const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
-        const videoCtaLink = document.getElementById("video-cta-link");
-        const videoNavLeft = document.getElementById("video-nav-left");
-        const videoNavRight = document.getElementById("video-nav-right");
-        let activeVideoIndex = 0;
-        let playingVideoIndex = -1;
 
         videoCards.forEach((card) => {
             const frame = card.querySelector(".video-player-frame");
             const coverImage = card.querySelector(".video-cover-image");
-            const src = frame?.dataset?.src;
-            if (!frame || !coverImage || !src) return;
-            frame.src = src;
+            if (!frame || !coverImage) return;
             frame.poster = coverImage.currentSrc || coverImage.src;
-            frame.controls = false;
+            frame.controls = true;
         });
 
-        const normalizeVideoIndex = (index) => {
-            const count = videoCards.length;
-            return ((index % count) + count) % count;
-        };
-
-        const getVideoDelta = (index) => {
-            let delta = index - activeVideoIndex;
-            const half = videoCards.length / 2;
-            if (delta > half) delta -= videoCards.length;
-            if (delta < -half) delta += videoCards.length;
-            return delta;
-        };
-
-        const updateVideoCta = () => {
-            if (!videoCtaLink || !videoCards.length) return;
-            const activeCard = videoCards[activeVideoIndex];
-            const pageUrl = activeCard?.dataset?.pageUrl;
-            if (!pageUrl) return;
-            videoCtaLink.href = pageUrl;
-        };
-
-        const resetVideoCardMedia = (card, options = {}) => {
-            const { rewind = true } = options;
-            const frame = card.querySelector(".video-player-frame");
-            const coverShell = card.querySelector(".video-cover-shell");
-            if (!frame || !coverShell) return;
-
-            frame.classList.add("video-media-hidden");
-            frame.classList.remove("is-ready");
-            delete frame.dataset.loadToken;
-            frame.controls = false;
-
-            coverShell.classList.remove("hidden");
-
-            frame.pause();
-            if (rewind) {
-                frame.currentTime = 0;
-            }
-        };
-
-        const renderVideoCarousel = () => {
-            videoCards.forEach((card, index) => {
-                const delta = getVideoDelta(index);
-                const isCenter = delta === 0;
-                const isNeighbor = Math.abs(delta) === 1;
-                card.classList.toggle("is-active", isCenter);
-                card.classList.toggle("is-neighbor", isNeighbor);
-                card.classList.toggle("is-hidden", !isCenter && !isNeighbor);
-
-                if (isCenter) {
-                    card.style.transform = "translate(-50%, -50%)";
-                    const frame = card.querySelector(".video-player-frame");
-                    const coverShell = card.querySelector(".video-cover-shell");
-                    if (frame && coverShell) {
-                        const shouldPlay = index === playingVideoIndex;
-                        if (shouldPlay) {
-                            frame.classList.remove("video-media-hidden");
-                            coverShell.classList.toggle("hidden", frame.classList.contains("is-ready"));
-                        }
-                    }
-                    return;
-                }
-
-                const translatePercent = isNeighbor ? delta * 56 : (delta < 0 ? -132 : 132);
-                card.style.transform = `translate(calc(-50% + ${translatePercent}%), -50%)`;
-            });
-
-            updateVideoCta();
-        };
-
-        const pauseAllVideos = () => {
-            playingVideoIndex = -1;
-            videoCards.forEach((card) => {
-                resetVideoCardMedia(card);
-            });
-        };
-
-        const playCenterVideo = () => {
-            const centerCard = videoCards[activeVideoIndex];
-            if (!centerCard) return;
-            const frame = centerCard.querySelector(".video-player-frame");
-            const coverShell = centerCard.querySelector(".video-cover-shell");
-            const coverImage = centerCard.querySelector(".video-cover-image");
-            if (!frame || !coverShell || !coverImage) return;
-
-            const loadToken = Date.now().toString() + Math.random().toString(36).slice(2);
-            frame.dataset.loadToken = loadToken;
-            frame.classList.remove("video-media-hidden", "is-ready");
-            coverShell.classList.remove("hidden");
-            frame.controls = false;
-            frame.poster = coverImage.currentSrc || coverImage.src;
-
-            frame.addEventListener("playing", () => {
-                if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
+        videoCoverShells.forEach((shell) => {
+            shell.addEventListener("click", async (event) => {
+                event.preventDefault();
+                const card = shell.closest(".video-slide");
+                const frame = card?.querySelector(".video-player-frame");
+                if (!frame) return;
+                shell.classList.add("hidden");
                 frame.controls = true;
-                requestAnimationFrame(() => {
-                    if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
-                    frame.classList.add("is-ready");
-                    coverShell.classList.add("hidden");
-                });
-            }, { once: true });
-
-            playingVideoIndex = activeVideoIndex;
-            renderVideoCarousel();
-
-            requestAnimationFrame(async () => {
-                if (frame.dataset.loadToken !== loadToken || playingVideoIndex !== activeVideoIndex) return;
                 try {
-                    frame.currentTime = 0;
                     await frame.play();
                 } catch (_error) {
-                    frame.classList.remove("is-ready");
-                    coverShell.classList.remove("hidden");
+                    shell.classList.remove("hidden");
                 }
             });
-        };
-
-        const setActiveVideoIndex = (nextIndex) => {
-            const previousPlayingIndex = playingVideoIndex;
-            playingVideoIndex = -1;
-            activeVideoIndex = normalizeVideoIndex(nextIndex);
-            renderVideoCarousel();
-
-            // 延迟重置之前播放的视频，避免闪黑
-            if (previousPlayingIndex !== -1) {
-                setTimeout(() => {
-                    const previousCard = videoCards[previousPlayingIndex];
-                    if (previousCard && previousPlayingIndex !== activeVideoIndex) {
-                        resetVideoCardMedia(previousCard);
-                    }
-                }, 300);
-            }
-        };
-
-        if (videoNavLeft) {
-            videoNavLeft.addEventListener("click", () => {
-                setActiveVideoIndex(activeVideoIndex - 1);
-            });
-        }
-
-        if (videoNavRight) {
-            videoNavRight.addEventListener("click", () => {
-                setActiveVideoIndex(activeVideoIndex + 1);
-            });
-        }
-
-        videoCards.forEach((card, index) => {
-            card.addEventListener("click", () => {
-                if (index === activeVideoIndex) return;
-                setActiveVideoIndex(index);
-            });
         });
-
-        videoCoverShells.forEach((coverShell, index) => {
-            coverShell.addEventListener("click", (event) => {
-                event.stopPropagation();
-                if (index !== activeVideoIndex) return;
-                playCenterVideo();
-            });
-        });
-
-        if (videoCards.length) {
-            renderVideoCarousel();
-        }
 
         // 技术参数动态计数效果
         function animateCounter(element, target, duration = 1500) {

@@ -112,7 +112,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 80px 20px;
+            padding: 80px 20px 0;
         }
 
         /* 产品概览 */
@@ -948,22 +948,28 @@
         }
 
         .dropdown-content {
-            display: none;
             position: absolute;
             top: calc(100% + 10px);
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(6px);
             background: #ffffff;
             min-width: 200px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             border-radius: 8px;
             z-index: 1001;
             padding: 8px 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
         }
 
         .dropdown:hover .dropdown-content,
-        .dropdown:hover .dropdown-content:hover {
-            display: block;
+        .dropdown:focus-within .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
         }
 
         .dropdown-content a {
@@ -1290,6 +1296,7 @@
                 <div class="dropdown-content">
                     <a href="documents/Panthera-HT参数手册.pdf" target="_blank">参数手册</a>
                     <a href="documents/Panthera-HT快速使用指南.pdf" target="_blank">快速使用指南</a>
+                    <a href="documents/Panthera-HT资料库.pdf" target="_blank">资料库</a>
                 </div>
             </div>
             <a href="guide.html" target="_blank" rel="noopener noreferrer" class="navbar-link-strong">指南</a>
@@ -1501,10 +1508,14 @@
             </div>
         </section>
 
-        <!-- LeRobot & XLeRobot Ecosystem -->
+        <!-- LeRobot AI Workflow -->
         <section class="lerobot-section">
             <style>
                 .lerobot-section {
+                    width: 100vw;
+                    margin-left: 50%;
+                    transform: translateX(-50%);
+                    box-sizing: border-box;
                     background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
                     margin-top: 0px;
                     padding: 220px 24px 80px;
@@ -1702,27 +1713,6 @@
                     border-color: #555;
                 }
 
-                .lerobot-community {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 24px;
-                    margin-top: 48px;
-                    flex-wrap: wrap;
-                    font-size: 13px;
-                    color: #6a6a76;
-                }
-
-                .lerobot-community a {
-                    color: #8b8b98;
-                    text-decoration: none;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                }
-
-                .lerobot-community a:hover { color: #c0c0cc; }
-
                 @media (max-width: 860px) {
                     .lerobot-flow,
                     .lerobot-cards { grid-template-columns: 1fr; }
@@ -1732,7 +1722,7 @@
 
             <div class="lerobot-inner">
                 <div class="lerobot-header">
-                    <h2 class="lerobot-title">LeRobot &amp; XLeRobot — AI-Ready Ecosystem</h2>
+                    <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
                     <p class="lerobot-subtitle">直接进行数据采集到策略部署——无需重新适配</p>
                 </div>
 
@@ -1771,45 +1761,36 @@
                     <div class="lerobot-card">
                         <div class="card-icon">🤖</div>
                         <h3>原生LeRobot集成</h3>
-                        <p>数据格式原生兼容，直接接入 HuggingFace 生态，无需额外转换适配。</p>
+                        <p>数据格式原生兼容 LeRobot/Hugging Face 生态，采集训练无需额外转换适配。</p>
                     </div>
                     <div class="lerobot-card">
                         <div class="card-icon">🧩</div>
-                        <h3>XLeRobot兼容</h3>
-                        <p>可复用社区算法库、数据集、demos，降低你的研发成本。</p>
+                        <h3>标准化训练数据</h3>
+                        <p>采集数据可直接用于策略训练，减少格式转换与重复适配。</p>
                     </div>
                     <div class="lerobot-card">
                         <div class="card-icon">⚡</div>
                         <h3>快速跑通首个策略</h3>
-                        <p>从开箱到跑通模仿学习，24 小时内完成，快速验证你的想法。</p>
+                        <p>从开箱到跑通模仿学习，24小时内完成，快速验证你的想法。</p>
                     </div>
                 </div>
 
                 <div class="lerobot-code">
-                    <span class="comment"># github.com/chizhayuehaiyvyvmao/Panthera-HT_lerobot</span><br>
-                    <span class="keyword">from</span> lerobot.teleoperators.teleoperator <span class="keyword">import</span> Teleoperator<br>
-                    <span class="keyword">from</span> lerobot.robots.robot <span class="keyword">import</span> Robot<br>
-                    <span class="keyword">class</span> PantheraLeader(Teleoperator): ...<br>
-                    <span class="keyword">class</span> PantheraFollower(Robot): ...<br>
+                    <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
+                    <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span> PantheraLeader, PantheraFollower<br>
+                    <br>
+                    leader = PantheraLeader(...)<br>
+                    follower = PantheraFollower(...)<br>
                     <br>
                     leader.<span class="keyword">connect</span>()<br>
-                    action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment"># {joint1.pos: 0.1, ...}</span><br>
+                    follower.<span class="keyword">connect</span>()<br>
+                    <br>
+                    action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment"># {"joint1.pos": 0.1, ...}</span><br>
                     follower.<span class="keyword">send_action</span>(action)
                 </div>
 
                 <div class="lerobot-cta">
-                    <a class="btn-primary" href="https://github.com" target="_blank" rel="noopener">View LeRobot Integration Docs →</a>
-                    <a class="btn-secondary" href="https://www.bilibili.com/video/BV16n9cBKELa" target="_blank" rel="noopener">Watch Demo →</a>
-                </div>
-
-                <div class="lerobot-community">
-                    <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
-                    <span>·</span>
-                    <a href="https://huggingface.co" target="_blank" rel="noopener">HuggingFace</a>
-                    <span>·</span>
-                    <a href="#" target="_blank" rel="noopener">XLeRobot</a>
-                    <span>·</span>
-                    <span>🤝 Community Demos</span>
+                    <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank" rel="noopener">View LeRobot Integration Docs →</a>
                 </div>
             </div>
         </section>
