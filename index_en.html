@@ -1509,7 +1509,7 @@
                 <div class="video-carousel" id="video-carousel">
                     <article class="video-slide" data-index="0"
                         data-page-url="https://www.bilibili.com/video/BV1Bc9aBnEKS">
-                        <div class="video-slide-inner">
+                        <div class="video-slide-inner custom-video-wrap">
                             <button type="button" class="video-cover-shell" aria-label="Play video 1">
                                 <img class="video-cover-image" src="images/视频封面/main.png" alt="Video 1 cover"
                                     loading="lazy" referrerpolicy="no-referrer">
@@ -1518,13 +1518,20 @@
                                         <path d="M8 5v14l11-7z" />
                                     </svg></span>
                             </button>
-                            <video class="video-player-frame" src="video/main_en.mp4" title="Panthera-HT Video 1"
-                                controls playsinline preload="metadata"></video>
+                            <video class="video-player-frame custom-video" src="video/main_en.mp4"
+                                title="Panthera-HT Video 1" playsinline preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="Play video"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="Video progress">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
                         </div>
                     </article>
                 </div>
                 <div class="video-cta-wrap">
-                    <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS"
+                    <a class="video-cta" id="video-cta-link" href="https://x.com/HTrobotics/status/2073185067321729526?s=20"
                         target="_blank" rel="noopener noreferrer" aria-label="Open current video in a new window">
                         <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
                             <path
@@ -1636,6 +1643,7 @@
             }
 
             .lerobot-video-wrap {
+                position: relative;
                 margin-bottom: 72px;
                 border-radius: 16px;
                 overflow: hidden;
@@ -1649,6 +1657,80 @@
                 height: 100%;
                 object-fit: cover;
                 display: block;
+            }
+
+            .custom-video-wrap {
+                position: relative;
+            }
+
+            .custom-video-controls {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 14px;
+                background: linear-gradient(to top,
+                        rgba(0, 0, 0, 0.62) 0%,
+                        rgba(0, 0, 0, 0.62) 10%,
+                        rgba(0, 0, 0, 0.61) 20%,
+                        rgba(0, 0, 0, 0.60) 30%,
+                        rgba(0, 0, 0, 0.58) 40%,
+                        rgba(0, 0, 0, 0.55) 50%,
+                        rgba(0, 0, 0, 0.51) 60%,
+                        rgba(0, 0, 0, 0.45) 70%,
+                        rgba(0, 0, 0, 0.38) 78%,
+                        rgba(0, 0, 0, 0.30) 85%,
+                        rgba(0, 0, 0, 0.22) 90%,
+                        rgba(0, 0, 0, 0.14) 94%,
+                        rgba(0, 0, 0, 0.08) 97%,
+                        rgba(0, 0, 0, 0.03) 99%,
+                        rgba(0, 0, 0, 0) 100%);
+                z-index: 3;
+                opacity: 0;
+                pointer-events: none;
+                cursor: pointer;
+                transition: opacity 0.18s ease;
+            }
+
+            .custom-video-wrap.show-controls .custom-video-controls,
+            .custom-video-wrap.is-seeking .custom-video-controls {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .custom-video-toggle {
+                width: 30px;
+                height: 30px;
+                border: 0;
+                border-radius: 6px;
+                background: transparent;
+                color: #f0f0f5;
+                font-size: 14px;
+                line-height: 1;
+                cursor: pointer;
+                flex: 0 0 auto;
+            }
+
+            .custom-video-toggle:hover {
+                background: rgba(255, 255, 255, 0.12);
+            }
+
+            .custom-video-progress {
+                width: 100%;
+                accent-color: #7db9f8;
+                cursor: pointer;
+            }
+
+            .custom-video-time {
+                min-width: 92px;
+                color: #d7d7dc;
+                font-size: 13px;
+                font-variant-numeric: tabular-nums;
+                text-align: right;
+                flex: 0 0 auto;
             }
 
             .lerobot-cards {
@@ -1773,78 +1855,86 @@
                 <p class="lerobot-subtitle">From data collection to policy deployment — no extra adapter work</p>
             </div>
 
-                <div class="lerobot-flow">
-                    <div class="lerobot-flow-step">
-                        <img src="images/lerobot/1.png" alt="Data collection" loading="lazy">
-                        <div class="lerobot-flow-label">
-                            <span class="step-num">1</span>
-                            <span>Data Collection</span>
-                            <span class="arrow">→</span>
-                        </div>
-                    </div>
-                    <div class="lerobot-flow-step">
-                        <img src="images/lerobot/2.png" alt="Policy training" loading="lazy">
-                        <div class="lerobot-flow-label">
-                            <span class="step-num">2</span>
-                            <span>Policy Training</span>
-                            <span class="arrow">→</span>
-                        </div>
-                    </div>
-                    <div class="lerobot-flow-step">
-                        <img src="images/lerobot/3.png" alt="Deployment" loading="lazy">
-                        <div class="lerobot-flow-label">
-                            <span class="step-num">3</span>
-                            <span>Real-World Deployment</span>
-                            <span class="arrow">→</span>
-                        </div>
+            <div class="lerobot-flow">
+                <div class="lerobot-flow-step">
+                    <img src="images/lerobot/1.png" alt="Data collection" loading="lazy">
+                    <div class="lerobot-flow-label">
+                        <span class="step-num">1</span>
+                        <span>Data Collection</span>
+                        <span class="arrow">→</span>
                     </div>
                 </div>
+                <div class="lerobot-flow-step">
+                    <img src="images/lerobot/2.png" alt="Policy training" loading="lazy">
+                    <div class="lerobot-flow-label">
+                        <span class="step-num">2</span>
+                        <span>Policy Training</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+                <div class="lerobot-flow-step">
+                    <img src="images/lerobot/3.png" alt="Deployment" loading="lazy">
+                    <div class="lerobot-flow-label">
+                        <span class="step-num">3</span>
+                        <span>Real-World Deployment</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
 
-                <div class="lerobot-video-wrap">
-                    <video src="video/lerobot_en.mp4" controls playsinline preload="metadata"></video>
+            <div class="lerobot-video-wrap custom-video-wrap">
+                <video class="custom-video" src="video/lerobot_en.mp4?v=20260706-clean" playsinline
+                    preload="metadata"></video>
+                <div class="custom-video-controls">
+                    <button class="custom-video-toggle" type="button" aria-label="Play video"
+                        aria-pressed="false">▶</button>
+                    <input class="custom-video-progress" type="range" min="0" max="100"
+                        step="0.01" value="0" aria-label="Video progress">
+                    <span class="custom-video-time">0:00 / 0:00</span>
                 </div>
+            </div>
 
-                <div class="lerobot-cards">
-                    <div class="lerobot-card">
-                        <div class="card-icon">🤖</div>
-                        <h3>Native LeRobot Integration</h3>
-                        <p>Data format is natively compatible with the LeRobot/Hugging Face ecosystem, with no extra
-                            conversion needed for collection and training。</p>
-                    </div>
-                    <div class="lerobot-card">
-                        <div class="card-icon">🧩</div>
-                        <h3>Standardized Training Data</h3>
-                        <p>Collected data can be used directly for policy training, reducing format conversion and
-                            repeated adaptation。</p>
-                    </div>
-                    <div class="lerobot-card">
-                        <div class="card-icon">⚡</div>
-                        <h3>Fast First Policy</h3>
-                        <p>Go from unboxing to a working imitation-learning policy within 24 hours, so ideas can be
-                            validated quickly。</p>
-                    </div>
+            <div class="lerobot-cards">
+                <div class="lerobot-card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Native LeRobot Integration</h3>
+                    <p>Data format is natively compatible with the LeRobot/Hugging Face ecosystem, with no extra
+                        conversion needed for collection and training。</p>
                 </div>
+                <div class="lerobot-card">
+                    <div class="card-icon">🧩</div>
+                    <h3>Standardized Training Data</h3>
+                    <p>Collected data can be used directly for policy training, reducing format conversion and
+                        repeated adaptation。</p>
+                </div>
+                <div class="lerobot-card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Fast First Policy</h3>
+                    <p>Go from unboxing to a working imitation-learning policy within 24 hours, so ideas can be
+                        validated quickly。</p>
+                </div>
+            </div>
 
-                <div class="lerobot-code">
-                    <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
-                    <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span>
-                    PantheraLeader, PantheraFollower<br>
-                    <br>
-                    leader = PantheraLeader(...)<br>
-                    follower = PantheraFollower(...)<br>
-                    <br>
-                    leader.<span class="keyword">connect</span>()<br>
-                    follower.<span class="keyword">connect</span>()<br>
-                    <br>
-                    action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment">#
-                        {"joint1.pos": 0.1, ...}</span><br>
-                    follower.<span class="keyword">send_action</span>(action)
-                </div>
+            <div class="lerobot-code">
+                <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
+                <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span>
+                PantheraLeader, PantheraFollower<br>
+                <br>
+                leader = PantheraLeader(...)<br>
+                follower = PantheraFollower(...)<br>
+                <br>
+                leader.<span class="keyword">connect</span>()<br>
+                follower.<span class="keyword">connect</span>()<br>
+                <br>
+                action = leader.<span class="keyword">get_action</span>()&nbsp;&nbsp;<span class="comment">#
+                    {"joint1.pos": 0.1, ...}</span><br>
+                follower.<span class="keyword">send_action</span>(action)
+            </div>
 
-                <div class="lerobot-cta">
-                    <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot"
-                        target="_blank" rel="noopener">View LeRobot Integration Docs →</a>
-                </div>
+            <div class="lerobot-cta">
+                <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank"
+                    rel="noopener">View LeRobot Integration Docs →</a>
+            </div>
         </div>
     </section>
     <script type="module" src="viewer.js"></script>
@@ -1893,8 +1983,149 @@
             }, { passive: true });
         }
 
+        const formatVideoTime = (seconds) => {
+            if (!Number.isFinite(seconds)) return "0:00";
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, "0");
+            return `${minutes}:${remainingSeconds}`;
+        };
+
+        const setupCustomVideoControls = (wrap) => {
+            const video = wrap.querySelector("video");
+            const toggle = wrap.querySelector(".custom-video-toggle");
+            const progress = wrap.querySelector(".custom-video-progress");
+            const time = wrap.querySelector(".custom-video-time");
+            if (!video || !toggle || !progress || !time) return;
+
+            let isSeeking = false;
+
+            const canShowControls = () => {
+                return !video.classList.contains("video-media-hidden") && !wrap.querySelector(".video-cover-shell:not(.hidden)");
+            };
+
+            const syncControls = () => {
+                const duration = video.duration || 0;
+                const current = video.currentTime || 0;
+                if (!isSeeking && duration > 0) {
+                    progress.value = ((current / duration) * 100).toString();
+                }
+                time.textContent = `${formatVideoTime(current)} / ${formatVideoTime(duration)}`;
+                toggle.textContent = video.paused ? "▶" : "Ⅱ";
+                toggle.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
+                toggle.setAttribute("aria-pressed", video.paused ? "false" : "true");
+                wrap.classList.toggle("is-seeking", isSeeking);
+                if (!canShowControls()) {
+                    wrap.classList.remove("show-controls");
+                }
+            };
+
+            const seekVideo = () => {
+                const duration = video.duration || 0;
+                if (duration <= 0) return;
+                video.currentTime = (Number(progress.value) / 100) * duration;
+                syncControls();
+            };
+
+            const updateProgressFromPointer = (event) => {
+                const rect = progress.getBoundingClientRect();
+                const duration = video.duration || 0;
+                if (rect.width <= 0 || duration <= 0) return;
+                const percent = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+                progress.value = percent.toString();
+                video.currentTime = (percent / 100) * duration;
+                syncControls();
+            };
+
+            const hideControlsIfOutside = () => {
+                if (!isSeeking && !wrap.matches(":hover")) {
+                    wrap.classList.remove("show-controls");
+                }
+            };
+
+            const togglePlayback = async () => {
+                if (video.paused) {
+                    try {
+                        await video.play();
+                    } catch (_error) {
+                        syncControls();
+                    }
+                } else {
+                    video.pause();
+                }
+            };
+
+            toggle.addEventListener("click", togglePlayback);
+            video.addEventListener("click", () => {
+                if (canShowControls()) {
+                    togglePlayback();
+                }
+            });
+            wrap.querySelector(".custom-video-controls")?.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+
+            progress.addEventListener("pointerdown", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                isSeeking = true;
+                wrap.classList.add("is-seeking", "show-controls");
+                progress.setPointerCapture?.(event.pointerId);
+                updateProgressFromPointer(event);
+            });
+            progress.addEventListener("pointermove", (event) => {
+                if (!isSeeking) return;
+                event.preventDefault();
+                event.stopPropagation();
+                updateProgressFromPointer(event);
+            });
+            progress.addEventListener("input", seekVideo);
+            progress.addEventListener("change", () => {
+                seekVideo();
+                isSeeking = false;
+                wrap.classList.remove("is-seeking");
+                hideControlsIfOutside();
+            });
+            progress.addEventListener("pointerup", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                updateProgressFromPointer(event);
+                isSeeking = false;
+                wrap.classList.remove("is-seeking");
+                progress.releasePointerCapture?.(event.pointerId);
+                hideControlsIfOutside();
+            });
+            progress.addEventListener("pointercancel", (event) => {
+                isSeeking = false;
+                wrap.classList.remove("is-seeking");
+                progress.releasePointerCapture?.(event.pointerId);
+                hideControlsIfOutside();
+            });
+            wrap.addEventListener("pointerenter", () => {
+                if (canShowControls()) {
+                    wrap.classList.add("show-controls");
+                }
+            });
+            wrap.addEventListener("pointermove", () => {
+                if (canShowControls()) {
+                    wrap.classList.add("show-controls");
+                }
+            });
+            wrap.addEventListener("pointerleave", () => {
+                hideControlsIfOutside();
+            });
+
+            video.addEventListener("loadedmetadata", syncControls);
+            video.addEventListener("timeupdate", syncControls);
+            video.addEventListener("play", syncControls);
+            video.addEventListener("pause", syncControls);
+            video.addEventListener("ended", syncControls);
+            video.controls = false;
+            syncControls();
+        };
+
+        document.querySelectorAll(".custom-video-wrap").forEach(setupCustomVideoControls);
+
         const videoCards = Array.from(document.querySelectorAll(".video-slide"));
-        const videoFrames = Array.from(document.querySelectorAll(".video-player-frame"));
         const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
 
         videoCards.forEach((card) => {
@@ -1902,7 +2133,7 @@
             const coverImage = card.querySelector(".video-cover-image");
             if (!frame || !coverImage) return;
             frame.poster = coverImage.currentSrc || coverImage.src;
-            frame.controls = true;
+            frame.controls = false;
         });
 
         videoCoverShells.forEach((shell) => {
@@ -1912,10 +2143,11 @@
                 const frame = card?.querySelector(".video-player-frame");
                 if (!frame) return;
                 shell.classList.add("hidden");
-                frame.controls = true;
+                frame.closest(".custom-video-wrap")?.classList.add("show-controls");
                 try {
                     await frame.play();
                 } catch (_error) {
+                    frame.closest(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
                     shell.classList.remove("hidden");
                 }
             });
