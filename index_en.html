@@ -112,7 +112,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 80px 20px 0;
+            padding: 115px 20px 0;
         }
 
         /* 产品概览 */
@@ -321,7 +321,7 @@
 
         /* 模型可视化 */
         .viewer-title-outside {
-            margin-top: 110px;
+            margin-top: 130px;
             margin-bottom: 18px;
             text-align: center;
             font-size: 46px;
@@ -732,7 +732,7 @@
         /* 展示视频 */
         .video-section {
             position: relative;
-            margin-top: 120px;
+            margin-top: 85px;
             width: min(1800px, calc(100vw - 40px));
             margin-left: 50%;
             transform: translateX(-50%);
@@ -1531,8 +1531,9 @@
                     </article>
                 </div>
                 <div class="video-cta-wrap">
-                    <a class="video-cta" id="video-cta-link" href="https://x.com/HTrobotics/status/2073185067321729526?s=20"
-                        target="_blank" rel="noopener noreferrer" aria-label="Open current video in a new window">
+                    <a class="video-cta" id="video-cta-link"
+                        href="https://x.com/HTrobotics/status/2073185067321729526?s=20" target="_blank"
+                        rel="noopener noreferrer" aria-label="Open current video in a new window">
                         <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
                             <path
                                 d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
@@ -1888,8 +1889,8 @@
                 <div class="custom-video-controls">
                     <button class="custom-video-toggle" type="button" aria-label="Play video"
                         aria-pressed="false">▶</button>
-                    <input class="custom-video-progress" type="range" min="0" max="100"
-                        step="0.01" value="0" aria-label="Video progress">
+                    <input class="custom-video-progress" type="range" min="0" max="100" step="0.01" value="0"
+                        aria-label="Video progress">
                     <span class="custom-video-time">0:00 / 0:00</span>
                 </div>
             </div>
@@ -2123,7 +2124,138 @@
             syncControls();
         };
 
-        document.querySelectorAll(".custom-video-wrap").forEach(setupCustomVideoControls);
+        const setupLerobotEnVideoControls = (wrap) => {
+            const video = wrap.querySelector("video");
+            const toggle = wrap.querySelector(".custom-video-toggle");
+            const progress = wrap.querySelector(".custom-video-progress");
+            const time = wrap.querySelector(".custom-video-time");
+            if (!video || !toggle || !progress || !time) return;
+
+            let isSeeking = false;
+
+            const syncControls = () => {
+                const duration = video.duration || 0;
+                const current = video.currentTime || 0;
+                if (!isSeeking && duration > 0) {
+                    progress.value = ((current / duration) * 100).toString();
+                }
+                time.textContent = `${formatVideoTime(current)} / ${formatVideoTime(duration)}`;
+                toggle.textContent = video.paused ? "▶" : "Ⅱ";
+                toggle.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
+                toggle.setAttribute("aria-pressed", video.paused ? "false" : "true");
+                wrap.classList.toggle("is-seeking", isSeeking);
+                if (!video.classList.contains("video-media-hidden") && !wrap.querySelector(".video-cover-shell:not(.hidden)")) {
+                    return;
+                }
+                wrap.classList.remove("show-controls");
+            };
+
+            const seekVideo = () => {
+                const duration = video.duration || 0;
+                if (duration <= 0) return;
+                video.currentTime = (Number(progress.value) / 100) * duration;
+                syncControls();
+            };
+
+            const updateProgressFromPointer = (event) => {
+                const rect = progress.getBoundingClientRect();
+                const duration = video.duration || 0;
+                if (rect.width <= 0 || duration <= 0) return;
+                const percent = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+                progress.value = percent.toString();
+                video.currentTime = (percent / 100) * duration;
+                syncControls();
+            };
+
+            const hideControlsIfOutside = () => {
+                if (!isSeeking && !wrap.matches(":hover")) {
+                    wrap.classList.remove("show-controls");
+                }
+            };
+
+            const togglePlayback = async () => {
+                if (video.paused) {
+                    try {
+                        await video.play();
+                    } catch (_error) {
+                        syncControls();
+                    }
+                } else {
+                    video.pause();
+                }
+            };
+
+            toggle.addEventListener("click", togglePlayback);
+            video.addEventListener("click", () => {
+                togglePlayback();
+            });
+            wrap.querySelector(".custom-video-controls")?.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+
+            progress.addEventListener("pointerdown", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                isSeeking = true;
+                wrap.classList.add("is-seeking", "show-controls");
+                progress.setPointerCapture?.(event.pointerId);
+                updateProgressFromPointer(event);
+            });
+            progress.addEventListener("pointermove", (event) => {
+                if (!isSeeking) return;
+                event.preventDefault();
+                event.stopPropagation();
+                updateProgressFromPointer(event);
+            });
+            progress.addEventListener("input", seekVideo);
+            progress.addEventListener("change", () => {
+                seekVideo();
+                isSeeking = false;
+                wrap.classList.remove("is-seeking");
+                hideControlsIfOutside();
+            });
+            progress.addEventListener("pointerup", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                updateProgressFromPointer(event);
+                isSeeking = false;
+                wrap.classList.remove("is-seeking");
+                progress.releasePointerCapture?.(event.pointerId);
+                hideControlsIfOutside();
+            });
+            progress.addEventListener("pointercancel", (event) => {
+                isSeeking = false;
+                wrap.classList.remove("is-seeking");
+                progress.releasePointerCapture?.(event.pointerId);
+                hideControlsIfOutside();
+            });
+            wrap.addEventListener("pointerenter", () => {
+                wrap.classList.add("show-controls");
+            });
+            wrap.addEventListener("pointermove", () => {
+                wrap.classList.add("show-controls");
+            });
+            wrap.addEventListener("pointerleave", () => {
+                hideControlsIfOutside();
+            });
+
+            video.addEventListener("loadedmetadata", syncControls);
+            video.addEventListener("timeupdate", syncControls);
+            video.addEventListener("play", syncControls);
+            video.addEventListener("pause", syncControls);
+            video.addEventListener("ended", syncControls);
+            video.controls = false;
+            syncControls();
+        };
+
+        document.querySelectorAll(".custom-video-wrap").forEach((wrap) => {
+            const video = wrap.querySelector("video");
+            if (video?.getAttribute("src")?.includes("lerobot_en.mp4")) {
+                setupLerobotEnVideoControls(wrap);
+            } else {
+                setupCustomVideoControls(wrap);
+            }
+        });
 
         const videoCards = Array.from(document.querySelectorAll(".video-slide"));
         const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
