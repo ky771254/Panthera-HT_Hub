@@ -1063,6 +1063,223 @@
             outline: none;
         }
 
+
+        /* 开发案例 */
+        .demo-cases {
+            position: relative;
+            width: 100vw;
+            margin-top: 34px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            padding: 34px 0 150px;
+            overflow: hidden;
+        }
+
+        .demo-cases-head {
+            width: min(1200px, calc(100vw - 64px));
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .demo-cases-title {
+            margin: 0;
+            color: #222;
+            font-family: 'Outfit', sans-serif;
+            font-size: 46px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+        }
+
+        .demo-case-actions {
+            display: flex;
+            gap: 10px;
+            flex: 0 0 auto;
+        }
+
+
+        .demo-case-actions {
+            position: absolute;
+            top: 34px;
+            right: max(32px, calc((100vw - 1200px) / 2));
+        }
+
+        .demo-case-btn {
+            width: 56px;
+            height: 56px;
+            border: 1px solid rgba(17, 17, 17, 0.14);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.78);
+            color: #1f2933;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-size: 0;
+            line-height: 0;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .demo-case-btn:hover {
+            background: #fff;
+            border-color: rgba(17, 17, 17, 0.28);
+            transform: translateY(-1px);
+        }
+
+        .demo-case-btn::before {
+            content: "";
+            width: 14px;
+            height: 14px;
+            border-top: 2px solid currentColor;
+            border-right: 2px solid currentColor;
+            display: block;
+        }
+
+        .demo-case-prev::before {
+            transform: translateX(2px) rotate(-135deg);
+        }
+
+        .demo-case-next::before {
+            transform: translateX(-2px) rotate(45deg);
+        }
+
+        .demo-case-btn:disabled {
+            color: #a8adb5;
+            border-color: rgba(17, 17, 17, 0.08);
+            background: rgba(245, 246, 248, 0.72);
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.56;
+        }
+
+        .demo-case-viewport {
+            width: 100%;
+            overflow: hidden;
+            padding: 18px 0 26px;
+            cursor: grab;
+        }
+
+        .demo-case-viewport.is-dragging {
+            cursor: grabbing;
+        }
+
+        .demo-case-viewport.is-dragging .demo-case-track {
+            transition: none;
+        }
+
+        .demo-case-track {
+            display: flex;
+            align-items: center;
+            gap: clamp(10px, 1.35vw, 24px);
+            padding: 0 calc((100vw - min(1200px, calc(100vw - 64px))) / 2);
+            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+
+        .demo-case-card {
+            position: relative;
+            flex: 0 0 clamp(600px, 71.25vw, 1050px);
+            transform: none;
+            transform-origin: center center;
+            opacity: 0.82;
+            transition: opacity 0.35s ease;
+            cursor: pointer;
+        }
+
+        .demo-case-card.is-active {
+            transform: none;
+            opacity: 1;
+            z-index: 3;
+            cursor: default;
+        }
+
+        .demo-case-card.is-neighbor {
+            opacity: 0.9;
+            z-index: 2;
+        }
+
+        .demo-case-card.is-distant {
+            opacity: 0.62;
+            z-index: 1;
+        }
+
+        .demo-case-video {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            border-radius: 0;
+            overflow: hidden;
+            background: #000;
+            box-shadow: none;
+        }
+
+        .demo-case-video::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.48);
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .demo-case-card.is-active .demo-case-video::after {
+            opacity: 0;
+        }
+
+        .demo-case-video video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            filter: blur(4.5px);
+            transform: scale(1.01);
+            transition: filter 0.35s ease, transform 0.35s ease;
+        }
+
+        .demo-case-card.is-active .demo-case-video video {
+            filter: none;
+            transform: none;
+        }
+
+        .demo-case-card:not(.is-active) .demo-case-video video {
+            pointer-events: none;
+        }
+
+        .demo-case-card:not(.is-active) .custom-video-controls {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        .demo-case-video .custom-video-controls {
+            z-index: 3;
+        }
+
+        .demo-case-label {
+            display: none;
+        }
+
+        .demo-case-caption {
+            min-height: 26px;
+            margin-top: 14px;
+            color: #5f6673;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 0.02em;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+
+        .demo-case-caption.is-hidden {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+
         /* 响应式 */
         @media (max-width: 768px) {
             .navbar {
@@ -1144,6 +1361,41 @@
 
             .video-slide-inner {
                 width: 100%;
+            }
+
+            .demo-cases {
+                width: 100vw;
+                margin-top: 22px;
+                padding: 26px 0 62px;
+            }
+
+            .demo-cases-head {
+                width: calc(100vw - 32px);
+                margin-bottom: 18px;
+            }
+
+            .demo-cases-title {
+                font-size: 32px;
+            }
+
+            .demo-case-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 30px;
+            }
+
+            .demo-case-track {
+                gap: 12px;
+                padding: 0 16px;
+            }
+
+            .demo-case-card {
+                flex-basis: min(94vw, 675px);
+                transform: none;
+            }
+
+            .demo-case-video {
+                border-radius: 0;
             }
 
             .video-cover-play {
@@ -1514,6 +1766,78 @@
                 </div>
             </div>
         </section>
+
+        <!-- 开发案例 -->
+        <section class="demo-cases" aria-labelledby="demo-cases-title">
+            <div class="demo-cases-head">
+                <h2 class="demo-cases-title" id="demo-cases-title">开发案例</h2>
+                <div class="demo-case-actions" aria-label="开发案例切换">
+                    <button class="demo-case-btn demo-case-prev" type="button" aria-label="上一个案例"></button>
+                    <button class="demo-case-btn demo-case-next" type="button" aria-label="下一个案例"></button>
+                </div>
+            </div>
+            <div class="demo-case-viewport">
+                <div class="demo-case-track">
+                    <article class="demo-case-card" data-demo-index="0">
+                        <div class="demo-case-video custom-video-wrap">
+                            <video class="custom-video" src="video/demo/demo1.mp4" playsinline
+                                preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="播放视频"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="视频进度">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
+                        </div>
+                        <div class="demo-case-label">案例 01</div>
+                    </article>
+                    <article class="demo-case-card is-active" data-demo-index="1">
+                        <div class="demo-case-video custom-video-wrap">
+                            <video class="custom-video" src="video/demo/demo2.mp4" playsinline
+                                preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="播放视频"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="视频进度">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
+                        </div>
+                        <div class="demo-case-label">案例 02</div>
+                    </article>
+                    <article class="demo-case-card" data-demo-index="2">
+                        <div class="demo-case-video custom-video-wrap">
+                            <video class="custom-video" src="video/demo/demo3.mp4" playsinline
+                                preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="播放视频"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="视频进度">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
+                        </div>
+                        <div class="demo-case-label">案例 03</div>
+                    </article>
+                    <article class="demo-case-card" data-demo-index="3">
+                        <div class="demo-case-video custom-video-wrap">
+                            <video class="custom-video" src="video/demo/demo4.mp4" playsinline
+                                preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="播放视频"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="视频进度">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
+                        </div>
+                        <div class="demo-case-label">案例 04</div>
+                    </article>
+                </div>
+            </div>
+            <div class="demo-case-caption" aria-live="polite">案例 02</div>
+        </section>
     </div>
 
     <!-- LeRobot AI Workflow -->
@@ -1855,8 +2179,7 @@
             <div class="lerobot-video-wrap custom-video-wrap">
                 <video class="custom-video" src="video/lerobot.mp4" playsinline preload="metadata"></video>
                 <div class="custom-video-controls">
-                    <button class="custom-video-toggle" type="button" aria-label="播放视频"
-                        aria-pressed="false">▶</button>
+                    <button class="custom-video-toggle" type="button" aria-label="播放视频" aria-pressed="false">▶</button>
                     <input class="custom-video-progress" type="range" min="0" max="100" step="0.01" value="0"
                         aria-label="视频进度">
                     <span class="custom-video-time">0:00 / 0:00</span>
@@ -2145,6 +2468,174 @@
                 playCenterVideo();
             });
         });
+
+        const demoCaseCards = Array.from(document.querySelectorAll(".demo-case-card"));
+        const demoCaseTrack = document.querySelector(".demo-case-track");
+        const demoCaseViewport = document.querySelector(".demo-case-viewport");
+        const demoCasePrev = document.querySelector(".demo-case-prev");
+        const demoCaseNext = document.querySelector(".demo-case-next");
+        const demoCaseCaption = document.querySelector(".demo-case-caption");
+        let demoCaptionTimer = 0;
+        let activeDemoCaseIndex = Math.min(1, Math.max(0, demoCaseCards.length - 1));
+
+        const updateDemoCases = () => {
+            if (!demoCaseTrack || !demoCaseViewport || demoCaseCards.length === 0) return;
+
+            demoCaseCards.forEach((card, index) => {
+                const offset = Math.abs(index - activeDemoCaseIndex);
+                const isActive = index === activeDemoCaseIndex;
+                card.classList.toggle("is-active", isActive);
+                card.classList.toggle("is-neighbor", offset === 1);
+                card.classList.toggle("is-distant", offset > 1);
+
+                if (!isActive) {
+                    const video = card.querySelector("video");
+                    video?.pause();
+                    card.querySelector(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
+                }
+            });
+
+            if (demoCasePrev) demoCasePrev.disabled = activeDemoCaseIndex === 0;
+            if (demoCaseNext) demoCaseNext.disabled = activeDemoCaseIndex === demoCaseCards.length - 1;
+
+
+            requestAnimationFrame(() => {
+                const activeCard = demoCaseCards[activeDemoCaseIndex];
+                if (!activeCard) return;
+                const viewportWidth = demoCaseViewport.getBoundingClientRect().width;
+                const targetCenter = activeCard.offsetLeft + activeCard.offsetWidth / 2;
+                const offset = targetCenter - viewportWidth / 2;
+                demoCaseTrack.style.transform = `translate3d(${-offset}px, 0, 0)`;
+
+                demoCaptionTimer = window.setTimeout(() => {
+                    if (!demoCaseCaption) return;
+                    const label = activeCard.querySelector(".demo-case-label")?.textContent?.trim() || "";
+                    demoCaseCaption.textContent = label;
+                    demoCaseCaption.classList.remove("is-hidden");
+                }, 420);
+            });
+        };
+
+        const setActiveDemoCase = (index) => {
+            if (demoCaseCards.length === 0) return;
+            activeDemoCaseIndex = Math.min(Math.max(index, 0), demoCaseCards.length - 1);
+            updateDemoCases();
+        };
+
+        const toggleDemoVideoPlayback = async (card) => {
+            const video = card.querySelector("video");
+            if (!video) return;
+            card.querySelector(".custom-video-wrap")?.classList.add("show-controls");
+
+            if (video.paused) {
+                try {
+                    await video.play();
+                } catch (_error) {
+                    video.pause();
+                }
+            } else {
+                video.pause();
+            }
+        };
+
+        demoCaseCards.forEach((card, index) => {
+
+            card.addEventListener("click", (event) => {
+                if (event.target.closest(".custom-video-controls")) return;
+                event.preventDefault();
+
+                if (index !== activeDemoCaseIndex) {
+                    setActiveDemoCase(index);
+                }
+            });
+        });
+
+        demoCasePrev?.addEventListener("click", () => setActiveDemoCase(activeDemoCaseIndex - 1));
+        demoCaseNext?.addEventListener("click", () => setActiveDemoCase(activeDemoCaseIndex + 1));
+
+        let demoDragStartX = 0;
+        let demoDragCurrentX = 0;
+        let demoDragBaseOffset = 0;
+        let demoDragStartCard = null;
+        let isDemoDragging = false;
+        let hasDemoDragMoved = false;
+
+        const getDemoTrackOffset = () => {
+            const transform = window.getComputedStyle(demoCaseTrack).transform;
+            if (!transform || transform === "none") return 0;
+            const matrix = new DOMMatrixReadOnly(transform);
+            return matrix.m41;
+        };
+
+        const finishDemoDrag = () => {
+            if (!isDemoDragging) return;
+            const delta = demoDragCurrentX - demoDragStartX;
+            const startCard = demoDragStartCard;
+            isDemoDragging = false;
+            demoDragStartCard = null;
+            demoCaseViewport?.classList.remove("is-dragging");
+
+            if (!hasDemoDragMoved) {
+                if (startCard?.classList.contains("is-active")) {
+                    toggleDemoVideoPlayback(startCard);
+                }
+                return;
+            }
+
+            if (Math.abs(delta) > 80) {
+                setActiveDemoCase(activeDemoCaseIndex + (delta < 0 ? 1 : -1));
+            } else {
+                updateDemoCases();
+            }
+
+            window.setTimeout(() => {
+                hasDemoDragMoved = false;
+            }, 0);
+        };
+
+        demoCaseViewport?.addEventListener("pointerdown", (event) => {
+            if (event.button !== 0 || event.target.closest(".custom-video-controls")) return;
+            isDemoDragging = true;
+            hasDemoDragMoved = false;
+            demoDragStartCard = event.target.closest(".demo-case-card");
+            demoDragStartX = event.clientX;
+            demoDragCurrentX = event.clientX;
+            demoDragBaseOffset = getDemoTrackOffset();
+            demoCaseViewport.classList.add("is-dragging");
+            demoCaseViewport.setPointerCapture?.(event.pointerId);
+        });
+
+        demoCaseViewport?.addEventListener("pointermove", (event) => {
+            if (!isDemoDragging) return;
+            demoDragCurrentX = event.clientX;
+            let delta = demoDragCurrentX - demoDragStartX;
+            if (activeDemoCaseIndex === 0 && delta > 0) {
+                delta = Math.min(92, Math.sqrt(delta) * 5.2);
+            } else if (activeDemoCaseIndex === demoCaseCards.length - 1 && delta < 0) {
+                delta = Math.max(-92, -Math.sqrt(Math.abs(delta)) * 5.2);
+            }
+            if (Math.abs(delta) > 6) {
+                if (!hasDemoDragMoved) {
+                    window.clearTimeout(demoCaptionTimer);
+                    demoCaseCaption?.classList.add("is-hidden");
+                }
+                hasDemoDragMoved = true;
+            }
+            demoCaseTrack.style.transform = `translate3d(${demoDragBaseOffset + delta}px, 0, 0)`;
+        });
+
+        demoCaseViewport?.addEventListener("pointerup", finishDemoDrag);
+        demoCaseViewport?.addEventListener("pointercancel", finishDemoDrag);
+        demoCaseViewport?.addEventListener("lostpointercapture", finishDemoDrag);
+
+        demoCaseViewport?.addEventListener("click", (event) => {
+            if (!hasDemoDragMoved) return;
+            event.preventDefault();
+            event.stopPropagation();
+        }, true);
+
+        window.addEventListener("resize", updateDemoCases);
+        updateDemoCases();
 
         // 技术参数动态计数效果
         function animateCounter(element, target, duration = 1500) {
