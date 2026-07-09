@@ -112,7 +112,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 115px 20px 0;
+            padding: 64px 20px 0;
         }
 
         /* 产品概览 */
@@ -647,7 +647,7 @@
 
         /* 产品亮点 */
         .features {
-            margin-top: 120px;
+            margin-top: 85px;
         }
 
         .features h2 {
@@ -770,7 +770,7 @@
         }
 
         .video-carousel {
-            width: min(1260px, calc(100vw - 64px));
+            width: min(1386px, calc(100vw - 64px));
             position: relative;
             aspect-ratio: 16 / 9;
             height: auto;
@@ -866,6 +866,11 @@
             opacity: 1;
         }
 
+        .video-section .custom-video-controls,
+        .video-section .video-cover-shell {
+            display: none;
+        }
+
         .video-media-hidden {
             opacity: 0;
             visibility: hidden;
@@ -947,6 +952,21 @@
 
         .video-cta:hover .video-cta-arrow {
             transform: translateY(2px) rotate(-45deg);
+        }
+
+        .demo-video-cta {
+            min-height: 56px;
+            padding: 13px 20px 13px 16px;
+        }
+
+        .demo-video-cta .video-cta-icon {
+            width: 26px;
+            height: 18px;
+        }
+
+        .demo-video-cta .video-cta-text {
+            font-size: 16px;
+            white-space: nowrap;
         }
 
         /* 文档下拉菜单 */
@@ -1080,6 +1100,221 @@
             outline: none;
         }
 
+
+        /* Demo Cases */
+        .demo-cases {
+            position: relative;
+            width: 100vw;
+            margin-top: 34px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            padding: 34px 0 150px;
+            overflow: hidden;
+        }
+
+        .demo-cases-head {
+            width: min(1200px, calc(100vw - 64px));
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .demo-cases-title {
+            margin: 0;
+            color: #222;
+            font-family: 'Outfit', sans-serif;
+            font-size: 46px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+        }
+
+        .demo-case-actions {
+            display: flex;
+            gap: 12px;
+            flex: 0 0 auto;
+            align-items: center;
+        }
+
+        .demo-case-actions {
+            position: absolute;
+            top: 34px;
+            right: max(8px, calc((100vw - 1200px) / 2 - 150px));
+        }
+
+        .demo-case-btn {
+            width: 56px;
+            height: 56px;
+            border: 1px solid rgba(17, 17, 17, 0.14);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.78);
+            color: #1f2933;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-size: 0;
+            line-height: 0;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .demo-case-btn:hover {
+            background: #fff;
+            border-color: rgba(17, 17, 17, 0.28);
+            transform: translateY(-1px);
+        }
+
+        .demo-case-btn::before {
+            content: "";
+            width: 14px;
+            height: 14px;
+            border-top: 2px solid currentColor;
+            border-right: 2px solid currentColor;
+            display: block;
+        }
+
+        .demo-case-prev::before {
+            transform: translateX(2px) rotate(-135deg);
+        }
+
+        .demo-case-next::before {
+            transform: translateX(-2px) rotate(45deg);
+        }
+
+        .demo-case-btn:disabled {
+            color: #a8adb5;
+            border-color: rgba(17, 17, 17, 0.08);
+            background: rgba(245, 246, 248, 0.72);
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.56;
+        }
+
+        .demo-case-viewport {
+            width: 100%;
+            overflow: hidden;
+            padding: 18px 0 26px;
+            cursor: grab;
+        }
+
+        .demo-case-viewport.is-dragging {
+            cursor: grabbing;
+        }
+
+        .demo-case-viewport.is-dragging .demo-case-track {
+            transition: none;
+        }
+
+        .demo-case-track {
+            display: flex;
+            align-items: center;
+            gap: clamp(10px, 1.35vw, 24px);
+            padding: 0 calc((100vw - min(1200px, calc(100vw - 64px))) / 2);
+            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+
+        .demo-case-card {
+            position: relative;
+            flex: 0 0 clamp(660px, 78.375vw, 1155px);
+            transform: none;
+            transform-origin: center center;
+            opacity: 0.82;
+            transition: opacity 0.35s ease;
+            cursor: pointer;
+        }
+
+        .demo-case-card.is-active {
+            transform: none;
+            opacity: 1;
+            z-index: 3;
+            cursor: default;
+        }
+
+        .demo-case-card.is-neighbor {
+            opacity: 0.9;
+            z-index: 2;
+        }
+
+        .demo-case-card.is-distant {
+            opacity: 0.62;
+            z-index: 1;
+        }
+
+        .demo-case-video {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            border-radius: 0;
+            overflow: hidden;
+            background: #000;
+            box-shadow: none;
+        }
+
+        .demo-case-video::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.48);
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .demo-case-card.is-active .demo-case-video::after {
+            opacity: 0;
+        }
+
+        .demo-case-video video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            filter: blur(4.5px);
+            transition: filter 0.35s ease;
+        }
+
+        .demo-case-card.is-active .demo-case-video video {
+            filter: none;
+        }
+
+        .demo-case-card:not(.is-active) .demo-case-video video {
+            pointer-events: none;
+        }
+
+        .demo-case-card:not(.is-active) .custom-video-controls {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        .demo-case-video .custom-video-controls {
+            z-index: 3;
+        }
+
+        .demo-case-label {
+            display: none;
+        }
+
+        .demo-case-caption {
+            min-height: 26px;
+            margin-top: 8px;
+            color: #5f6673;
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 0.02em;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+
+        .demo-case-caption.is-hidden {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+
         /* 响应式 */
         @media (max-width: 768px) {
             .navbar {
@@ -1160,6 +1395,41 @@
 
             .video-slide-inner {
                 width: 100%;
+            }
+
+            .demo-cases {
+                width: 100vw;
+                margin-top: 22px;
+                padding: 26px 0 62px;
+            }
+
+            .demo-cases-head {
+                width: calc(100vw - 32px);
+                margin-bottom: 18px;
+            }
+
+            .demo-cases-title {
+                font-size: 32px;
+            }
+
+            .demo-case-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 30px;
+            }
+
+            .demo-case-track {
+                gap: 12px;
+                padding: 0 16px;
+            }
+
+            .demo-case-card {
+                flex-basis: min(96vw, 742px);
+                transform: none;
+            }
+
+            .demo-case-video {
+                border-radius: 0;
             }
 
             .video-cover-play {
@@ -1310,9 +1580,10 @@
             <div class="dropdown">
                 <a href="#docs" class="navbar-link-strong">DOCS</a>
                 <div class="dropdown-content">
+                    <a href="https://alidocs.dingtalk.com/i/nodes/gwva2dxOW4zEmDq5FkeerMdwJbkz3BRL" target="_blank"
+                        rel="noopener noreferrer">Database</a>
                     <a href="documents/Panthera-HT Parameter Manual.pdf" target="_blank">Parameter Manual</a>
                     <a href="documents/Panthera-HT Quick Start Guide.pdf" target="_blank">Quick Start Guide</a>
-                    <a href="documents/Panthera-HT Database.pdf" target="_blank">Database</a>
                 </div>
             </div>
             <a href="guide_en.html" target="_blank" rel="noopener noreferrer" class="navbar-link-strong">GUIDE</a>
@@ -1518,8 +1789,9 @@
                                         <path d="M8 5v14l11-7z" />
                                     </svg></span>
                             </button>
-                            <video class="video-player-frame custom-video" src="video/main_en.mp4"
-                                title="Panthera-HT Video 1" playsinline preload="metadata"></video>
+                            <video class="video-player-frame custom-video video-media-hidden"
+                                data-src="video/main_en.mp4" title="Panthera-HT Video 1" playsinline
+                                preload="metadata"></video>
                             <div class="custom-video-controls">
                                 <button class="custom-video-toggle" type="button" aria-label="Play video"
                                     aria-pressed="false">▶</button>
@@ -1530,10 +1802,18 @@
                         </div>
                     </article>
                 </div>
-                <div class="video-cta-wrap">
-                    <a class="video-cta" id="video-cta-link"
-                        href="https://x.com/HTrobotics/status/2073185067321729526?s=20" target="_blank"
-                        rel="noopener noreferrer" aria-label="Open current video in a new window">
+            </div>
+        </section>
+
+        <!-- Development Cases -->
+        <section class="demo-cases" aria-labelledby="demo-cases-title">
+            <div class="demo-cases-head">
+                <h2 class="demo-cases-title" id="demo-cases-title">Development Cases</h2>
+                <div class="demo-case-actions" aria-label="Development case navigation">
+                    <button class="demo-case-btn demo-case-prev" type="button" aria-label="Previous case"></button>
+                    <button class="demo-case-btn demo-case-next" type="button" aria-label="Next case"></button>
+                    <a class="video-cta demo-video-cta" id="video-cta-link" href="https://x.com/HTrobotics"
+                        target="_blank" rel="noopener noreferrer" aria-label="Open Bilibili channel in a new window">
                         <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
                             <path
                                 d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
@@ -1544,6 +1824,53 @@
                     </a>
                 </div>
             </div>
+            <div class="demo-case-viewport">
+                <div class="demo-case-track">
+                    <article class="demo-case-card" data-demo-index="0">
+                        <div class="demo-case-video custom-video-wrap">
+                            <video class="custom-video" src="video/demo_en/demo1.mp4" playsinline
+                                preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="Play video"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="Video progress">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
+                        </div>
+                        <div class="demo-case-label">Visual tracking of a blue circular object</div>
+                    </article>
+                    <article class="demo-case-card is-active" data-demo-index="1">
+                        <div class="demo-case-video custom-video-wrap">
+                            <video class="custom-video" src="video/demo_en/demo2.mp4" playsinline
+                                preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="Play video"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="Video progress">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
+                        </div>
+                        <div class="demo-case-label">GraspNet grasp pose estimation</div>
+                    </article>
+                    <article class="demo-case-card" data-demo-index="2">
+                        <div class="demo-case-video custom-video-wrap">
+                            <video class="custom-video" src="video/demo_en/demo3.mp4" playsinline
+                                preload="metadata"></video>
+                            <div class="custom-video-controls">
+                                <button class="custom-video-toggle" type="button" aria-label="Play video"
+                                    aria-pressed="false">▶</button>
+                                <input class="custom-video-progress" type="range" min="0" max="100" step="0.01"
+                                    value="0" aria-label="Video progress">
+                                <span class="custom-video-time">0:00 / 0:00</span>
+                            </div>
+                        </div>
+                        <div class="demo-case-label">OpenClaw + robotic arm</div>
+                    </article>
+                </div>
+            </div>
+            <div class="demo-case-caption" aria-live="polite">GraspNet grasp pose estimation</div>
         </section>
     </div>
 
@@ -1557,7 +1884,7 @@
                 box-sizing: border-box;
                 background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
                 margin-top: 0px;
-                padding: 220px 24px 80px;
+                padding: 190px 24px 80px;
                 color: #e8e8ed;
             }
 
@@ -1734,6 +2061,13 @@
                 flex: 0 0 auto;
             }
 
+            .custom-video-volume {
+                width: 78px;
+                accent-color: #7db9f8;
+                cursor: pointer;
+                flex: 0 0 auto;
+            }
+
             .lerobot-cards {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
@@ -1837,6 +2171,26 @@
                 border-color: #555;
             }
 
+            .lerobot-reveal {
+                opacity: 0;
+                transform: translateY(48px);
+                transition: opacity 0.7s ease, transform 0.7s ease;
+                transition-delay: var(--lerobot-delay, 0ms);
+            }
+
+            .lerobot-section.is-visible .lerobot-reveal {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .lerobot-reveal {
+                    opacity: 1;
+                    transform: none;
+                    transition: none;
+                }
+            }
+
             @media (max-width: 860px) {
 
                 .lerobot-flow,
@@ -1851,12 +2205,12 @@
         </style>
 
         <div class="lerobot-inner">
-            <div class="lerobot-header">
+            <div class="lerobot-header lerobot-reveal" style="--lerobot-delay: 0ms;">
                 <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
                 <p class="lerobot-subtitle">From data collection to policy deployment — no extra adapter work</p>
             </div>
 
-            <div class="lerobot-flow">
+            <div class="lerobot-flow lerobot-reveal" style="--lerobot-delay: 90ms;">
                 <div class="lerobot-flow-step">
                     <img src="images/lerobot/1.png" alt="Data collection" loading="lazy">
                     <div class="lerobot-flow-label">
@@ -1883,7 +2237,7 @@
                 </div>
             </div>
 
-            <div class="lerobot-video-wrap custom-video-wrap">
+            <div class="lerobot-video-wrap custom-video-wrap lerobot-reveal" style="--lerobot-delay: 170ms;">
                 <video class="custom-video" src="video/lerobot_en.mp4?v=20260706-clean" playsinline
                     preload="metadata"></video>
                 <div class="custom-video-controls">
@@ -1895,7 +2249,7 @@
                 </div>
             </div>
 
-            <div class="lerobot-cards">
+            <div class="lerobot-cards lerobot-reveal" style="--lerobot-delay: 250ms;">
                 <div class="lerobot-card">
                     <div class="card-icon">🤖</div>
                     <h3>Native LeRobot Integration</h3>
@@ -1916,7 +2270,7 @@
                 </div>
             </div>
 
-            <div class="lerobot-code">
+            <div class="lerobot-code lerobot-reveal" style="--lerobot-delay: 330ms;">
                 <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
                 <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span>
                 PantheraLeader, PantheraFollower<br>
@@ -1932,7 +2286,7 @@
                 follower.<span class="keyword">send_action</span>(action)
             </div>
 
-            <div class="lerobot-cta">
+            <div class="lerobot-cta lerobot-reveal" style="--lerobot-delay: 410ms;">
                 <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank"
                     rel="noopener">View LeRobot Integration Docs →</a>
             </div>
@@ -1998,6 +2352,22 @@
             const time = wrap.querySelector(".custom-video-time");
             if (!video || !toggle || !progress || !time) return;
 
+            video.volume = 0.25;
+            video.muted = false;
+
+            let volume = wrap.querySelector(".custom-video-volume");
+            if (!volume) {
+                volume = document.createElement("input");
+                volume.className = "custom-video-volume";
+                volume.type = "range";
+                volume.min = "0";
+                volume.max = "1";
+                volume.step = "0.01";
+                volume.value = "0.25";
+                volume.setAttribute("aria-label", "Video volume");
+                time.insertAdjacentElement("beforebegin", volume);
+            }
+
             let isSeeking = false;
 
             const canShowControls = () => {
@@ -2014,6 +2384,7 @@
                 toggle.textContent = video.paused ? "▶" : "Ⅱ";
                 toggle.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
                 toggle.setAttribute("aria-pressed", video.paused ? "false" : "true");
+                volume.value = video.muted ? "0" : video.volume.toString();
                 wrap.classList.toggle("is-seeking", isSeeking);
                 if (!canShowControls()) {
                     wrap.classList.remove("show-controls");
@@ -2062,6 +2433,20 @@
                 }
             });
             wrap.querySelector(".custom-video-controls")?.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("input", () => {
+                video.muted = Number(volume.value) === 0;
+                video.volume = Number(volume.value);
+                syncControls();
+            });
+            volume.addEventListener("pointerdown", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("pointermove", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("pointerup", (event) => {
                 event.stopPropagation();
             });
 
@@ -2131,6 +2516,22 @@
             const time = wrap.querySelector(".custom-video-time");
             if (!video || !toggle || !progress || !time) return;
 
+            video.volume = 0.25;
+            video.muted = false;
+
+            let volume = wrap.querySelector(".custom-video-volume");
+            if (!volume) {
+                volume = document.createElement("input");
+                volume.className = "custom-video-volume";
+                volume.type = "range";
+                volume.min = "0";
+                volume.max = "1";
+                volume.step = "0.01";
+                volume.value = "0.25";
+                volume.setAttribute("aria-label", "Video volume");
+                time.insertAdjacentElement("beforebegin", volume);
+            }
+
             let isSeeking = false;
 
             const syncControls = () => {
@@ -2143,6 +2544,7 @@
                 toggle.textContent = video.paused ? "▶" : "Ⅱ";
                 toggle.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
                 toggle.setAttribute("aria-pressed", video.paused ? "false" : "true");
+                volume.value = video.muted ? "0" : video.volume.toString();
                 wrap.classList.toggle("is-seeking", isSeeking);
                 if (!video.classList.contains("video-media-hidden") && !wrap.querySelector(".video-cover-shell:not(.hidden)")) {
                     return;
@@ -2190,6 +2592,20 @@
                 togglePlayback();
             });
             wrap.querySelector(".custom-video-controls")?.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("input", () => {
+                video.muted = Number(volume.value) === 0;
+                video.volume = Number(volume.value);
+                syncControls();
+            });
+            volume.addEventListener("pointerdown", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("pointermove", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("pointerup", (event) => {
                 event.stopPropagation();
             });
 
@@ -2249,6 +2665,7 @@
         };
 
         document.querySelectorAll(".custom-video-wrap").forEach((wrap) => {
+            if (wrap.closest(".video-section")) return;
             const video = wrap.querySelector("video");
             if (video?.getAttribute("src")?.includes("lerobot_en.mp4")) {
                 setupLerobotEnVideoControls(wrap);
@@ -2257,33 +2674,215 @@
             }
         });
 
+        const lerobotSection = document.querySelector(".lerobot-section");
+        if (lerobotSection) {
+            if ("IntersectionObserver" in window) {
+                const lerobotObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        lerobotSection.classList.toggle("is-visible", entry.isIntersecting);
+                    });
+                }, { threshold: 0.18, rootMargin: "0px 0px -12% 0px" });
+                lerobotObserver.observe(lerobotSection);
+            } else {
+                lerobotSection.classList.add("is-visible");
+            }
+        }
+
         const videoCards = Array.from(document.querySelectorAll(".video-slide"));
         const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
 
         videoCards.forEach((card) => {
             const frame = card.querySelector(".video-player-frame");
             const coverImage = card.querySelector(".video-cover-image");
-            if (!frame || !coverImage) return;
+            const coverShell = card.querySelector(".video-cover-shell");
+            const src = frame?.dataset?.src || frame?.getAttribute("src");
+            if (!frame || !coverImage || !src) return;
+            frame.src = src;
             frame.poster = coverImage.currentSrc || coverImage.src;
             frame.controls = false;
+            frame.loop = true;
+            frame.muted = true;
+            frame.playsInline = true;
+            frame.classList.remove("video-media-hidden");
+            frame.classList.add("is-ready");
+            coverShell?.classList.add("hidden");
+            frame.play().catch(() => { });
         });
 
-        videoCoverShells.forEach((shell) => {
-            shell.addEventListener("click", async (event) => {
-                event.preventDefault();
-                const card = shell.closest(".video-slide");
-                const frame = card?.querySelector(".video-player-frame");
-                if (!frame) return;
-                shell.classList.add("hidden");
-                frame.closest(".custom-video-wrap")?.classList.add("show-controls");
+        const demoCaseCards = Array.from(document.querySelectorAll(".demo-case-card"));
+        const demoCaseTrack = document.querySelector(".demo-case-track");
+        const demoCaseViewport = document.querySelector(".demo-case-viewport");
+        const demoCasePrev = document.querySelector(".demo-case-prev");
+        const demoCaseNext = document.querySelector(".demo-case-next");
+        const demoCaseCaption = document.querySelector(".demo-case-caption");
+        let demoCaptionTimer = 0;
+        let activeDemoCaseIndex = Math.min(1, Math.max(0, demoCaseCards.length - 1));
+
+        const updateDemoCases = (options = {}) => {
+            if (!demoCaseTrack || !demoCaseViewport || demoCaseCards.length === 0) return;
+
+            const shouldAnimateCaption = options.animateCaption !== false;
+            window.clearTimeout(demoCaptionTimer);
+            if (shouldAnimateCaption) {
+                demoCaseCaption?.classList.add("is-hidden");
+            }
+
+            demoCaseCards.forEach((card, index) => {
+                const offset = Math.abs(index - activeDemoCaseIndex);
+                const isActive = index === activeDemoCaseIndex;
+                card.classList.toggle("is-active", isActive);
+                card.classList.toggle("is-neighbor", offset === 1);
+                card.classList.toggle("is-distant", offset > 1);
+
+                if (!isActive) {
+                    const video = card.querySelector("video");
+                    if (video) {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+                    card.querySelector(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
+                }
+            });
+
+            if (demoCasePrev) demoCasePrev.disabled = activeDemoCaseIndex === 0;
+            if (demoCaseNext) demoCaseNext.disabled = activeDemoCaseIndex === demoCaseCards.length - 1;
+
+            requestAnimationFrame(() => {
+                const activeCard = demoCaseCards[activeDemoCaseIndex];
+                if (!activeCard) return;
+                const viewportWidth = demoCaseViewport.getBoundingClientRect().width;
+                const targetCenter = activeCard.offsetLeft + activeCard.offsetWidth / 2;
+                const offset = targetCenter - viewportWidth / 2;
+                demoCaseTrack.style.transform = `translate3d(${-offset}px, 0, 0)`;
+
+                demoCaptionTimer = window.setTimeout(() => {
+                    if (!demoCaseCaption) return;
+                    const label = activeCard.querySelector(".demo-case-label")?.textContent?.trim() || "";
+                    demoCaseCaption.textContent = label;
+                    demoCaseCaption.classList.remove("is-hidden");
+                }, shouldAnimateCaption ? 420 : 0);
+            });
+        };
+
+        const setActiveDemoCase = (index) => {
+            if (demoCaseCards.length === 0) return;
+            activeDemoCaseIndex = Math.min(Math.max(index, 0), demoCaseCards.length - 1);
+            updateDemoCases();
+        };
+
+        const toggleDemoVideoPlayback = async (card) => {
+            const video = card.querySelector("video");
+            if (!video) return;
+            card.querySelector(".custom-video-wrap")?.classList.add("show-controls");
+
+            if (video.paused) {
                 try {
-                    await frame.play();
+                    await video.play();
                 } catch (_error) {
-                    frame.closest(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
-                    shell.classList.remove("hidden");
+                    video.pause();
+                }
+            } else {
+                video.pause();
+            }
+        };
+
+        demoCaseCards.forEach((card, index) => {
+            card.addEventListener("click", (event) => {
+                if (event.target.closest(".custom-video-controls")) return;
+                event.preventDefault();
+
+                if (index !== activeDemoCaseIndex) {
+                    setActiveDemoCase(index);
                 }
             });
         });
+
+        demoCasePrev?.addEventListener("click", () => setActiveDemoCase(activeDemoCaseIndex - 1));
+        demoCaseNext?.addEventListener("click", () => setActiveDemoCase(activeDemoCaseIndex + 1));
+
+        let demoDragStartX = 0;
+        let demoDragCurrentX = 0;
+        let demoDragBaseOffset = 0;
+        let demoDragStartCard = null;
+        let isDemoDragging = false;
+        let hasDemoDragMoved = false;
+
+        const getDemoTrackOffset = () => {
+            const transform = window.getComputedStyle(demoCaseTrack).transform;
+            if (!transform || transform === "none") return 0;
+            const matrix = new DOMMatrixReadOnly(transform);
+            return matrix.m41;
+        };
+
+        const finishDemoDrag = () => {
+            if (!isDemoDragging) return;
+            const delta = demoDragCurrentX - demoDragStartX;
+            const startCard = demoDragStartCard;
+            isDemoDragging = false;
+            demoDragStartCard = null;
+            demoCaseViewport?.classList.remove("is-dragging");
+
+            if (!hasDemoDragMoved) {
+                if (startCard?.classList.contains("is-active")) {
+                    toggleDemoVideoPlayback(startCard);
+                }
+                return;
+            }
+
+            if (Math.abs(delta) > 80) {
+                setActiveDemoCase(activeDemoCaseIndex + (delta < 0 ? 1 : -1));
+            } else {
+                updateDemoCases();
+            }
+
+            window.setTimeout(() => {
+                hasDemoDragMoved = false;
+            }, 0);
+        };
+
+        demoCaseViewport?.addEventListener("pointerdown", (event) => {
+            if (event.button !== 0 || event.target.closest(".custom-video-controls")) return;
+            isDemoDragging = true;
+            hasDemoDragMoved = false;
+            demoDragStartCard = event.target.closest(".demo-case-card");
+            demoDragStartX = event.clientX;
+            demoDragCurrentX = event.clientX;
+            demoDragBaseOffset = getDemoTrackOffset();
+            demoCaseViewport.classList.add("is-dragging");
+            demoCaseViewport.setPointerCapture?.(event.pointerId);
+        });
+
+        demoCaseViewport?.addEventListener("pointermove", (event) => {
+            if (!isDemoDragging) return;
+            demoDragCurrentX = event.clientX;
+            let delta = demoDragCurrentX - demoDragStartX;
+            if (activeDemoCaseIndex === 0 && delta > 0) {
+                delta = Math.min(92, Math.sqrt(delta) * 5.2);
+            } else if (activeDemoCaseIndex === demoCaseCards.length - 1 && delta < 0) {
+                delta = Math.max(-92, -Math.sqrt(Math.abs(delta)) * 5.2);
+            }
+            if (Math.abs(delta) > 6) {
+                if (!hasDemoDragMoved) {
+                    window.clearTimeout(demoCaptionTimer);
+                    demoCaseCaption?.classList.add("is-hidden");
+                }
+                hasDemoDragMoved = true;
+            }
+            demoCaseTrack.style.transform = `translate3d(${demoDragBaseOffset + delta}px, 0, 0)`;
+        });
+
+        demoCaseViewport?.addEventListener("pointerup", finishDemoDrag);
+        demoCaseViewport?.addEventListener("pointercancel", finishDemoDrag);
+        demoCaseViewport?.addEventListener("lostpointercapture", finishDemoDrag);
+
+        demoCaseViewport?.addEventListener("click", (event) => {
+            if (!hasDemoDragMoved) return;
+            event.preventDefault();
+            event.stopPropagation();
+        }, true);
+
+        window.addEventListener("resize", () => updateDemoCases({ animateCaption: false }));
+        updateDemoCases({ animateCaption: false });
 
         // 技术参数动态计数效果
         function animateCounter(element, target, duration = 1500) {
