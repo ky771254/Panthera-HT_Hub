@@ -1828,7 +1828,7 @@
                 <div class="demo-case-track">
                     <article class="demo-case-card" data-demo-index="0">
                         <div class="demo-case-video custom-video-wrap">
-                            <video class="custom-video" src="video/demo_en/demo1.mp4" playsinline
+                            <video class="custom-video" src="video/demo_en/demo1.mp4?v=20260709-remux" playsinline
                                 preload="metadata"></video>
                             <div class="custom-video-controls">
                                 <button class="custom-video-toggle" type="button" aria-label="Play video"
@@ -1842,7 +1842,7 @@
                     </article>
                     <article class="demo-case-card is-active" data-demo-index="1">
                         <div class="demo-case-video custom-video-wrap">
-                            <video class="custom-video" src="video/demo_en/demo2.mp4" playsinline
+                            <video class="custom-video" src="video/demo_en/demo2.mp4?v=20260709-remux" playsinline
                                 preload="metadata"></video>
                             <div class="custom-video-controls">
                                 <button class="custom-video-toggle" type="button" aria-label="Play video"
@@ -1856,7 +1856,7 @@
                     </article>
                     <article class="demo-case-card" data-demo-index="2">
                         <div class="demo-case-video custom-video-wrap">
-                            <video class="custom-video" src="video/demo_en/demo3.mp4" playsinline
+                            <video class="custom-video" src="video/demo_en/demo3.mp4?v=20260709-remux" playsinline
                                 preload="metadata"></video>
                             <div class="custom-video-controls">
                                 <button class="custom-video-toggle" type="button" aria-label="Play video"
@@ -2024,7 +2024,8 @@
             }
 
             .custom-video-wrap.show-controls .custom-video-controls,
-            .custom-video-wrap.is-seeking .custom-video-controls {
+            .custom-video-wrap.is-seeking .custom-video-controls,
+            .custom-video-wrap:hover .custom-video-controls {
                 opacity: 1;
                 pointer-events: auto;
             }
@@ -2238,7 +2239,7 @@
             </div>
 
             <div class="lerobot-video-wrap custom-video-wrap lerobot-reveal" style="--lerobot-delay: 170ms;">
-                <video class="custom-video" src="video/lerobot_en.mp4?v=20260706-clean" playsinline
+                <video class="custom-video" src="video/lerobot_en.mp4?v=20260709-remux" playsinline
                     preload="metadata"></video>
                 <div class="custom-video-controls">
                     <button class="custom-video-toggle" type="button" aria-label="Play video"
@@ -2364,11 +2365,12 @@
                 volume.max = "1";
                 volume.step = "0.01";
                 volume.value = "0.25";
-                volume.setAttribute("aria-label", "Video volume");
+                volume.setAttribute("aria-label", "视频音量");
                 time.insertAdjacentElement("beforebegin", volume);
             }
 
             let isSeeking = false;
+            let ignoreNativeProgressEvent = false;
 
             const canShowControls = () => {
                 return !video.classList.contains("video-media-hidden") && !wrap.querySelector(".video-cover-shell:not(.hidden)");
@@ -2382,7 +2384,7 @@
                 }
                 time.textContent = `${formatVideoTime(current)} / ${formatVideoTime(duration)}`;
                 toggle.textContent = video.paused ? "▶" : "Ⅱ";
-                toggle.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
+                toggle.setAttribute("aria-label", video.paused ? "播放视频" : "暂停视频");
                 toggle.setAttribute("aria-pressed", video.paused ? "false" : "true");
                 volume.value = video.muted ? "0" : video.volume.toString();
                 wrap.classList.toggle("is-seeking", isSeeking);
@@ -2398,16 +2400,57 @@
                 syncControls();
             };
 
+            const getSeekClientX = (event) => {
+                return event.touches?.[0]?.clientX ?? event.changedTouches?.[0]?.clientX ?? event.clientX;
+            };
+
+            const stopSeekEvent = (event) => {
+                if (event.cancelable) event.preventDefault();
+                event.stopPropagation();
+            };
+
             const updateProgressFromPointer = (event) => {
                 const rect = progress.getBoundingClientRect();
                 const duration = video.duration || 0;
-                if (rect.width <= 0 || duration <= 0) return;
-                const percent = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+                const clientX = getSeekClientX(event);
+                if (rect.width <= 0 || duration <= 0 || !Number.isFinite(clientX)) return;
+                const percent = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
                 progress.value = percent.toString();
                 video.currentTime = (percent / 100) * duration;
                 syncControls();
             };
 
+            const beginProgressSeek = (event) => {
+                stopSeekEvent(event);
+                isSeeking = true;
+                ignoreNativeProgressEvent = true;
+                wrap.classList.add("is-seeking", "show-controls");
+                if (Number.isFinite(event.pointerId)) {
+                    progress.setPointerCapture?.(event.pointerId);
+                }
+                updateProgressFromPointer(event);
+            };
+
+            const moveProgressSeek = (event) => {
+                if (!isSeeking) return;
+                stopSeekEvent(event);
+                updateProgressFromPointer(event);
+            };
+
+            const finishProgressSeek = (event) => {
+                if (!isSeeking) return;
+                stopSeekEvent(event);
+                updateProgressFromPointer(event);
+                isSeeking = false;
+                wrap.classList.remove("is-seeking");
+                if (Number.isFinite(event.pointerId)) {
+                    progress.releasePointerCapture?.(event.pointerId);
+                }
+                hideControlsIfOutside();
+                window.setTimeout(() => {
+                    ignoreNativeProgressEvent = false;
+                }, 0);
+            };
             const hideControlsIfOutside = () => {
                 if (!isSeeking && !wrap.matches(":hover")) {
                     wrap.classList.remove("show-controls");
@@ -2450,40 +2493,28 @@
                 event.stopPropagation();
             });
 
-            progress.addEventListener("pointerdown", (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                isSeeking = true;
-                wrap.classList.add("is-seeking", "show-controls");
-                progress.setPointerCapture?.(event.pointerId);
+            progress.addEventListener("pointerdown", beginProgressSeek);
+            progress.addEventListener("pointermove", moveProgressSeek);
+            progress.addEventListener("pointerup", finishProgressSeek);
+            progress.addEventListener("pointercancel", finishProgressSeek);
+            progress.addEventListener("mousedown", beginProgressSeek);
+            document.addEventListener("mousemove", moveProgressSeek);
+            document.addEventListener("mouseup", finishProgressSeek);
+            progress.addEventListener("touchstart", beginProgressSeek, { passive: false });
+            document.addEventListener("touchmove", moveProgressSeek, { passive: false });
+            document.addEventListener("touchend", finishProgressSeek, { passive: false });
+            progress.addEventListener("click", (event) => {
+                stopSeekEvent(event);
                 updateProgressFromPointer(event);
             });
-            progress.addEventListener("pointermove", (event) => {
-                if (!isSeeking) return;
-                event.preventDefault();
-                event.stopPropagation();
-                updateProgressFromPointer(event);
+            progress.addEventListener("input", () => {
+                if (!ignoreNativeProgressEvent) seekVideo();
             });
-            progress.addEventListener("input", seekVideo);
             progress.addEventListener("change", () => {
+                if (ignoreNativeProgressEvent) return;
                 seekVideo();
                 isSeeking = false;
                 wrap.classList.remove("is-seeking");
-                hideControlsIfOutside();
-            });
-            progress.addEventListener("pointerup", (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                updateProgressFromPointer(event);
-                isSeeking = false;
-                wrap.classList.remove("is-seeking");
-                progress.releasePointerCapture?.(event.pointerId);
-                hideControlsIfOutside();
-            });
-            progress.addEventListener("pointercancel", (event) => {
-                isSeeking = false;
-                wrap.classList.remove("is-seeking");
-                progress.releasePointerCapture?.(event.pointerId);
                 hideControlsIfOutside();
             });
             wrap.addEventListener("pointerenter", () => {
@@ -2495,161 +2526,6 @@
                 if (canShowControls()) {
                     wrap.classList.add("show-controls");
                 }
-            });
-            wrap.addEventListener("pointerleave", () => {
-                hideControlsIfOutside();
-            });
-
-            video.addEventListener("loadedmetadata", syncControls);
-            video.addEventListener("timeupdate", syncControls);
-            video.addEventListener("play", syncControls);
-            video.addEventListener("pause", syncControls);
-            video.addEventListener("ended", syncControls);
-            video.controls = false;
-            syncControls();
-        };
-
-        const setupLerobotEnVideoControls = (wrap) => {
-            const video = wrap.querySelector("video");
-            const toggle = wrap.querySelector(".custom-video-toggle");
-            const progress = wrap.querySelector(".custom-video-progress");
-            const time = wrap.querySelector(".custom-video-time");
-            if (!video || !toggle || !progress || !time) return;
-
-            video.volume = 0.25;
-            video.muted = false;
-
-            let volume = wrap.querySelector(".custom-video-volume");
-            if (!volume) {
-                volume = document.createElement("input");
-                volume.className = "custom-video-volume";
-                volume.type = "range";
-                volume.min = "0";
-                volume.max = "1";
-                volume.step = "0.01";
-                volume.value = "0.25";
-                volume.setAttribute("aria-label", "Video volume");
-                time.insertAdjacentElement("beforebegin", volume);
-            }
-
-            let isSeeking = false;
-
-            const syncControls = () => {
-                const duration = video.duration || 0;
-                const current = video.currentTime || 0;
-                if (!isSeeking && duration > 0) {
-                    progress.value = ((current / duration) * 100).toString();
-                }
-                time.textContent = `${formatVideoTime(current)} / ${formatVideoTime(duration)}`;
-                toggle.textContent = video.paused ? "▶" : "Ⅱ";
-                toggle.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
-                toggle.setAttribute("aria-pressed", video.paused ? "false" : "true");
-                volume.value = video.muted ? "0" : video.volume.toString();
-                wrap.classList.toggle("is-seeking", isSeeking);
-                if (!video.classList.contains("video-media-hidden") && !wrap.querySelector(".video-cover-shell:not(.hidden)")) {
-                    return;
-                }
-                wrap.classList.remove("show-controls");
-            };
-
-            const seekVideo = () => {
-                const duration = video.duration || 0;
-                if (duration <= 0) return;
-                video.currentTime = (Number(progress.value) / 100) * duration;
-                syncControls();
-            };
-
-            const updateProgressFromPointer = (event) => {
-                const rect = progress.getBoundingClientRect();
-                const duration = video.duration || 0;
-                if (rect.width <= 0 || duration <= 0) return;
-                const percent = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
-                progress.value = percent.toString();
-                video.currentTime = (percent / 100) * duration;
-                syncControls();
-            };
-
-            const hideControlsIfOutside = () => {
-                if (!isSeeking && !wrap.matches(":hover")) {
-                    wrap.classList.remove("show-controls");
-                }
-            };
-
-            const togglePlayback = async () => {
-                if (video.paused) {
-                    try {
-                        await video.play();
-                    } catch (_error) {
-                        syncControls();
-                    }
-                } else {
-                    video.pause();
-                }
-            };
-
-            toggle.addEventListener("click", togglePlayback);
-            video.addEventListener("click", () => {
-                togglePlayback();
-            });
-            wrap.querySelector(".custom-video-controls")?.addEventListener("click", (event) => {
-                event.stopPropagation();
-            });
-            volume.addEventListener("input", () => {
-                video.muted = Number(volume.value) === 0;
-                video.volume = Number(volume.value);
-                syncControls();
-            });
-            volume.addEventListener("pointerdown", (event) => {
-                event.stopPropagation();
-            });
-            volume.addEventListener("pointermove", (event) => {
-                event.stopPropagation();
-            });
-            volume.addEventListener("pointerup", (event) => {
-                event.stopPropagation();
-            });
-
-            progress.addEventListener("pointerdown", (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                isSeeking = true;
-                wrap.classList.add("is-seeking", "show-controls");
-                progress.setPointerCapture?.(event.pointerId);
-                updateProgressFromPointer(event);
-            });
-            progress.addEventListener("pointermove", (event) => {
-                if (!isSeeking) return;
-                event.preventDefault();
-                event.stopPropagation();
-                updateProgressFromPointer(event);
-            });
-            progress.addEventListener("input", seekVideo);
-            progress.addEventListener("change", () => {
-                seekVideo();
-                isSeeking = false;
-                wrap.classList.remove("is-seeking");
-                hideControlsIfOutside();
-            });
-            progress.addEventListener("pointerup", (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                updateProgressFromPointer(event);
-                isSeeking = false;
-                wrap.classList.remove("is-seeking");
-                progress.releasePointerCapture?.(event.pointerId);
-                hideControlsIfOutside();
-            });
-            progress.addEventListener("pointercancel", (event) => {
-                isSeeking = false;
-                wrap.classList.remove("is-seeking");
-                progress.releasePointerCapture?.(event.pointerId);
-                hideControlsIfOutside();
-            });
-            wrap.addEventListener("pointerenter", () => {
-                wrap.classList.add("show-controls");
-            });
-            wrap.addEventListener("pointermove", () => {
-                wrap.classList.add("show-controls");
             });
             wrap.addEventListener("pointerleave", () => {
                 hideControlsIfOutside();
@@ -2666,12 +2542,7 @@
 
         document.querySelectorAll(".custom-video-wrap").forEach((wrap) => {
             if (wrap.closest(".video-section")) return;
-            const video = wrap.querySelector("video");
-            if (video?.getAttribute("src")?.includes("lerobot_en.mp4")) {
-                setupLerobotEnVideoControls(wrap);
-            } else {
-                setupCustomVideoControls(wrap);
-            }
+            setupCustomVideoControls(wrap);
         });
 
         const lerobotSection = document.querySelector(".lerobot-section");
