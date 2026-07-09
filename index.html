@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panthera-HT</title>
+    <title>Panthera-HT 开源六轴机械臂 | 高擎动力</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1566,9 +1566,9 @@
             <div class="dropdown">
                 <a href="#docs" class="navbar-link-strong">文档</a>
                 <div class="dropdown-content">
+                    <a href="https://alidocs.dingtalk.com/i/nodes/ydxXB52LJq19j0OkUMNm3GO4JqjMp697" target="_blank" rel="noopener noreferrer">资料库</a>
                     <a href="documents/Panthera-HT参数手册.pdf" target="_blank">参数手册</a>
                     <a href="documents/Panthera-HT快速使用指南.pdf" target="_blank">快速使用指南</a>
-                    <a href="documents/Panthera-HT资料库.pdf" target="_blank">资料库</a>
                 </div>
             </div>
             <a href="guide.html" target="_blank" rel="noopener noreferrer" class="navbar-link-strong">指南</a>
@@ -1867,7 +1867,7 @@
                 box-sizing: border-box;
                 background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 15px, #c8c8c8 30px, #999999 45px, #6a6a6a 60px, #505050 70px, #383838 80px, #2a2a2a 90px, #1e1e1e 100px, #141414 110px);
                 margin-top: 0px;
-                padding: 220px 24px 80px;
+                padding: 190px 24px 80px;
                 color: #e8e8ed;
             }
 
@@ -2154,6 +2154,26 @@
                 border-color: #555;
             }
 
+            .lerobot-reveal {
+                opacity: 0;
+                transform: translateY(48px);
+                transition: opacity 0.7s ease, transform 0.7s ease;
+                transition-delay: var(--lerobot-delay, 0ms);
+            }
+
+            .lerobot-section.is-visible .lerobot-reveal {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .lerobot-reveal {
+                    opacity: 1;
+                    transform: none;
+                    transition: none;
+                }
+            }
+
             @media (max-width: 860px) {
 
                 .lerobot-flow,
@@ -2168,12 +2188,12 @@
         </style>
 
         <div class="lerobot-inner">
-            <div class="lerobot-header">
+            <div class="lerobot-header lerobot-reveal" style="--lerobot-delay: 0ms;">
                 <h2 class="lerobot-title">LeRobot-Ready AI Workflow</h2>
                 <p class="lerobot-subtitle">直接进行数据采集到策略部署——无需重新适配</p>
             </div>
 
-            <div class="lerobot-flow">
+            <div class="lerobot-flow lerobot-reveal" style="--lerobot-delay: 90ms;">
                 <div class="lerobot-flow-step">
                     <img src="images/lerobot/1.png" alt="Data collection" loading="lazy">
                     <div class="lerobot-flow-label">
@@ -2200,7 +2220,7 @@
                 </div>
             </div>
 
-            <div class="lerobot-video-wrap custom-video-wrap">
+            <div class="lerobot-video-wrap custom-video-wrap lerobot-reveal" style="--lerobot-delay: 170ms;">
                 <video class="custom-video" src="video/lerobot.mp4" playsinline preload="metadata"></video>
                 <div class="custom-video-controls">
                     <button class="custom-video-toggle" type="button" aria-label="播放视频" aria-pressed="false">▶</button>
@@ -2210,7 +2230,7 @@
                 </div>
             </div>
 
-            <div class="lerobot-cards">
+            <div class="lerobot-cards lerobot-reveal" style="--lerobot-delay: 250ms;">
                 <div class="lerobot-card">
                     <div class="card-icon">🤖</div>
                     <h3>原生LeRobot集成</h3>
@@ -2228,7 +2248,7 @@
                 </div>
             </div>
 
-            <div class="lerobot-code">
+            <div class="lerobot-code lerobot-reveal" style="--lerobot-delay: 330ms;">
                 <span class="comment"># https://github.com/HighTorque-Robotics/Panthera-HT_lerobot</span><br>
                 <span class="keyword">from</span> lerobot_robot_panthera <span class="keyword">import</span>
                 PantheraLeader, PantheraFollower<br>
@@ -2244,7 +2264,7 @@
                 follower.<span class="keyword">send_action</span>(action)
             </div>
 
-            <div class="lerobot-cta">
+            <div class="lerobot-cta lerobot-reveal" style="--lerobot-delay: 410ms;">
                 <a class="btn-primary" href="https://github.com/HighTorque-Robotics/Panthera-HT_lerobot" target="_blank"
                     rel="noopener">查看 LeRobot 集成文档 →</a>
             </div>
@@ -2289,7 +2309,7 @@
             const time = wrap.querySelector(".custom-video-time");
             if (!video || !toggle || !progress || !time) return;
 
-            video.volume = 0.5;
+            video.volume = 0.25;
             video.muted = false;
 
             let volume = wrap.querySelector(".custom-video-volume");
@@ -2300,7 +2320,7 @@
                 volume.min = "0";
                 volume.max = "1";
                 volume.step = "0.01";
-                volume.value = "0.5";
+                volume.value = "0.25";
                 volume.setAttribute("aria-label", "视频音量");
                 time.insertAdjacentElement("beforebegin", volume);
             }
@@ -2451,6 +2471,20 @@
             setupCustomVideoControls(wrap);
         });
 
+        const lerobotSection = document.querySelector(".lerobot-section");
+        if (lerobotSection) {
+            if ("IntersectionObserver" in window) {
+                const lerobotObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        lerobotSection.classList.toggle("is-visible", entry.isIntersecting);
+                    });
+                }, { threshold: 0.18, rootMargin: "0px 0px -12% 0px" });
+                lerobotObserver.observe(lerobotSection);
+            } else {
+                lerobotSection.classList.add("is-visible");
+            }
+        }
+
         const videoCards = Array.from(document.querySelectorAll(".video-slide"));
         const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
 
@@ -2500,7 +2534,10 @@
 
                 if (!isActive) {
                     const video = card.querySelector("video");
-                    video?.pause();
+                    if (video) {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
                     card.querySelector(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
                 }
             });
