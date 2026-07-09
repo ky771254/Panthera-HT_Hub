@@ -753,7 +753,7 @@
         }
 
         .video-carousel {
-            width: min(1260px, calc(100vw - 64px));
+            width: min(1386px, calc(100vw - 64px));
             position: relative;
             aspect-ratio: 16 / 9;
             height: auto;
@@ -849,6 +849,11 @@
             opacity: 1;
         }
 
+        .video-section .custom-video-controls,
+        .video-section .video-cover-shell {
+            display: none;
+        }
+
         .video-media-hidden {
             opacity: 0;
             visibility: hidden;
@@ -930,6 +935,21 @@
 
         .video-cta:hover .video-cta-arrow {
             transform: translateY(2px) rotate(-45deg);
+        }
+
+        .demo-video-cta {
+            min-height: 56px;
+            padding: 13px 20px 13px 16px;
+        }
+
+        .demo-video-cta .video-cta-icon {
+            width: 26px;
+            height: 18px;
+        }
+
+        .demo-video-cta .video-cta-text {
+            font-size: 16px;
+            white-space: nowrap;
         }
 
         /* 文档下拉菜单 */
@@ -1096,15 +1116,16 @@
 
         .demo-case-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex: 0 0 auto;
+            align-items: center;
         }
 
 
         .demo-case-actions {
             position: absolute;
             top: 34px;
-            right: max(32px, calc((100vw - 1200px) / 2));
+            right: max(8px, calc((100vw - 1200px) / 2 - 150px));
         }
 
         .demo-case-btn {
@@ -1182,7 +1203,7 @@
 
         .demo-case-card {
             position: relative;
-            flex: 0 0 clamp(600px, 71.25vw, 1050px);
+            flex: 0 0 clamp(660px, 78.375vw, 1155px);
             transform: none;
             transform-origin: center center;
             opacity: 0.82;
@@ -1388,7 +1409,7 @@
             }
 
             .demo-case-card {
-                flex-basis: min(94vw, 675px);
+                flex-basis: min(96vw, 742px);
                 transform: none;
             }
 
@@ -1750,18 +1771,6 @@
                         </div>
                     </article>
                 </div>
-                <div class="video-cta-wrap">
-                    <a class="video-cta" id="video-cta-link" href="https://www.bilibili.com/video/BV1Bc9aBnEKS"
-                        target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开当前视频">
-                        <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
-                            <path
-                                d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
-                                fill="currentColor" />
-                        </svg>
-                        <span class="video-cta-text">在Bilibili中观看</span>
-                        <span class="video-cta-arrow" aria-hidden="true"></span>
-                    </a>
-                </div>
             </div>
         </section>
 
@@ -1772,6 +1781,16 @@
                 <div class="demo-case-actions" aria-label="开发案例切换">
                     <button class="demo-case-btn demo-case-prev" type="button" aria-label="上一个案例"></button>
                     <button class="demo-case-btn demo-case-next" type="button" aria-label="下一个案例"></button>
+                    <a class="video-cta demo-video-cta" id="video-cta-link" href="https://space.bilibili.com/3546974831774298"
+                        target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开当前视频">
+                        <svg class="video-cta-icon" viewBox="0 0 40 28" aria-hidden="true">
+                            <path
+                                d="M15.71 20.08V7.92L25.72 14L15.71 20.08ZM34.94 3.01C32.95 2.48 24.97 2.48 20 2.48C15.03 2.48 7.05 2.48 5.06 3.01C3.31 3.48 1.93 4.86 1.46 6.61C0.93 8.6 0.93 12.74 0.93 14C0.93 15.26 0.93 19.4 1.46 21.39C1.93 23.14 3.31 24.52 5.06 24.99C7.05 25.52 15.03 25.52 20 25.52C24.97 25.52 32.95 25.52 34.94 24.99C36.69 24.52 38.07 23.14 38.54 21.39C39.07 19.4 39.07 15.26 39.07 14C39.07 12.74 39.07 8.6 38.54 6.61C38.07 4.86 36.69 3.48 34.94 3.01Z"
+                                fill="currentColor" />
+                        </svg>
+                        <span class="video-cta-text">在Bilibili中观看</span>
+                        <span class="video-cta-arrow" aria-hidden="true"></span>
+                    </a>
                 </div>
             </div>
             <div class="demo-case-viewport">
@@ -2025,6 +2044,13 @@
                 flex: 0 0 auto;
             }
 
+            .custom-video-volume {
+                width: 78px;
+                accent-color: #7db9f8;
+                cursor: pointer;
+                flex: 0 0 auto;
+            }
+
             .lerobot-cards {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
@@ -2263,6 +2289,22 @@
             const time = wrap.querySelector(".custom-video-time");
             if (!video || !toggle || !progress || !time) return;
 
+            video.volume = 0.5;
+            video.muted = false;
+
+            let volume = wrap.querySelector(".custom-video-volume");
+            if (!volume) {
+                volume = document.createElement("input");
+                volume.className = "custom-video-volume";
+                volume.type = "range";
+                volume.min = "0";
+                volume.max = "1";
+                volume.step = "0.01";
+                volume.value = "0.5";
+                volume.setAttribute("aria-label", "视频音量");
+                time.insertAdjacentElement("beforebegin", volume);
+            }
+
             let isSeeking = false;
 
             const canShowControls = () => {
@@ -2279,6 +2321,7 @@
                 toggle.textContent = video.paused ? "▶" : "Ⅱ";
                 toggle.setAttribute("aria-label", video.paused ? "播放视频" : "暂停视频");
                 toggle.setAttribute("aria-pressed", video.paused ? "false" : "true");
+                volume.value = video.muted ? "0" : video.volume.toString();
                 wrap.classList.toggle("is-seeking", isSeeking);
                 if (!canShowControls()) {
                     wrap.classList.remove("show-controls");
@@ -2327,6 +2370,20 @@
                 }
             });
             wrap.querySelector(".custom-video-controls")?.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("input", () => {
+                video.muted = Number(volume.value) === 0;
+                video.volume = Number(volume.value);
+                syncControls();
+            });
+            volume.addEventListener("pointerdown", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("pointermove", (event) => {
+                event.stopPropagation();
+            });
+            volume.addEventListener("pointerup", (event) => {
                 event.stopPropagation();
             });
 
@@ -2389,7 +2446,10 @@
             syncControls();
         };
 
-        document.querySelectorAll(".custom-video-wrap").forEach(setupCustomVideoControls);
+        document.querySelectorAll(".custom-video-wrap").forEach((wrap) => {
+            if (wrap.closest(".video-section")) return;
+            setupCustomVideoControls(wrap);
+        });
 
         const videoCards = Array.from(document.querySelectorAll(".video-slide"));
         const videoCoverShells = Array.from(document.querySelectorAll(".video-cover-shell"));
@@ -2397,75 +2457,21 @@
         videoCards.forEach((card) => {
             const frame = card.querySelector(".video-player-frame");
             const coverImage = card.querySelector(".video-cover-image");
+            const coverShell = card.querySelector(".video-cover-shell");
             const src = frame?.dataset?.src;
             if (!frame || !coverImage || !src) return;
             frame.src = src;
             frame.poster = coverImage.currentSrc || coverImage.src;
             frame.controls = false;
+            frame.loop = true;
+            frame.muted = true;
+            frame.playsInline = true;
+            frame.classList.remove("video-media-hidden");
+            frame.classList.add("is-ready");
+            coverShell?.classList.add("hidden");
+            frame.play().catch(() => {});
         });
 
-        const pauseAllVideos = () => {
-            videoCards.forEach((card) => {
-                const frame = card.querySelector(".video-player-frame");
-                const coverShell = card.querySelector(".video-cover-shell");
-                if (!frame || !coverShell) return;
-                frame.classList.add("video-media-hidden");
-                frame.classList.remove("is-ready");
-                delete frame.dataset.loadToken;
-                frame.controls = false;
-                frame.closest(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
-                coverShell.classList.remove("hidden");
-                frame.pause();
-                frame.currentTime = 0;
-            });
-        };
-
-        const playCenterVideo = () => {
-            const centerCard = videoCards[0];
-            if (!centerCard) return;
-            const frame = centerCard.querySelector(".video-player-frame");
-            const coverShell = centerCard.querySelector(".video-cover-shell");
-            const coverImage = centerCard.querySelector(".video-cover-image");
-            if (!frame || !coverShell || !coverImage) return;
-
-            const loadToken = Date.now().toString() + Math.random().toString(36).slice(2);
-            frame.dataset.loadToken = loadToken;
-            frame.classList.remove("video-media-hidden", "is-ready");
-            coverShell.classList.remove("hidden");
-            frame.controls = false;
-            frame.closest(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
-            frame.poster = coverImage.currentSrc || coverImage.src;
-
-            frame.addEventListener("playing", () => {
-                if (frame.dataset.loadToken !== loadToken) return;
-                requestAnimationFrame(() => {
-                    if (frame.dataset.loadToken !== loadToken) return;
-                    frame.classList.add("is-ready");
-                    coverShell.classList.add("hidden");
-                    frame.closest(".custom-video-wrap")?.classList.add("show-controls");
-                });
-            }, { once: true });
-
-            requestAnimationFrame(async () => {
-                if (frame.dataset.loadToken !== loadToken) return;
-                try {
-                    frame.currentTime = 0;
-                    await frame.play();
-                } catch (_error) {
-                    frame.classList.remove("is-ready");
-                    frame.closest(".custom-video-wrap")?.classList.remove("show-controls", "is-seeking");
-                    coverShell.classList.remove("hidden");
-                }
-            });
-        };
-
-        videoCoverShells.forEach((shell) => {
-            shell.addEventListener("click", (event) => {
-                event.preventDefault();
-                pauseAllVideos();
-                playCenterVideo();
-            });
-        });
 
         const demoCaseCards = Array.from(document.querySelectorAll(".demo-case-card"));
         const demoCaseTrack = document.querySelector(".demo-case-track");
