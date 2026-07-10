@@ -60,7 +60,7 @@
             align-items: center;
         }
 
-        /* 文档、Github、素材库 */
+        /* 资料库、Github、联系入口 */
         .navbar-links a {
             text-decoration: none;
             color: #393939;
@@ -969,67 +969,6 @@
             white-space: nowrap;
         }
 
-        /* 文档下拉菜单 */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* 伪元素桥接"文档"按钮与子菜单之间的安全区域 */
-        .dropdown::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: -20px;
-            right: -20px;
-            height: 15px;
-        }
-
-        .dropdown-content {
-            position: absolute;
-            top: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%) translateY(6px);
-            background: #ffffff;
-            min-width: 200px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            border-radius: 8px;
-            z-index: 1001;
-            padding: 8px 0;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-        }
-
-        .dropdown:hover .dropdown-content,
-        .dropdown:focus-within .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .dropdown-content a {
-            color: #333 !important;
-            padding: 12px 24px;
-            text-decoration: none;
-            display: block;
-            transition: background 0.2s, color 0.2s;
-            font-size: 16px;
-        }
-
-        .dropdown-content a:visited,
-        .dropdown-content a:active,
-        .dropdown-content a:focus {
-            color: #333 !important;
-        }
-
-        .dropdown-content a:hover {
-            background: #ebebeb;
-            color: #333 !important;
-        }
-
         .language-dropdown {
             position: relative;
             display: inline-flex;
@@ -1577,15 +1516,7 @@
     <nav class="navbar">
         <a href="#top" class="navbar-brand" id="nav-brand-top">Panthera-HT</a>
         <div class="navbar-links">
-            <div class="dropdown">
-                <a href="#docs" class="navbar-link-strong">DOCS</a>
-                <div class="dropdown-content">
-                    <a href="https://alidocs.dingtalk.com/i/nodes/gwva2dxOW4zEmDq5FkeerMdwJbkz3BRL" target="_blank"
-                        rel="noopener noreferrer">Database</a>
-                    <a href="documents/Panthera-HT Parameter Manual.pdf" target="_blank">Parameter Manual</a>
-                    <a href="documents/Panthera-HT Quick Start Guide.pdf" target="_blank">Quick Start Guide</a>
-                </div>
-            </div>
+            <a href="https://alidocs.dingtalk.com/i/nodes/gwva2dxOW4zEmDq5FkeerMdwJbkz3BRL" target="_blank" rel="noopener noreferrer" class="navbar-link-strong">DATABASE</a>
             <a href="guide_en.html" target="_blank" rel="noopener noreferrer" class="navbar-link-strong">GUIDE</a>
             <a href="https://github.com/HighTorque-Robotics/Panthera-HT_Main" target="_blank"
                 class="navbar-link-strong">GITHUB</a>
