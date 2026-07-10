@@ -56,7 +56,7 @@ async function initViewer() {
     setStatus("正在初始化模型 ...", true);
     createJointControls(ROBOT_DESCRIPTION.joints);
     setViewerActive(false);
-    setStatus("正在加载 STL 模型 ...", true);
+    setStatus("正在加载 GLB 模型 ...", true);
 
     try {
         state.robotRoot = await buildRobot(ROBOT_DESCRIPTION);
@@ -142,13 +142,13 @@ function setupScene() {
 function createRobotDescription() {
     const links = new Map();
     [
-        ["base_link", "meshes/base_link.STL"],
-        ["link1", "meshes/link1.STL"],
-        ["link2", "meshes/link2.STL"],
-        ["link3", "meshes/link3.STL"],
-        ["link4", "meshes/link4.STL"],
-        ["link5", "meshes/link5.STL"],
-        ["link6", "meshes/link6.STL"],
+        ["base_link", "meshes/base_link.glb"],
+        ["link1", "meshes/link1.glb"],
+        ["link2", "meshes/link2.glb"],
+        ["link3", "meshes/link3.glb"],
+        ["link4", "meshes/link4.glb"],
+        ["link5", "meshes/link5.glb"],
+        ["link6", "meshes/link6.glb"],
         ["tool_link", ""],
     ].forEach(([name, mesh]) => {
         links.set(name, {
@@ -363,10 +363,14 @@ async function buildRobot(description) {
                 linkGroup.add(visualGroup);
 
                 if (visual.mesh) {
-                    const task = loadStlGeometry(visual.mesh).then((geometry) => {
-                        geometry.computeVertexNormals();
+                    const task = loadGlbGeometry(visual.mesh).then((geometry) => {
+                        const renderGeometry = geometry.index ? geometry.toNonIndexed() : geometry;
+                        if (renderGeometry !== geometry) {
+                            geometry.dispose();
+                        }
+                        renderGeometry.computeVertexNormals();
                         const mesh = new THREE.Mesh(
-                            geometry,
+                            renderGeometry,
                             new THREE.MeshStandardMaterial({
                                 color: parseColor(visual.color),
                                 metalness: 0.16,
@@ -794,84 +798,171 @@ function updateJointMotion(time) {
     });
 }
 
-async function loadStlGeometry(url) {
+async function loadGlbGeometry(url) {
     const response = await fetch(url);
     if (!response.ok) {
-        throw new Error(`Unable to fetch STL: ${url} (${response.status})`);
+        throw new Error(`Unable to fetch GLB: ${url} (${response.status})`);
     }
 
     const arrayBuffer = await response.arrayBuffer();
-    return parseStlGeometry(arrayBuffer);
+    return parseGlbGeometry(arrayBuffer);
 }
 
-function parseStlGeometry(arrayBuffer) {
+function parseGlbGeometry(arrayBuffer) {
     const view = new DataView(arrayBuffer);
-    const faceCount = view.getUint32(80, true);
-    const expectedBinaryLength = 84 + faceCount * 50;
+    const magic = view.getUint32(0, true);
+    const version = view.getUint32(4, true);
+    const declaredLength = view.getUint32(8, true);
 
-    if (expectedBinaryLength === arrayBuffer.byteLength) {
-        return parseBinaryStl(view, faceCount);
+    if (magic !== 0x46546c67 || version !== 2 || declaredLength > arrayBuffer.byteLength) {
+        throw new Error("Invalid GLB file.");
     }
 
-    const text = new TextDecoder().decode(arrayBuffer);
-    return parseAsciiStl(text);
-}
+    let json = null;
+    let binaryChunkOffset = 0;
+    let binaryChunkLength = 0;
+    let offset = 12;
 
-function parseBinaryStl(view, faceCount) {
-    const positions = new Float32Array(faceCount * 9);
-    const normals = new Float32Array(faceCount * 9);
-    let offset = 84;
+    while (offset + 8 <= declaredLength) {
+        const chunkLength = view.getUint32(offset, true);
+        const chunkType = view.getUint32(offset + 4, true);
+        const chunkOffset = offset + 8;
 
-    for (let faceIndex = 0; faceIndex < faceCount; faceIndex += 1) {
-        const normal = [
-            view.getFloat32(offset, true),
-            view.getFloat32(offset + 4, true),
-            view.getFloat32(offset + 8, true),
-        ];
-        offset += 12;
-
-        for (let vertexIndex = 0; vertexIndex < 3; vertexIndex += 1) {
-            const attributeIndex = faceIndex * 9 + vertexIndex * 3;
-            positions[attributeIndex] = view.getFloat32(offset, true);
-            positions[attributeIndex + 1] = view.getFloat32(offset + 4, true);
-            positions[attributeIndex + 2] = view.getFloat32(offset + 8, true);
-
-            normals[attributeIndex] = normal[0];
-            normals[attributeIndex + 1] = normal[1];
-            normals[attributeIndex + 2] = normal[2];
-            offset += 12;
+        if (chunkType === 0x4e4f534a) {
+            const jsonText = new TextDecoder()
+                .decode(new Uint8Array(arrayBuffer, chunkOffset, chunkLength))
+                .replace(/\0+$/g, "")
+                .trim();
+            json = JSON.parse(jsonText);
+        } else if (chunkType === 0x004e4942) {
+            binaryChunkOffset = chunkOffset;
+            binaryChunkLength = chunkLength;
         }
 
-        offset += 2;
+        offset = chunkOffset + chunkLength;
+    }
+
+    if (!json || !binaryChunkOffset || !binaryChunkLength) {
+        throw new Error("GLB is missing JSON or BIN data.");
+    }
+
+    const primitive = json.meshes?.[0]?.primitives?.[0];
+    if (!primitive?.attributes || primitive.attributes.POSITION === undefined) {
+        throw new Error("GLB does not contain a supported mesh primitive.");
     }
 
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
+    const position = readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.attributes.POSITION);
+    geometry.setAttribute("position", new THREE.BufferAttribute(toFloat32Array(position.array), position.itemSize));
+
+    if (primitive.attributes.NORMAL !== undefined) {
+        const normal = readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.attributes.NORMAL);
+        geometry.setAttribute("normal", new THREE.BufferAttribute(toFloat32Array(normal.array), normal.itemSize));
+    }
+
+    if (primitive.indices !== undefined) {
+        const index = readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.indices);
+        geometry.setIndex(new THREE.BufferAttribute(index.array, 1));
+    }
+
     return geometry;
 }
 
-function parseAsciiStl(text) {
-    const positions = [];
-    const normals = [];
-    const pattern = /facet\s+normal\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)[\s\S]*?outer\s+loop[\s\S]*?vertex\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)[\s\S]*?vertex\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)[\s\S]*?vertex\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)[\s\S]*?endloop[\s\S]*?endfacet/g;
-    let match = pattern.exec(text);
+function readGlbAccessor(json, arrayBuffer, binaryChunkOffset, accessorIndex) {
+    const accessor = json.accessors?.[accessorIndex];
+    const bufferView = accessor ? json.bufferViews?.[accessor.bufferView] : null;
 
-    while (match) {
-        const values = match.slice(1).map(Number);
-        const normal = values.slice(0, 3);
-        const vertices = values.slice(3);
-
-        for (let index = 0; index < 9; index += 3) {
-            positions.push(vertices[index], vertices[index + 1], vertices[index + 2]);
-            normals.push(normal[0], normal[1], normal[2]);
-        }
-
-        match = pattern.exec(text);
+    if (!accessor || !bufferView) {
+        throw new Error("GLB accessor is missing buffer data.");
     }
 
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-    geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
-    return geometry;
+    const TypedArray = getGlbTypedArray(accessor.componentType);
+    const componentSize = TypedArray.BYTES_PER_ELEMENT;
+    const itemSize = getGlbTypeSize(accessor.type);
+    const byteOffset = binaryChunkOffset + (bufferView.byteOffset || 0) + (accessor.byteOffset || 0);
+    const byteStride = bufferView.byteStride || itemSize * componentSize;
+    const packedByteLength = accessor.count * itemSize * componentSize;
+
+    if (byteStride === itemSize * componentSize) {
+        const slice = arrayBuffer.slice(byteOffset, byteOffset + packedByteLength);
+        return { array: new TypedArray(slice), itemSize };
+    }
+
+    const source = new DataView(arrayBuffer, byteOffset, bufferView.byteLength - (accessor.byteOffset || 0));
+    const array = new TypedArray(accessor.count * itemSize);
+
+    for (let row = 0; row < accessor.count; row += 1) {
+        for (let column = 0; column < itemSize; column += 1) {
+            array[row * itemSize + column] = readGlbComponent(
+                source,
+                row * byteStride + column * componentSize,
+                accessor.componentType,
+            );
+        }
+    }
+
+    return { array, itemSize };
+}
+
+function getGlbTypedArray(componentType) {
+    switch (componentType) {
+        case 5120:
+            return Int8Array;
+        case 5121:
+            return Uint8Array;
+        case 5122:
+            return Int16Array;
+        case 5123:
+            return Uint16Array;
+        case 5125:
+            return Uint32Array;
+        case 5126:
+            return Float32Array;
+        default:
+            throw new Error(`Unsupported GLB component type: ${componentType}`);
+    }
+}
+
+function getGlbTypeSize(type) {
+    switch (type) {
+        case "SCALAR":
+            return 1;
+        case "VEC2":
+            return 2;
+        case "VEC3":
+            return 3;
+        case "VEC4":
+            return 4;
+        case "MAT2":
+            return 4;
+        case "MAT3":
+            return 9;
+        case "MAT4":
+            return 16;
+        default:
+            throw new Error(`Unsupported GLB accessor type: ${type}`);
+    }
+}
+
+function readGlbComponent(view, offset, componentType) {
+    switch (componentType) {
+        case 5120:
+            return view.getInt8(offset);
+        case 5121:
+            return view.getUint8(offset);
+        case 5122:
+            return view.getInt16(offset, true);
+        case 5123:
+            return view.getUint16(offset, true);
+        case 5125:
+            return view.getUint32(offset, true);
+        case 5126:
+            return view.getFloat32(offset, true);
+        default:
+            throw new Error(`Unsupported GLB component type: ${componentType}`);
+    }
+}
+
+function toFloat32Array(array) {
+    return array instanceof Float32Array ? array : Float32Array.from(array);
 }
