@@ -846,24 +846,75 @@ function parseGlbGeometry(arrayBuffer) {
         throw new Error("GLB is missing JSON or BIN data.");
     }
 
-    const primitive = json.meshes?.[0]?.primitives?.[0];
-    if (!primitive?.attributes || primitive.attributes.POSITION === undefined) {
+    const primitives = (json.meshes?.[0]?.primitives || []).filter((primitive) => (
+        primitive?.attributes && primitive.attributes.POSITION !== undefined
+    ));
+
+    if (primitives.length === 0) {
         throw new Error("GLB does not contain a supported mesh primitive.");
     }
 
     const geometry = new THREE.BufferGeometry();
-    const position = readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.attributes.POSITION);
-    geometry.setAttribute("position", new THREE.BufferAttribute(toFloat32Array(position.array), position.itemSize));
+    const parts = primitives.map((primitive) => {
+        const position = readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.attributes.POSITION);
+        const normal = primitive.attributes.NORMAL !== undefined
+            ? readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.attributes.NORMAL)
+            : null;
+        const index = primitive.indices !== undefined
+            ? readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.indices)
+            : null;
 
-    if (primitive.attributes.NORMAL !== undefined) {
-        const normal = readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.attributes.NORMAL);
-        geometry.setAttribute("normal", new THREE.BufferAttribute(toFloat32Array(normal.array), normal.itemSize));
+        return { position, normal, index };
+    });
+
+    const totalPositionLength = parts.reduce((sum, part) => sum + part.position.array.length, 0);
+    const totalVertexCount = totalPositionLength / 3;
+    const hasNormals = parts.every((part) => part.normal?.array);
+    const totalIndexLength = parts.reduce((sum, part) => (
+        sum + (part.index ? part.index.array.length : part.position.array.length / part.position.itemSize)
+    ), 0);
+
+    const positions = new Float32Array(totalPositionLength);
+    const normals = hasNormals ? new Float32Array(totalPositionLength) : null;
+    const IndexArray = totalVertexCount > 65535 ? Uint32Array : Uint16Array;
+    const indices = new IndexArray(totalIndexLength);
+
+    let positionOffset = 0;
+    let indexOffset = 0;
+    let vertexOffset = 0;
+
+    parts.forEach((part) => {
+        const partPositions = toFloat32Array(part.position.array);
+        positions.set(partPositions, positionOffset);
+
+        if (normals && part.normal) {
+            normals.set(toFloat32Array(part.normal.array), positionOffset);
+        }
+
+        if (part.index) {
+            for (let i = 0; i < part.index.array.length; i += 1) {
+                indices[indexOffset + i] = part.index.array[i] + vertexOffset;
+            }
+            indexOffset += part.index.array.length;
+        } else {
+            const partVertexCount = part.position.array.length / part.position.itemSize;
+            for (let i = 0; i < partVertexCount; i += 1) {
+                indices[indexOffset + i] = vertexOffset + i;
+            }
+            indexOffset += partVertexCount;
+        }
+
+        positionOffset += partPositions.length;
+        vertexOffset += partPositions.length / part.position.itemSize;
+    });
+
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+    if (normals) {
+        geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
     }
 
-    if (primitive.indices !== undefined) {
-        const index = readGlbAccessor(json, arrayBuffer, binaryChunkOffset, primitive.indices);
-        geometry.setIndex(new THREE.BufferAttribute(index.array, 1));
-    }
+    geometry.setIndex(new THREE.BufferAttribute(indices, 1));
 
     return geometry;
 }
@@ -883,21 +934,24 @@ function readGlbAccessor(json, arrayBuffer, binaryChunkOffset, accessorIndex) {
     const byteStride = bufferView.byteStride || itemSize * componentSize;
     const packedByteLength = accessor.count * itemSize * componentSize;
 
-    if (byteStride === itemSize * componentSize) {
+    if (byteStride === itemSize * componentSize && !accessor.normalized) {
         const slice = arrayBuffer.slice(byteOffset, byteOffset + packedByteLength);
         return { array: new TypedArray(slice), itemSize };
     }
 
     const source = new DataView(arrayBuffer, byteOffset, bufferView.byteLength - (accessor.byteOffset || 0));
-    const array = new TypedArray(accessor.count * itemSize);
+    const array = accessor.normalized ? new Float32Array(accessor.count * itemSize) : new TypedArray(accessor.count * itemSize);
 
     for (let row = 0; row < accessor.count; row += 1) {
         for (let column = 0; column < itemSize; column += 1) {
-            array[row * itemSize + column] = readGlbComponent(
+            const value = readGlbComponent(
                 source,
                 row * byteStride + column * componentSize,
                 accessor.componentType,
             );
+            array[row * itemSize + column] = accessor.normalized
+                ? normalizeGlbComponent(value, accessor.componentType)
+                : value;
         }
     }
 
@@ -958,6 +1012,25 @@ function readGlbComponent(view, offset, componentType) {
             return view.getUint32(offset, true);
         case 5126:
             return view.getFloat32(offset, true);
+        default:
+            throw new Error(`Unsupported GLB component type: ${componentType}`);
+    }
+}
+
+function normalizeGlbComponent(value, componentType) {
+    switch (componentType) {
+        case 5120:
+            return Math.max(value / 127, -1);
+        case 5121:
+            return value / 255;
+        case 5122:
+            return Math.max(value / 32767, -1);
+        case 5123:
+            return value / 65535;
+        case 5125:
+            return value / 4294967295;
+        case 5126:
+            return value;
         default:
             throw new Error(`Unsupported GLB component type: ${componentType}`);
     }
